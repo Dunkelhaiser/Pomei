@@ -1,0 +1,29 @@
+{
+    "name": "server",
+    "private": true,
+    "description": "Fastify server.",
+    "version": "0.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "node --env-file=.env --import=tsx --watch ./src/app.ts",
+        "build": "tsc",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint:fix": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint:staged": "eslint --fix --report-unused-disable-directives --max-warnings 0",
+        "format": "prettier -uw --cache --ignore-path .gitignore ."
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.25",
+        "eslint": "^8.56.0",
+        "eslint-config-shared": "workspace:*",
+        "shared-types": "workspace:*",
+        "tsx": "^4.7.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@t3-oss/env-core": "^0.9.2",
+        "fastify": "^4.26.2",
+        "zod": "^3.22.4"
+    }
+}

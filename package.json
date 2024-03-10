@@ -1,0 +1,31 @@
+{
+    "name": "pomei",
+    "version": "1.0.0",
+    "description": "Simple notes taking app.",
+    "scripts": {
+        "dev:client": "pnpm --filter client dev",
+        "dev:server": "pnpm --filter server dev",
+        "format": "pnpm run --parallel -r format",
+        "format:client": "pnpm --filter client format",
+        "format:server": "pnpm --filter server format",
+        "lint": "pnpm run --parallel -r lint",
+        "lint:client": "pnpm --filter client lint",
+        "lint:server": "pnpm --filter server lint",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "./apps/**/src/**/*": "prettier -uw --cache",
+        "./apps/client/src/**/*.{ts,tsx}": "pnpm --filter client lint:staged",
+        "./apps/server/src/**/*.{ts,tsx}": "pnpm --filter server lint:staged"
+    },
+    "keywords": [],
+    "author": "Dunkelhaiser",
+    "license": "MIT",
+    "devDependencies": {
+        "@commitlint/cli": "^19.0.3",
+        "@commitlint/config-conventional": "^19.0.3",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.2",
+        "prettier": "^3.2.5"
+    }
+}
