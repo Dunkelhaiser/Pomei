@@ -141,4 +141,12 @@ module.exports = {
         "import/no-self-import": "error",
         "import/no-useless-path-segments": ["error"],
     },
+    overrides: [
+        {
+            files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+            rules: {
+                "import/no-extraneous-dependencies": "off",
+            },
+        },
+    ],
 };
