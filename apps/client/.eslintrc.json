@@ -8,8 +8,7 @@
         "plugin:react-hooks/recommended",
         "plugin:@tanstack/eslint-plugin-query/recommended",
         "plugin:testing-library/dom",
-        "plugin:testing-library/react",
-        "plugin:playwright/recommended"
+        "plugin:testing-library/react"
     ],
     "ignorePatterns": ["dist", "vite.config.ts"],
     "parser": "@typescript-eslint/parser",
@@ -39,6 +38,10 @@
                 "import/prefer-default-export": "error",
                 "import/no-default-export": "off"
             }
+        },
+        {
+            "files": ["*.spec.jsx", "*.spec.tsx"],
+            "extends": ["plugin:playwright/recommended"]
         }
     ],
     "settings": {
