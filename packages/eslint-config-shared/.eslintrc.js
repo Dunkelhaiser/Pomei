@@ -4,6 +4,7 @@ module.exports = {
         "plugin:@typescript-eslint/stylistic-type-checked",
         "prettier",
         "plugin:import/recommended",
+        "plugin:import/typescript",
         "plugin:@typescript-eslint/recommended",
         "plugin:vitest/recommended",
         "plugin:jsdoc/recommended-typescript-error",
