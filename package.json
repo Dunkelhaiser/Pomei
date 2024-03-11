@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Simple notes taking app.",
     "scripts": {
+        "dev": "pnpm --parallel --stream -r run dev",
         "dev:client": "pnpm --filter client dev",
         "dev:server": "pnpm --filter server dev",
         "format": "pnpm run --parallel -r format",
