@@ -2,5 +2,15 @@
     "eslint.workingDirectories": [{ "mode": "auto" }],
     "files.exclude": {
         "**/node_modules/": true
-    }
+    },
+    "cssVariables.lookupFiles": [
+        "**/*.css",
+        "**/*.scss",
+        "**/*.sass",
+        "**/*.less",
+        "node_modules/@mantine/core/styles.css"
+    ],
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false
 }

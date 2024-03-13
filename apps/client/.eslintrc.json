@@ -10,7 +10,7 @@
         "plugin:testing-library/dom",
         "plugin:testing-library/react"
     ],
-    "ignorePatterns": ["dist", "vite.config.ts"],
+    "ignorePatterns": ["dist", "vite.config.ts", "postcss.config.js"],
     "parser": "@typescript-eslint/parser",
     "plugins": ["react-refresh"],
     "rules": {

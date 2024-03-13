@@ -9,6 +9,8 @@ module.exports = {
                 "build",
                 // Changes to CI workflows
                 "ci",
+                // Setup of dependencies
+                "deps",
                 // Documentation-only changes
                 "docs",
                 // A new feature

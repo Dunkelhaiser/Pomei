@@ -10,11 +10,20 @@
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:staged": "eslint --fix --report-unused-disable-directives --max-warnings 0",
+        "stylelint": "stylelint '**/*.css'",
         "format": "prettier -uw --cache --ignore-path .gitignore .",
         "preview": "vite preview"
     },
     "dependencies": {
+        "@mantine/core": "^7.6.2",
+        "@mantine/form": "^7.6.2",
+        "@mantine/hooks": "^7.6.2",
+        "@mantine/tiptap": "^7.6.2",
         "@t3-oss/env-core": "^0.9.2",
+        "@tabler/icons-react": "^3.0.1",
+        "@tiptap/extension-link": "^2.2.4",
+        "@tiptap/react": "^2.2.4",
+        "@tiptap/starter-kit": "^2.2.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "zod": "^3.22.4"
@@ -37,7 +46,13 @@
         "eslint-plugin-react-refresh": "^0.4.5",
         "eslint-plugin-testing-library": "^6.2.0",
         "happy-dom": "^13.7.3",
+        "postcss": "^8.4.35",
+        "postcss-preset-mantine": "^1.13.0",
+        "postcss-simple-vars": "^7.0.1",
         "shared-types": "workspace:*",
+        "stylelint": "^16.2.1",
+        "stylelint-config-clean-order": "^5.4.1",
+        "stylelint-config-standard": "^36.0.0",
         "typescript": "^5.2.2",
         "vite": "^5.1.4"
     }

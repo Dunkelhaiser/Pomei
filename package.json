@@ -9,6 +9,7 @@
         "format": "pnpm run --parallel -r format",
         "format:client": "pnpm --filter client format",
         "format:server": "pnpm --filter server format",
+        "stylelint": "pnpm --filter client stylelint",
         "lint": "pnpm run --parallel -r lint",
         "lint:client": "pnpm --filter client lint",
         "lint:server": "pnpm --filter server lint",
