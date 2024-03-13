@@ -1,0 +1,92 @@
+{
+    "id": "9f49ba16-593d-4bb3-a21b-39dc83918986",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "version": "5",
+    "dialect": "pg",
+    "tables": {
+        "user": {
+            "name": "user",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "email": {
+                    "name": "email",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "username": {
+                    "name": "username",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "first_name": {
+                    "name": "first_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "last_name": {
+                    "name": "last_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "password": {
+                    "name": "password",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "verified_at": {
+                    "name": "verified_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "user_email_unique": {
+                    "name": "user_email_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["email"]
+                },
+                "user_username_unique": {
+                    "name": "user_username_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["username"]
+                }
+            }
+        }
+    },
+    "enums": {},
+    "schemas": {},
+    "_meta": {
+        "columns": {},
+        "schemas": {},
+        "tables": {}
+    }
+}

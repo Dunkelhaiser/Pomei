@@ -2,7 +2,7 @@
     "root": true,
     "env": { "browser": false, "es2020": true },
     "extends": ["shared"],
-    "ignorePatterns": ["dist"],
+    "ignorePatterns": ["dist", "drizzle.config.ts"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": ["./tsconfig.json"]
