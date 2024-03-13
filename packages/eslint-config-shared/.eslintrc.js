@@ -82,6 +82,8 @@ module.exports = {
         "@typescript-eslint/no-loop-func": "error",
         "no-useless-constructor": "off",
         "@typescript-eslint/no-useless-constructor": "error",
+        "require-await": "off",
+        "@typescript-eslint/require-await": "off",
         "@typescript-eslint/default-param-last": "error",
         "@typescript-eslint/naming-convention": [
             "error",
