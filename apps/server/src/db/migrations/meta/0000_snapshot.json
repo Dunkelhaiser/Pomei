@@ -1,40 +1,41 @@
 {
-    "id": "9f49ba16-593d-4bb3-a21b-39dc83918986",
+    "id": "d0e99cd8-e17f-43f3-9092-580b52569988",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "version": "5",
     "dialect": "pg",
     "tables": {
-        "user": {
-            "name": "user",
+        "users": {
+            "name": "users",
             "schema": "",
             "columns": {
                 "id": {
                     "name": "id",
-                    "type": "serial",
+                    "type": "uuid",
                     "primaryKey": true,
-                    "notNull": true
+                    "notNull": true,
+                    "default": "gen_random_uuid()"
                 },
                 "email": {
                     "name": "email",
-                    "type": "text",
+                    "type": "varchar(320)",
                     "primaryKey": false,
                     "notNull": true
                 },
                 "username": {
                     "name": "username",
-                    "type": "text",
+                    "type": "varchar(20)",
                     "primaryKey": false,
                     "notNull": true
                 },
                 "first_name": {
                     "name": "first_name",
-                    "type": "text",
+                    "type": "varchar(30)",
                     "primaryKey": false,
                     "notNull": false
                 },
                 "last_name": {
                     "name": "last_name",
-                    "type": "text",
+                    "type": "varchar(30)",
                     "primaryKey": false,
                     "notNull": false
                 },
@@ -65,17 +66,28 @@
                     "default": "now()"
                 }
             },
-            "indexes": {},
+            "indexes": {
+                "username_idx": {
+                    "name": "username_idx",
+                    "columns": ["username"],
+                    "isUnique": true
+                },
+                "email_idx": {
+                    "name": "email_idx",
+                    "columns": ["email"],
+                    "isUnique": true
+                }
+            },
             "foreignKeys": {},
             "compositePrimaryKeys": {},
             "uniqueConstraints": {
-                "user_email_unique": {
-                    "name": "user_email_unique",
+                "users_email_unique": {
+                    "name": "users_email_unique",
                     "nullsNotDistinct": false,
                     "columns": ["email"]
                 },
-                "user_username_unique": {
-                    "name": "user_username_unique",
+                "users_username_unique": {
+                    "name": "users_username_unique",
                     "nullsNotDistinct": false,
                     "columns": ["username"]
                 }
