@@ -36,8 +36,8 @@ export const createUser = async (input: SignUpInput) => {
     const user = await db
         .insert(users)
         .values({
-            username: input.username,
-            email: input.email,
+            username,
+            email,
             password: hashedPassword,
         })
         .returning({

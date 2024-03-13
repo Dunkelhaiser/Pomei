@@ -1,9 +1,13 @@
 import Fastify from "fastify";
+import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import { authRoutes } from "./modules/auth/auth.route.ts";
 
 export const app = Fastify({
     logger: true,
 });
+
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
 app.get("/healthcheck", () => ({
     status: "OK",
