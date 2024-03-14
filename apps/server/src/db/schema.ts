@@ -18,3 +18,11 @@ export const users = pgTable(
         emailIdx: uniqueIndex("email_idx").on(table.email),
     })
 );
+
+export const sessions = pgTable("sessions", {
+    id: text("id").primaryKey(),
+    userId: uuid("user_id")
+        .notNull()
+        .references(() => users.id),
+    expiresAt: timestamp("expires_at").notNull(),
+});

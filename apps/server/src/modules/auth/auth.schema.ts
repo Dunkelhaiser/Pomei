@@ -21,8 +21,26 @@ export const signUpSchema = zod.object({
 export const createdUserSchema = zod.object({
     user: zod.object({
         id: zod.string(),
-        username: zod.string(),
         email: zod.string(),
+        username: zod.string(),
+        createdAt: zod.date(),
+    }),
+});
+
+export const signInSchema = zod.object({
+    login: zod.string().min(1, { message: "Enter your username/email" }),
+    password: zod.string().min(1, { message: "Enter your password" }),
+});
+
+export const userResponseSchema = zod.object({
+    user: zod.object({
+        id: zod.string(),
+        email: zod.string(),
+        username: zod.string(),
+        firstName: zod.string().nullable(),
+        lastName: zod.string().nullable(),
+        verifiedAt: zod.date().nullable(),
+        updatedAt: zod.date(),
         createdAt: zod.date(),
     }),
 });
@@ -32,3 +50,4 @@ export const errorSchema = zod.object({
 });
 
 export type SignUpInput = zod.infer<typeof signUpSchema>;
+export type SignInInput = zod.infer<typeof signInSchema>;

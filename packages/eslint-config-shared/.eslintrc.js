@@ -85,6 +85,7 @@ module.exports = {
         "require-await": "off",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/default-param-last": "error",
+        "@typescript-eslint/no-misused-promises": "off",
         "@typescript-eslint/naming-convention": [
             "error",
             {
