@@ -5,6 +5,7 @@ const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[\w_]+$/;
 export const signUpSchema = zod.object({
     username: zod
         .string()
+        .trim()
         .min(1, { message: "Enter your username" })
         .min(3, { message: "Username must be at least 6 characters long" })
         .max(20, { message: "Username must be at most 20 characters long" })
@@ -12,6 +13,7 @@ export const signUpSchema = zod.object({
     email: zod.string().min(1, { message: "Enter your email" }).email({ message: "Enter valid email" }),
     password: zod
         .string()
+        .trim()
         .min(1, { message: "Enter your password" })
         .min(6, { message: "Password must be at least 6 characters long" }),
 });
