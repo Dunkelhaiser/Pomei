@@ -49,5 +49,7 @@ export const errorSchema = zod.object({
     message: zod.string(),
 });
 
+export const emptySchema = zod.object({});
+
 export type SignUpInput = zod.infer<typeof signUpSchema>;
 export type SignInInput = zod.infer<typeof signInSchema>;

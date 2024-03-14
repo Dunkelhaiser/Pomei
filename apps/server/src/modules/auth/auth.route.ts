@@ -1,8 +1,15 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { signInHandler, signUpHandler } from "./auth.controller.ts";
+import { signInHandler, signOutHandler, signUpHandler } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
-import { createdUserSchema, errorSchema, signInSchema, userResponseSchema, signUpSchema } from "./auth.schema.ts";
+import {
+    createdUserSchema,
+    errorSchema,
+    signInSchema,
+    userResponseSchema,
+    signUpSchema,
+    emptySchema,
+} from "./auth.schema.ts";
 
 export const authRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
@@ -34,5 +41,17 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         signInHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/sign_out",
+        {
+            schema: {
+                response: {
+                    204: emptySchema,
+                    500: errorSchema,
+                },
+            },
+        },
+        signOutHandler
     );
 };

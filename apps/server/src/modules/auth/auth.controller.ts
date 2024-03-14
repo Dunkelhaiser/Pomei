@@ -37,3 +37,15 @@ export const signInHandler = async (req: FastifyRequest<{ Body: SignInInput }>, 
         return res.status(500).send("Failed to sign in");
     }
 };
+
+export const signOutHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
+        if (sessionId) {
+            await lucia.invalidateSession(sessionId);
+        }
+        return res.code(204).send();
+    } catch (err) {
+        return res.status(500).send("Failed to sign out");
+    }
+};
