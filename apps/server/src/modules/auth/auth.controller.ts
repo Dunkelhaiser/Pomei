@@ -49,3 +49,14 @@ export const signOutHandler = async (req: FastifyRequest, res: FastifyReply) => 
         return res.status(500).send("Failed to sign out");
     }
 };
+
+export const terminateAllSessionsHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        if (req.user?.id) {
+            await lucia.invalidateUserSessions(req.user.id);
+        }
+        return res.code(204).send();
+    } catch (err) {
+        return res.status(500).send("Failed to terminate all sessions");
+    }
+};
