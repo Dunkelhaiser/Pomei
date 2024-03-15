@@ -127,3 +127,16 @@ export const resetPasswordHandler = async (
         return res.status(500).send("Failed to reset password");
     }
 };
+
+export const changePasswordHandler = async (req: FastifyRequest<{ Body: PasswordInput }>, res: FastifyReply) => {
+    try {
+        const { password } = req.body;
+        await updatePassword(req.user.id, password);
+        return res.code(200).send({ message: "Password updated" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.status(500).send("Failed to update password");
+    }
+};

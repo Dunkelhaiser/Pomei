@@ -8,6 +8,7 @@ import {
     signUpHandler,
     terminateAllSessionsHandler,
     verificationCodeHandler,
+    changePasswordHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 import {
@@ -129,5 +130,21 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         resetPasswordHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/change-password",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["auth"],
+                body: passwordSchema,
+                response: {
+                    200: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        changePasswordHandler
     );
 };
