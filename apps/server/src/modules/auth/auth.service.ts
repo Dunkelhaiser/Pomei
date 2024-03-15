@@ -9,22 +9,13 @@ export const getUserByEmail = async (email: string) => {
     return user.length === 0 ? null : user[0];
 };
 
-export const getUserByUsername = async (username: string) => {
-    const user = await db.select().from(users).where(eq(users.username, username));
-    return user.length === 0 ? null : user[0];
-};
-
 export const getUserById = async (id: string) => {
     const user = await db.select().from(users).where(eq(users.id, id));
     return user.length === 0 ? null : user[0];
 };
 
 export const createUser = async (input: SignUpInput) => {
-    const { username, email, password } = input;
-    const existingUsername = await getUserByUsername(username);
-    if (existingUsername) {
-        throw new Error("Username already exists");
-    }
+    const { email, password } = input;
 
     const existingEmail = await getUserByEmail(email);
     if (existingEmail) {
@@ -36,13 +27,11 @@ export const createUser = async (input: SignUpInput) => {
     const user = await db
         .insert(users)
         .values({
-            username,
             email,
             password: hashedPassword,
         })
         .returning({
             id: users.id,
-            username: users.username,
             email: users.email,
             createdAt: users.createdAt,
         });

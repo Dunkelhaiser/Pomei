@@ -5,9 +5,9 @@ import { createUser, getUserByEmail } from "./auth.service.ts";
 import { lucia } from "./auth.ts";
 
 export const signUpHandler = async (req: FastifyRequest<{ Body: SignUpInput }>, res: FastifyReply) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const user = await createUser({ username, email, password });
+        const user = await createUser({ email, password });
         return res.code(201).send({ user: user[0] });
     } catch (err) {
         if (err instanceof Error) {
@@ -18,9 +18,9 @@ export const signUpHandler = async (req: FastifyRequest<{ Body: SignUpInput }>, 
 };
 
 export const signInHandler = async (req: FastifyRequest<{ Body: SignInInput }>, res: FastifyReply) => {
-    const { login, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const user = await getUserByEmail(login);
+        const user = await getUserByEmail(email);
         if (!user) {
             return res.code(400).send({ message: "Invalid credentials" });
         }
