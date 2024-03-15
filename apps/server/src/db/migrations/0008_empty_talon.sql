@@ -1,0 +1,1 @@
+ALTER TABLE "password_reset_codes" ADD CONSTRAINT "password_reset_codes_token_hash_unique" UNIQUE("token_hash");

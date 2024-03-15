@@ -1,6 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import {
+    resetPasswordTokenHandler,
+    resetPasswordHandler,
     signInHandler,
     signOutHandler,
     signUpHandler,
@@ -16,6 +18,9 @@ import {
     signUpSchema,
     emptySchema,
     verificationCodeSchema,
+    emailSchema,
+    passwordSchema,
+    resetPasswordSchema,
 } from "./auth.schema.ts";
 
 export const authRoutes = async (app: FastifyInstance) => {
@@ -93,5 +98,36 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         verificationCodeHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/reset-password",
+        {
+            schema: {
+                tags: ["auth"],
+                body: emailSchema,
+                response: {
+                    200: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        resetPasswordTokenHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/reset-password/:token",
+        {
+            schema: {
+                tags: ["auth"],
+                params: resetPasswordSchema,
+                body: passwordSchema,
+                response: {
+                    200: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        resetPasswordHandler
     );
 };

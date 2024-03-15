@@ -1,11 +1,22 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Argon2id } from "oslo/password";
-import { SignInInput, SignUpInput, VerificationCodeInput } from "./auth.schema.ts";
+import {
+    EmailInput,
+    PasswordInput,
+    ResetPasswordInput,
+    SignInInput,
+    SignUpInput,
+    VerificationCodeInput,
+} from "./auth.schema.ts";
 import {
     createUser,
+    generatePasswordResetToken,
     genereateVerificationCode,
     getUserByEmail,
+    sendPasswordResetLink,
     sendVerificationCode,
+    updatePassword,
+    verifyPasswordResetToken,
     verifyVerificationCode,
 } from "./auth.service.ts";
 import { lucia } from "./auth.ts";
@@ -79,5 +90,40 @@ export const verificationCodeHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.status(500).send("Failed to verify account");
+    }
+};
+
+export const resetPasswordTokenHandler = async (req: FastifyRequest<{ Body: EmailInput }>, res: FastifyReply) => {
+    try {
+        const { email } = req.body;
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.code(400).send({ message: "Invalid email" });
+        }
+        const resetToken = await generatePasswordResetToken(user.id);
+        const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+        await sendPasswordResetLink(resetLink, email);
+        return res.code(200).send({ message: "Password reset link sent" });
+    } catch (err) {
+        return res.status(500).send("Failed to send reset link");
+    }
+};
+
+export const resetPasswordHandler = async (
+    req: FastifyRequest<{ Body: PasswordInput; Params: ResetPasswordInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const { password } = req.body;
+        const { token } = req.params;
+        const { userId } = await verifyPasswordResetToken(token);
+        await lucia.invalidateUserSessions(userId);
+        await updatePassword(userId, password);
+        return res.code(200).send({ message: "Password reset" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.status(500).send("Failed to reset password");
     }
 };

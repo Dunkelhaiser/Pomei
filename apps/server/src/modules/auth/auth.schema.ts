@@ -40,6 +40,22 @@ export const verificationCodeSchema = zod.object({
         .max(5, { message: "Enter verification code" }),
 });
 
+export const emailSchema = zod.object({
+    email: zod.string().min(1, { message: "Enter your email" }).email({ message: "Enter valid email" }),
+});
+
+export const passwordSchema = zod.object({
+    password: zod
+        .string()
+        .trim()
+        .min(1, { message: "Enter your password" })
+        .min(6, { message: "Password must be at least 6 characters long" }),
+});
+
+export const resetPasswordSchema = zod.object({
+    token: zod.string().trim(),
+});
+
 export const messageSchema = zod.object({
     message: zod.string(),
 });
@@ -49,3 +65,6 @@ export const emptySchema = zod.object({});
 export type SignUpInput = zod.infer<typeof signUpSchema>;
 export type SignInInput = zod.infer<typeof signInSchema>;
 export type VerificationCodeInput = zod.infer<typeof verificationCodeSchema>;
+export type EmailInput = zod.infer<typeof emailSchema>;
+export type PasswordInput = zod.infer<typeof passwordSchema>;
+export type ResetPasswordInput = zod.infer<typeof resetPasswordSchema>;

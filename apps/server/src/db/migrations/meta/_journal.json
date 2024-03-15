@@ -50,6 +50,20 @@
             "when": 1710505898871,
             "tag": "0006_mean_dreadnoughts",
             "breakpoints": true
+        },
+        {
+            "idx": 7,
+            "version": "5",
+            "when": 1710519778114,
+            "tag": "0007_vengeful_cyclops",
+            "breakpoints": true
+        },
+        {
+            "idx": 8,
+            "version": "5",
+            "when": 1710519832272,
+            "tag": "0008_empty_talon",
+            "breakpoints": true
         }
     ]
 }
