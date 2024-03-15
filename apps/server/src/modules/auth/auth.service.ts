@@ -1,8 +1,11 @@
 import { eq } from "drizzle-orm";
+import { User } from "lucia";
+import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
+import { alphabet, generateRandomString } from "oslo/crypto";
 import { Argon2id } from "oslo/password";
 import { SignUpInput } from "./auth.schema.ts";
 import { db } from "@/db/client.ts";
-import { users } from "@/db/schema.ts";
+import { users, verificationCodes } from "@/db/schema.ts";
 
 export const getUserByEmail = async (email: string) => {
     const user = await db.select().from(users).where(eq(users.email, email));
@@ -24,7 +27,7 @@ export const createUser = async (input: SignUpInput) => {
 
     const hashedPassword = await new Argon2id().hash(password);
 
-    const user = await db
+    const [user] = await db
         .insert(users)
         .values({
             email,
@@ -37,4 +40,28 @@ export const createUser = async (input: SignUpInput) => {
         });
 
     return user;
+};
+
+export const genereateVerificationCode = async (userId: string) => {
+    await db.delete(verificationCodes).where(eq(verificationCodes.userId, userId));
+    const code = generateRandomString(5, alphabet("0-9"));
+    await db.insert(verificationCodes).values({
+        userId,
+        code,
+        expiresAt: createDate(new TimeSpan(5, "m")),
+    });
+    return code;
+};
+
+export const verifyVerificationCode = async (user: User, code: string) => {
+    const [verificationCode] = await db.select().from(verificationCodes).where(eq(verificationCodes.userId, user.id));
+    if (!verificationCode.code || verificationCode.code !== code) {
+        throw new Error("Invalid verification code");
+    }
+    await db.delete(verificationCodes).where(eq(verificationCodes.userId, user.id));
+    if (!isWithinExpirationDate(verificationCode.expiresAt)) {
+        throw new Error("Verification code expired");
+    }
+
+    await db.update(users).set({ verifiedAt: new Date() }).where(eq(users.id, user.id));
 };

@@ -4,12 +4,11 @@ import { lucia } from "./auth.ts";
 export const authHandler = async (
     req: FastifyRequest<{ Body: unknown } | { Params: unknown } | { Body: unknown; Params: unknown }>,
     res: FastifyReply
+    // eslint-disable-next-line consistent-return
 ) => {
     const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
 
     if (!sessionId) {
-        req.user = null;
-        req.session = null;
         return res.code(401).send({ message: "Unathorized" });
     }
 
@@ -24,6 +23,6 @@ export const authHandler = async (
         void res.setCookie(cookie.name, cookie.value, cookie.attributes);
     }
 
-    req.user = user;
-    req.session = session;
+    req.user = user!;
+    req.session = session!;
 };

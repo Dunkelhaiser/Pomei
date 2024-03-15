@@ -19,6 +19,16 @@ export const sessions = pgTable("sessions", {
     id: text("id").primaryKey(),
     userId: uuid("user_id")
         .notNull()
-        .references(() => users.id),
+        .references(() => users.id, { onDelete: "cascade" }),
     expiresAt: timestamp("expires_at").notNull(),
+});
+
+export const verificationCodes = pgTable("verification_codes", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+        .notNull()
+        .references(() => users.id, { onDelete: "cascade" }),
+    code: text("code").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
 });

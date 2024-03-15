@@ -1,14 +1,15 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Argon2id } from "oslo/password";
-import { SignInInput, SignUpInput } from "./auth.schema.ts";
-import { createUser, getUserByEmail } from "./auth.service.ts";
+import { SignInInput, SignUpInput, VerificationCodeInput } from "./auth.schema.ts";
+import { createUser, genereateVerificationCode, getUserByEmail, verifyVerificationCode } from "./auth.service.ts";
 import { lucia } from "./auth.ts";
 
 export const signUpHandler = async (req: FastifyRequest<{ Body: SignUpInput }>, res: FastifyReply) => {
     const { email, password } = req.body;
     try {
         const user = await createUser({ email, password });
-        return res.code(201).send({ user: user[0] });
+        await genereateVerificationCode(user.id);
+        return res.code(201).send({ user });
     } catch (err) {
         if (err instanceof Error) {
             return res.code(409).send({ message: err.message });
@@ -52,11 +53,24 @@ export const signOutHandler = async (req: FastifyRequest, res: FastifyReply) => 
 
 export const terminateAllSessionsHandler = async (req: FastifyRequest, res: FastifyReply) => {
     try {
-        if (req.user?.id) {
-            await lucia.invalidateUserSessions(req.user.id);
-        }
+        await lucia.invalidateUserSessions(req.user.id);
         return res.code(204).send();
     } catch (err) {
         return res.status(500).send("Failed to terminate all sessions");
+    }
+};
+
+export const verificationCodeHandler = async (
+    req: FastifyRequest<{ Body: VerificationCodeInput }>,
+    res: FastifyReply
+) => {
+    try {
+        await verifyVerificationCode(req.user, req.body.code);
+        return res.code(200).send({ message: "Account verified" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.status(500).send("Failed to verify account");
     }
 };

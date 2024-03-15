@@ -14,6 +14,7 @@ export const lucia = new Lucia(adapter, {
         },
     },
     getUserAttributes: (attributes) => ({
+        verifiedAt: attributes.verifiedAt,
         email: attributes.email,
     }),
 });
@@ -22,6 +23,7 @@ declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
         DatabaseUserAttributes: {
+            verifiedAt: Date;
             email: string;
         };
     }
@@ -29,7 +31,7 @@ declare module "lucia" {
 
 declare module "fastify" {
     interface FastifyRequest {
-        user: User | null;
-        session: Session | null;
+        user: User;
+        session: Session;
     }
 }

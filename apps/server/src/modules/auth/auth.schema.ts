@@ -32,7 +32,15 @@ export const userResponseSchema = zod.object({
     }),
 });
 
-export const errorSchema = zod.object({
+export const verificationCodeSchema = zod.object({
+    code: zod
+        .string()
+        .trim()
+        .min(5, { message: "Enter verification code" })
+        .max(5, { message: "Enter verification code" }),
+});
+
+export const messageSchema = zod.object({
     message: zod.string(),
 });
 
@@ -40,3 +48,4 @@ export const emptySchema = zod.object({});
 
 export type SignUpInput = zod.infer<typeof signUpSchema>;
 export type SignInInput = zod.infer<typeof signInSchema>;
+export type VerificationCodeInput = zod.infer<typeof verificationCodeSchema>;
