@@ -133,3 +133,7 @@ export const updateEmail = async (userId: string, email: string) => {
     }
     await db.update(users).set({ email }).where(eq(users.id, userId));
 };
+
+export const deleteUser = async (userId: string) => {
+    await db.delete(users).where(eq(users.id, userId));
+};

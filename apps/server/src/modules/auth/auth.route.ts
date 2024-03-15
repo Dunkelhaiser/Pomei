@@ -10,6 +10,7 @@ import {
     verificationCodeHandler,
     changePasswordHandler,
     changeEmailHandler,
+    deleteAccountHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 import {
@@ -163,5 +164,21 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         changeEmailHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/delete",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["auth"],
+                body: passwordSchema,
+                response: {
+                    204: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        deleteAccountHandler
     );
 };

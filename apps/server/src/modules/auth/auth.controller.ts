@@ -10,9 +10,11 @@ import {
 } from "./auth.schema.ts";
 import {
     createUser,
+    deleteUser,
     generatePasswordResetToken,
     genereateVerificationCode,
     getUserByEmail,
+    getUserById,
     sendPasswordResetLink,
     sendVerificationCode,
     updateEmail,
@@ -152,5 +154,26 @@ export const changeEmailHandler = async (req: FastifyRequest<{ Body: EmailInput 
             return res.code(400).send({ message: err.message });
         }
         return res.status(500).send("Failed to update email");
+    }
+};
+
+export const deleteAccountHandler = async (req: FastifyRequest<{ Body: PasswordInput }>, res: FastifyReply) => {
+    try {
+        const { password } = req.body;
+        const user = await getUserById(req.user.id);
+        if (!user) {
+            return res.code(400).send({ message: "Invalid credentials" });
+        }
+        const validPassword = await new Argon2id().verify(user.password, password);
+        if (!validPassword) {
+            return res.code(400).send({ message: "Invalid credentials" });
+        }
+        await deleteUser(req.user.id);
+        return res.code(204).send();
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.status(500).send("Failed to delete user");
     }
 };
