@@ -15,7 +15,6 @@ export const authRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
         "/sign_up",
         {
-            preHandler: authHandler,
             schema: {
                 body: signUpSchema,
                 response: {
