@@ -18,7 +18,7 @@ export const createdUserSchema = zod.object({
 });
 
 export const signInSchema = zod.object({
-    email: zod.string().min(1, { message: "Enter your email" }),
+    email: zod.string().min(1, { message: "Enter your email" }).email({ message: "Enter valid email" }),
     password: zod.string().min(1, { message: "Enter your password" }),
 });
 
