@@ -1,14 +1,21 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Argon2id } from "oslo/password";
 import { SignInInput, SignUpInput, VerificationCodeInput } from "./auth.schema.ts";
-import { createUser, genereateVerificationCode, getUserByEmail, verifyVerificationCode } from "./auth.service.ts";
+import {
+    createUser,
+    genereateVerificationCode,
+    getUserByEmail,
+    sendVerificationCode,
+    verifyVerificationCode,
+} from "./auth.service.ts";
 import { lucia } from "./auth.ts";
 
 export const signUpHandler = async (req: FastifyRequest<{ Body: SignUpInput }>, res: FastifyReply) => {
     const { email, password } = req.body;
     try {
         const user = await createUser({ email, password });
-        await genereateVerificationCode(user.id);
+        const verificationCode = await genereateVerificationCode(user.id);
+        await sendVerificationCode(verificationCode, user.email);
         return res.code(201).send({ user });
     } catch (err) {
         if (err instanceof Error) {

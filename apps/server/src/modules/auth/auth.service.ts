@@ -6,6 +6,7 @@ import { Argon2id } from "oslo/password";
 import { SignUpInput } from "./auth.schema.ts";
 import { db } from "@/db/client.ts";
 import { users, verificationCodes } from "@/db/schema.ts";
+import { resend } from "@/utils/resend.ts";
 
 export const getUserByEmail = async (email: string) => {
     const user = await db.select().from(users).where(eq(users.email, email));
@@ -64,4 +65,17 @@ export const verifyVerificationCode = async (user: User, code: string) => {
     }
 
     await db.update(users).set({ verifiedAt: new Date() }).where(eq(users.id, user.id));
+};
+
+export const sendVerificationCode = async (code: string, email: string) => {
+    const { error } = await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: "Pomei - Verification",
+        html: `<h1>Your verification code: ${code}</h1>`,
+    });
+
+    if (error) {
+        throw new Error("Failed to send verification code");
+    }
 };
