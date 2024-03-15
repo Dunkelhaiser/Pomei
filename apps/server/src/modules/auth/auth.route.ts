@@ -23,6 +23,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         "/sign_up",
         {
             schema: {
+                tags: ["auth"],
                 body: signUpSchema,
                 response: {
                     201: createdUserSchema,
@@ -38,6 +39,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         "/sign_in",
         {
             schema: {
+                tags: ["auth"],
                 body: signInSchema,
                 response: {
                     200: userResponseSchema,
@@ -53,6 +55,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             preHandler: authHandler,
             schema: {
+                tags: ["auth"],
                 response: {
                     204: emptySchema,
                     500: messageSchema,
@@ -66,6 +69,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             preHandler: authHandler,
             schema: {
+                tags: ["auth"],
                 response: {
                     204: emptySchema,
                     500: messageSchema,
@@ -79,6 +83,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             preHandler: authHandler,
             schema: {
+                tags: ["auth"],
                 body: verificationCodeSchema,
                 response: {
                     200: messageSchema,
