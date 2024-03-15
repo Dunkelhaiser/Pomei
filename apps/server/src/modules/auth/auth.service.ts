@@ -125,3 +125,11 @@ export const updatePassword = async (userId: string, password: string) => {
     const hashedPassword = await new Argon2id().hash(password);
     await db.update(users).set({ password: hashedPassword }).where(eq(users.id, userId));
 };
+
+export const updateEmail = async (userId: string, email: string) => {
+    const existingEmail = await getUserByEmail(email);
+    if (existingEmail) {
+        throw new Error("Email is already used");
+    }
+    await db.update(users).set({ email }).where(eq(users.id, userId));
+};

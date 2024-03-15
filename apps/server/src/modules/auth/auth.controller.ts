@@ -15,6 +15,7 @@ import {
     getUserByEmail,
     sendPasswordResetLink,
     sendVerificationCode,
+    updateEmail,
     updatePassword,
     verifyPasswordResetToken,
     verifyVerificationCode,
@@ -138,5 +139,18 @@ export const changePasswordHandler = async (req: FastifyRequest<{ Body: Password
             return res.code(400).send({ message: err.message });
         }
         return res.status(500).send("Failed to update password");
+    }
+};
+
+export const changeEmailHandler = async (req: FastifyRequest<{ Body: EmailInput }>, res: FastifyReply) => {
+    try {
+        const { email } = req.body;
+        await updateEmail(req.user.id, email);
+        return res.code(200).send({ message: "Email updated" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.status(500).send("Failed to update email");
     }
 };
