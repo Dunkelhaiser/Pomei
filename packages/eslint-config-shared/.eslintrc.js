@@ -64,6 +64,7 @@ module.exports = {
         "no-useless-call": "error",
         "no-useless-concat": "error",
         "no-useless-return": "error",
+        "consistent-return": "error",
         "prefer-named-capture-group": "error",
         "prefer-promise-reject-errors": ["error", { allowEmptyReject: true }],
         "prefer-regex-literals": "error",
