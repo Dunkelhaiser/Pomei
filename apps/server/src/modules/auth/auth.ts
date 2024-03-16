@@ -23,7 +23,7 @@ declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
         DatabaseUserAttributes: {
-            verifiedAt: Date;
+            verifiedAt: Date | null;
             email: string;
         };
     }

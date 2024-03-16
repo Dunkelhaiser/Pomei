@@ -11,6 +11,7 @@ import {
     changePasswordHandler,
     changeEmailHandler,
     deleteAccountHandler,
+    resendVerificationCodeHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 import {
@@ -101,6 +102,21 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         verificationCodeHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/resend-verification-code",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["auth"],
+                response: {
+                    200: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        resendVerificationCodeHandler
     );
     app.withTypeProvider<ZodTypeProvider>().post(
         "/reset-password",

@@ -96,6 +96,19 @@ export const verificationCodeHandler = async (
     }
 };
 
+export const resendVerificationCodeHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        if (req.user.verifiedAt !== null) {
+            return res.code(400).send({ message: "User already verified" });
+        }
+        const verificationCode = await genereateVerificationCode(req.user.id);
+        await sendVerificationCode(verificationCode, req.user.email);
+        return res.code(200).send({ message: "Verification code sent" });
+    } catch (err) {
+        return res.status(500).send("Failed to resend verification code");
+    }
+};
+
 export const resetPasswordTokenHandler = async (req: FastifyRequest<{ Body: EmailInput }>, res: FastifyReply) => {
     try {
         const { email } = req.body;
