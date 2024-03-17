@@ -15,17 +15,15 @@ import {
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 import {
-    createdUserSchema,
-    messageSchema,
     signInSchema,
     userResponseSchema,
     signUpSchema,
-    emptySchema,
     verificationCodeSchema,
     emailSchema,
     passwordSchema,
     resetPasswordSchema,
 } from "./auth.schema.ts";
+import { messageSchema, emptySchema } from "@/utils/schema.ts";
 
 export const authRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
@@ -35,7 +33,7 @@ export const authRoutes = async (app: FastifyInstance) => {
                 tags: ["auth"],
                 body: signUpSchema,
                 response: {
-                    201: createdUserSchema,
+                    201: userResponseSchema,
                     400: messageSchema,
                     409: messageSchema,
                     500: messageSchema,
