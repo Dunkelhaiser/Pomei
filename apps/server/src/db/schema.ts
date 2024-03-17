@@ -56,11 +56,30 @@ export const notes = pgTable(
         userId: uuid("user_id")
             .notNull()
             .references(() => users.id, { onDelete: "cascade" }),
+        folderId: uuid("folder_id").references(() => folders.id, { onDelete: "set null" }),
         createdAt: timestamp("created_at").notNull().defaultNow(),
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },
     (table) => ({
         titleIdx: uniqueIndex("title_idx").on(table.title),
         contentIdx: uniqueIndex("content_idx").on(table.content),
+    })
+);
+
+export const folders = pgTable(
+    "folders",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        name: varchar("name", { length: 25 }),
+        color: varchar("color", { length: 7 }),
+        order: integer("order").notNull().default(0),
+        userId: uuid("user_id")
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        createdAt: timestamp("created_at").notNull().defaultNow(),
+        updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    },
+    (table) => ({
+        nameIdx: uniqueIndex("name_idx").on(table.name),
     })
 );

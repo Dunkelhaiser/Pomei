@@ -71,6 +71,13 @@
             "when": 1710704718364,
             "tag": "0009_clammy_nocturne",
             "breakpoints": true
+        },
+        {
+            "idx": 10,
+            "version": "5",
+            "when": 1710704748793,
+            "tag": "0010_daffy_fantastic_four",
+            "breakpoints": true
         }
     ]
 }
