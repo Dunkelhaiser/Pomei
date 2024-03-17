@@ -86,7 +86,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         terminateAllSessionsHandler
     );
     app.withTypeProvider<ZodTypeProvider>().post(
-        "/verificate",
+        "/verify",
         {
             preHandler: authHandler,
             schema: {
