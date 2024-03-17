@@ -1,7 +1,7 @@
 import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import Fastify from "fastify";
+import Fastify, { FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler, jsonSchemaTransform } from "fastify-type-provider-zod";
 import { env } from "./env.ts";
 import { authRoutes } from "./modules/auth/auth.route.ts";
@@ -14,6 +14,14 @@ export const app = Fastify({
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
+
+const signals = ["SIGINT", "SIGTERM", "SIGHUP"] as const;
+
+const gracefulShutdown = async (signal: (typeof signals)[number], server: FastifyInstance) => {
+    app.log.info(`Received signal: ${signal}`);
+    await server.close();
+    process.exit(0);
+};
 
 app.get("/healthcheck", () => ({
     status: "OK",
@@ -52,6 +60,10 @@ void (async () => {
     void app.register(authRoutes, { prefix: "/auth" });
     try {
         await app.listen({ port: 3000, host: "0.0.0.0" });
+
+        for (const signal of signals) {
+            process.on(signal, () => gracefulShutdown(signal, app));
+        }
     } catch (err) {
         app.log.error(err);
         process.exit(1);
