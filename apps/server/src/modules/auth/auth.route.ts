@@ -31,6 +31,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             schema: {
                 tags: ["auth"],
+                description: "Register a new account",
                 body: signUpSchema,
                 response: {
                     201: userResponseSchema,
@@ -47,6 +48,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             schema: {
                 tags: ["auth"],
+                description: "Sign in to an account",
                 body: signInSchema,
                 response: {
                     200: userResponseSchema,
@@ -63,6 +65,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Sign out of the current session",
                 response: {
                     204: emptySchema,
                     500: messageSchema,
@@ -77,6 +80,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Terminate all sessions",
                 response: {
                     204: emptySchema,
                     500: messageSchema,
@@ -91,6 +95,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Verify account with code",
                 body: verificationCodeSchema,
                 response: {
                     200: messageSchema,
@@ -107,6 +112,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Resend verification code",
                 response: {
                     200: messageSchema,
                     400: messageSchema,
@@ -121,6 +127,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             schema: {
                 tags: ["auth"],
+                description: "Send reset password email",
                 body: emailSchema,
                 response: {
                     200: messageSchema,
@@ -136,6 +143,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         {
             schema: {
                 tags: ["auth"],
+                description: "Reset password",
                 params: resetPasswordSchema,
                 body: passwordSchema,
                 response: {
@@ -153,6 +161,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Change password",
                 body: passwordSchema,
                 response: {
                     200: messageSchema,
@@ -169,6 +178,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Change email",
                 body: emailSchema,
                 response: {
                     200: messageSchema,
@@ -185,6 +195,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             preHandler: authHandler,
             schema: {
                 tags: ["auth"],
+                description: "Delete account",
                 body: passwordSchema,
                 response: {
                     204: messageSchema,
