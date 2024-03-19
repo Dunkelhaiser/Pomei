@@ -1,4 +1,4 @@
-import { text, varchar, timestamp, pgTable, uuid, uniqueIndex, integer, boolean } from "drizzle-orm/pg-core";
+import { text, varchar, timestamp, pgTable, uuid, uniqueIndex, integer, boolean, index } from "drizzle-orm/pg-core";
 
 export const users = pgTable(
     "users",
@@ -48,7 +48,7 @@ export const notes = pgTable(
     {
         id: uuid("id").primaryKey().defaultRandom(),
         title: varchar("title", { length: 255 }),
-        content: text("content").notNull(),
+        content: text("content"),
         order: integer("order").notNull().default(0),
         tags: varchar("tags", { length: 20 }).array(),
         isArchived: boolean("is_archived").notNull().default(false),
@@ -61,8 +61,8 @@ export const notes = pgTable(
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },
     (table) => ({
-        titleIdx: uniqueIndex("title_idx").on(table.title),
-        contentIdx: uniqueIndex("content_idx").on(table.content),
+        titleIdx: index("title_idx").on(table.title),
+        contentIdx: index("content_idx").on(table.content),
     })
 );
 
