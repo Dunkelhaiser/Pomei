@@ -26,6 +26,7 @@ export const noteSchema = zod.object({
     createdAt: zod.date(),
     updatedAt: zod.date(),
 });
+export const notesSchema = noteSchema.array();
 
 export const getNoteSchema = zod.object({
     id: zod.string().uuid({ message: "Enter valid id format" }),

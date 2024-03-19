@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetNoteInput, NewNoteInput } from "./notes.schema.ts";
-import { createNote, getNote } from "./notes.service.ts";
+import { createNote, getAllNotes, getNote } from "./notes.service.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
@@ -26,5 +26,17 @@ export const getNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInput 
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to get note");
+    }
+};
+
+export const getAllNotesHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        const notes = await getAllNotes(req.user.id);
+        return res.code(200).send(notes);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to get notes");
     }
 };

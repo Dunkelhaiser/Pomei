@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { createNoteHandler, getNoteHandler } from "./notes.controller.ts";
-import { getNoteSchema, newNoteSchema, noteSchema } from "./notes.schema.ts";
+import { createNoteHandler, getAllNotesHandler, getNoteHandler } from "./notes.controller.ts";
+import { getNoteSchema, newNoteSchema, noteSchema, notesSchema } from "./notes.schema.ts";
 import { authHandler } from "../auth/auth.handler.ts";
 import { messageSchema } from "@/utils/schema.ts";
 
@@ -40,5 +40,21 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         getNoteHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Get all notes",
+                response: {
+                    200: notesSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getAllNotesHandler
     );
 };

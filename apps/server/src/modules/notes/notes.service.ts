@@ -21,3 +21,8 @@ export const getNote = async (id: string, userId: string) => {
         .where(and(eq(notes.id, id), eq(notes.userId, userId)));
     return note.length ? note[0] : null;
 };
+
+export const getAllNotes = async (userId: string) => {
+    const notesArr = await db.select().from(notes).where(eq(notes.userId, userId));
+    return notesArr;
+};
