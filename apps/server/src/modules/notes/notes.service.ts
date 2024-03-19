@@ -26,3 +26,13 @@ export const getAllNotes = async (userId: string) => {
     const notesArr = await db.select().from(notes).where(eq(notes.userId, userId));
     return notesArr;
 };
+
+export const editNote = async (id: string, input: NewNoteInput, userId: string) => {
+    const note = await getNote(id, userId);
+    if (!note) {
+        return null;
+    }
+    const updatedNote = { ...note, ...input };
+    const [editedNote] = await db.update(notes).set(updatedNote).where(eq(notes.id, id)).returning();
+    return editedNote;
+};
