@@ -27,4 +27,9 @@ export const noteSchema = zod.object({
     updatedAt: zod.date(),
 });
 
+export const getNoteSchema = zod.object({
+    id: zod.string().uuid({ message: "Enter valid id format" }),
+});
+
 export type NewNoteInput = zod.infer<typeof newNoteSchema>;
+export type GetNoteInput = zod.infer<typeof getNoteSchema>;
