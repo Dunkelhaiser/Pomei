@@ -50,7 +50,7 @@ export const notes = pgTable(
         title: varchar("title", { length: 255 }),
         content: text("content"),
         order: integer("order").notNull().default(0),
-        tags: varchar("tags", { length: 20 }).array(),
+        tags: varchar("tags", { length: 20 }).array().notNull().default([]),
         isArchived: boolean("is_archived").notNull().default(false),
         isDeleted: boolean("is_deleted").notNull().default(false),
         userId: uuid("user_id")

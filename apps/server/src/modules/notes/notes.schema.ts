@@ -3,15 +3,13 @@ import { z as zod } from "zod";
 export const newNoteSchema = zod.object({
     title: zod.string().trim().max(255, { message: "Title must be less than 255 characters long" }).nullable(),
     content: zod.string().trim().nullable(),
-    tags: zod
-        .array(
-            zod
-                .string()
-                .trim()
-                .min(1, { message: "Tag must be at least 1 character long" })
-                .max(20, { message: "Tag must be less than 20 characters long" })
-        )
-        .nullable(),
+    tags: zod.array(
+        zod
+            .string()
+            .trim()
+            .min(1, { message: "Tag must be at least 1 character long" })
+            .max(20, { message: "Tag must be less than 20 characters long" })
+    ),
 });
 
 export const noteSchema = zod.object({
