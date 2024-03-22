@@ -3,17 +3,6 @@ import { NewNoteInput } from "./notes.schema.ts";
 import { db } from "@/db/client.ts";
 import { notes } from "@/db/schema.ts";
 
-export const createNote = async (input: NewNoteInput, userId: string) => {
-    const [newNote] = await db
-        .insert(notes)
-        .values({
-            ...input,
-            userId,
-        })
-        .returning();
-    return newNote;
-};
-
 export const getNote = async (id: string, userId: string) => {
     const note = await db
         .select()
@@ -43,6 +32,23 @@ export const getNoteByOrder = async (order: number, userId: string) => {
 export const getAllNotes = async (userId: string) => {
     const notesArr = await db.select().from(notes).where(eq(notes.userId, userId));
     return notesArr;
+};
+
+export const createNote = async (input: NewNoteInput, userId: string) => {
+    const lastNoteOrder = await getLastNoteOrder(userId);
+    let order = 0;
+    if (lastNoteOrder !== null) {
+        order = lastNoteOrder + 1;
+    }
+    const [newNote] = await db
+        .insert(notes)
+        .values({
+            ...input,
+            order,
+            userId,
+        })
+        .returning();
+    return newNote;
 };
 
 export const editNote = async (id: string, input: NewNoteInput, userId: string) => {

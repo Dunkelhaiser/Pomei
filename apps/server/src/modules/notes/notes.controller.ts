@@ -9,7 +9,6 @@ import {
     getAllNotes,
     getArchive,
     getBin,
-    getLastNoteOrder,
     getNote,
     moveToBin,
     reorderNote,
@@ -17,10 +16,6 @@ import {
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
-        const lastNoteOrder = await getLastNoteOrder(req.user.id);
-        if (lastNoteOrder !== null) {
-            req.body.order = lastNoteOrder + 1;
-        }
         const newNote = await createNote(req.body, req.user.id);
         return res.code(201).send(newNote);
     } catch (err) {
