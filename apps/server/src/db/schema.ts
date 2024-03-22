@@ -70,8 +70,8 @@ export const folders = pgTable(
     "folders",
     {
         id: uuid("id").primaryKey().defaultRandom(),
-        name: varchar("name", { length: 25 }),
-        color: varchar("color", { length: 7 }),
+        name: varchar("name", { length: 25 }).notNull(),
+        color: varchar("color", { length: 7 }).notNull(),
         order: integer("order").notNull().default(0),
         userId: uuid("user_id")
             .notNull()
@@ -80,6 +80,6 @@ export const folders = pgTable(
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },
     (table) => ({
-        nameIdx: uniqueIndex("name_idx").on(table.name),
+        nameIdx: index("name_idx").on(table.name),
     })
 );

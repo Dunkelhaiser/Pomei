@@ -6,6 +6,7 @@ import { serializerCompiler, validatorCompiler, jsonSchemaTransform } from "fast
 import { env } from "./env.ts";
 import { authRoutes } from "./modules/auth/auth.route.ts";
 import { csrfPlugin } from "./modules/auth/csrf.ts";
+import { foldersRoutes } from "./modules/folders/folders.route.ts";
 import { notesRoutes } from "./modules/notes/notes.route.ts";
 import { version } from "../package.json";
 
@@ -52,6 +53,8 @@ void (async () => {
 
     void app.register(authRoutes, { prefix: "/auth" });
     void app.register(notesRoutes, { prefix: "/notes" });
+    void app.register(foldersRoutes, { prefix: "/folders" });
+
     try {
         await app.listen({ port: 3000, host: "0.0.0.0" });
     } catch (err) {

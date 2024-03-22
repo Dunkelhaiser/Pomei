@@ -1,0 +1,1 @@
+ALTER TABLE "folders" ALTER COLUMN "name" SET NOT NULL;
