@@ -90,3 +90,12 @@ export const moveToBin = async (id: string, move: boolean, userId: string) => {
     const [deletedNote] = await db.update(notes).set({ isDeleted: move }).where(eq(notes.id, id)).returning();
     return deletedNote;
 };
+
+export const deleteNote = async (id: string, userId: string) => {
+    const note = await getNote(id, userId);
+    if (!note) {
+        return null;
+    }
+    await db.delete(notes).where(eq(notes.id, id));
+    return note;
+};

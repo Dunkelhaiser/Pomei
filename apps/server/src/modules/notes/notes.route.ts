@@ -3,6 +3,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import {
     archiveNoteHandler,
     createNoteHandler,
+    deleteNoteHandler,
     editNoteHandler,
     getAllNotesHandler,
     getNoteHandler,
@@ -19,7 +20,7 @@ import {
     orderSchema,
 } from "./notes.schema.ts";
 import { authHandler } from "../auth/auth.handler.ts";
-import { messageSchema } from "@/utils/schema.ts";
+import { emptySchema, messageSchema } from "@/utils/schema.ts";
 
 export const notesRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
@@ -148,5 +149,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         moveToBinHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().delete(
+        "/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Permanently delete note",
+                params: getNoteSchema,
+                response: {
+                    204: emptySchema,
+                    404: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        deleteNoteHandler
     );
 };

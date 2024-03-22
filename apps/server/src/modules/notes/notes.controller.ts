@@ -3,6 +3,7 @@ import { ArchiveInput, GetNoteInput, MoveToBinInput, NewNoteInput, OrderInput } 
 import {
     archiveNote,
     createNote,
+    deleteNote,
     editNote,
     getAllNotes,
     getLastNoteOrder,
@@ -123,5 +124,20 @@ export const moveToBinHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send(`Failed to ${req.body.moveToBin ? "move note to bin" : "restore note"}`);
+    }
+};
+
+export const deleteNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
+    try {
+        const note = await deleteNote(req.params.id, req.user.id);
+        if (note) {
+            return res.code(204).send();
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to delete note");
     }
 };
