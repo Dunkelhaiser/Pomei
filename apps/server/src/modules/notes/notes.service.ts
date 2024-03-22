@@ -78,6 +78,9 @@ export const archiveNote = async (id: string, archive: boolean, userId: string) 
     if (!note) {
         return null;
     }
+    if (note.isDeleted) {
+        throw new Error("Note is in bin");
+    }
     const [archivedNote] = await db.update(notes).set({ isArchived: archive }).where(eq(notes.id, id)).returning();
     return archivedNote;
 };
@@ -95,7 +98,11 @@ export const moveToBin = async (id: string, move: boolean, userId: string) => {
     if (!note) {
         return null;
     }
-    const [deletedNote] = await db.update(notes).set({ isDeleted: move }).where(eq(notes.id, id)).returning();
+    const [deletedNote] = await db
+        .update(notes)
+        .set({ isDeleted: move, isArchived: false })
+        .where(eq(notes.id, id))
+        .returning();
     return deletedNote;
 };
 
