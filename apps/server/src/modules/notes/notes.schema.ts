@@ -30,5 +30,10 @@ export const getNoteSchema = zod.object({
     id: zod.string().uuid({ message: "Enter valid id format" }),
 });
 
+export const orderSchema = zod.object({
+    order: zod.number().min(0, { message: "Order must be greater than or equal to 0" }),
+});
+
 export type NewNoteInput = zod.infer<typeof newNoteSchema>;
 export type GetNoteInput = zod.infer<typeof getNoteSchema>;
+export type OrderInput = zod.infer<typeof orderSchema>;

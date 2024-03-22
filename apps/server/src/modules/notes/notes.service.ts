@@ -36,3 +36,12 @@ export const editNote = async (id: string, input: NewNoteInput, userId: string) 
     const [editedNote] = await db.update(notes).set(updatedNote).where(eq(notes.id, id)).returning();
     return editedNote;
 };
+
+export const reorderNote = async (id: string, order: number, userId: string) => {
+    const note = await getNote(id, userId);
+    if (!note) {
+        return null;
+    }
+    const [editedNote] = await db.update(notes).set({ order }).where(eq(notes.id, id)).returning();
+    return editedNote;
+};

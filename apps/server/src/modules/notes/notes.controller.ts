@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetNoteInput, NewNoteInput } from "./notes.schema.ts";
-import { createNote, editNote, getAllNotes, getNote } from "./notes.service.ts";
+import { GetNoteInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
+import { createNote, editNote, getAllNotes, getNote, reorderNote } from "./notes.service.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
@@ -56,5 +56,23 @@ export const editNoteHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to edit note");
+    }
+};
+
+export const reorderNoteHandler = async (
+    req: FastifyRequest<{ Params: GetNoteInput; Body: OrderInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const note = await reorderNote(req.params.id, req.body.order, req.user.id);
+        if (note) {
+            return res.code(200).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to reorder note");
     }
 };
