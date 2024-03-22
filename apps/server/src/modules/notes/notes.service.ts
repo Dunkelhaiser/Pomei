@@ -103,3 +103,11 @@ export const deleteNote = async (id: string, userId: string) => {
 export const emptyBin = async (userId: string) => {
     await db.delete(notes).where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
 };
+
+export const getBin = async (userId: string) => {
+    const bin = await db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
+    return bin;
+};

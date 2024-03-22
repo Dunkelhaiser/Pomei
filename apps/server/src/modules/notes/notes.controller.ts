@@ -7,6 +7,7 @@ import {
     editNote,
     emptyBin,
     getAllNotes,
+    getBin,
     getLastNoteOrder,
     getNote,
     moveToBin,
@@ -149,5 +150,14 @@ export const emptyBinHandler = async (req: FastifyRequest, res: FastifyReply) =>
         return res.code(204).send();
     } catch (err) {
         return res.code(500).send("Failed to empty bin");
+    }
+};
+
+export const getBinHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        const bin = await getBin(req.user.id);
+        return res.code(200).send(bin);
+    } catch (err) {
+        return res.code(500).send("Failed to get bin");
     }
 };
