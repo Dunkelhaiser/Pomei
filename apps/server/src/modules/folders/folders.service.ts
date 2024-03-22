@@ -3,6 +3,11 @@ import { NewFolderInput } from "./folder.schema.ts";
 import { db } from "@/db/client.ts";
 import { folders } from "@/db/schema.ts";
 
+export const getAllFolders = async (userId: string) => {
+    const allFolders = await db.select().from(folders).where(eq(folders.userId, userId)).orderBy(folders.order);
+    return allFolders;
+};
+
 export const getLastFolderOrder = async (userId: string) => {
     const lastFolder = await db
         .select({ order: folders.order })

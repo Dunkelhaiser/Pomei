@@ -15,5 +15,6 @@ export const folderSchema = zod.object({
     createdAt: zod.date(),
     updatedAt: zod.date(),
 });
+export const foldersSchema = folderSchema.array();
 
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
