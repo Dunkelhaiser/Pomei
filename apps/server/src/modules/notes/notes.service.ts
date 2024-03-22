@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { NewNoteInput } from "./notes.schema.ts";
+import { getFolderById } from "../folders/folders.service.ts";
 import { db } from "@/db/client.ts";
 import { notes } from "@/db/schema.ts";
 
@@ -131,4 +132,37 @@ export const getBin = async (userId: string) => {
         .from(notes)
         .where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
     return bin;
+};
+
+export const addToFolder = async (noteId: string, folderId: string, userId: string) => {
+    const note = await getNote(noteId, userId);
+    if (!note) {
+        return null;
+    }
+
+    if (note.folderId) {
+        throw new Error("Note already in folder");
+    }
+
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        throw new Error("Folder does not exist");
+    }
+
+    const [editedNote] = await db.update(notes).set({ folderId }).where(eq(notes.id, noteId)).returning();
+    return editedNote;
+};
+
+export const removeFromFolder = async (noteId: string, userId: string) => {
+    const note = await getNote(noteId, userId);
+    if (!note) {
+        return null;
+    }
+
+    if (!note.folderId) {
+        throw new Error("Note not in folder");
+    }
+
+    const [editedNote] = await db.update(notes).set({ folderId: null }).where(eq(notes.id, noteId)).returning();
+    return editedNote;
 };

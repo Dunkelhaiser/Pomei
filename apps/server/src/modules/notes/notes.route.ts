@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import {
+    addToFolderHandler,
     archiveNoteHandler,
     createNoteHandler,
     deleteNoteHandler,
@@ -11,10 +12,12 @@ import {
     getBinHandler,
     getNoteHandler,
     moveToBinHandler,
+    removeFromFolderHandler,
     reorderNoteHandler,
 } from "./notes.controller.ts";
 import {
     archiveSchema,
+    folderIdSchema,
     getNoteSchema,
     moveToBinSchema,
     newNoteSchema,
@@ -215,5 +218,42 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         getBinHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().put(
+        "/folder/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes", "folders"],
+                description: "Add note to folder",
+                params: getNoteSchema,
+                body: folderIdSchema,
+                response: {
+                    200: noteSchema,
+                    400: messageSchema,
+                    404: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        addToFolderHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().delete(
+        "/folder/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes", "folders"],
+                description: "Remove note from folder",
+                params: getNoteSchema,
+                response: {
+                    200: noteSchema,
+                    400: messageSchema,
+                    404: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        removeFromFolderHandler
     );
 };

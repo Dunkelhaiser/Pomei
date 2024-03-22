@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ArchiveInput, GetNoteInput, MoveToBinInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
+import { ArchiveInput, FolderIdInput, GetNoteInput, MoveToBinInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
 import {
+    addToFolder,
     archiveNote,
     createNote,
     deleteNote,
@@ -11,6 +12,7 @@ import {
     getBin,
     getNote,
     moveToBin,
+    removeFromFolder,
     reorderNote,
 } from "./notes.service.ts";
 
@@ -164,5 +166,38 @@ export const getBinHandler = async (req: FastifyRequest, res: FastifyReply) => {
         return res.code(200).send(bin);
     } catch (err) {
         return res.code(500).send("Failed to get bin");
+    }
+};
+
+export const addToFolderHandler = async (
+    req: FastifyRequest<{ Params: GetNoteInput; Body: FolderIdInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const note = await addToFolder(req.params.id, req.body.folderId, req.user.id);
+        if (note) {
+            return res.code(200).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to add note to folder");
+    }
+};
+
+export const removeFromFolderHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
+    try {
+        const note = await removeFromFolder(req.params.id, req.user.id);
+        if (note) {
+            return res.code(200).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to remove note from folder");
     }
 };
