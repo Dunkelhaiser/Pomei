@@ -17,4 +17,9 @@ export const folderSchema = zod.object({
 });
 export const foldersSchema = folderSchema.array();
 
+export const getFolderSchema = zod.object({
+    id: zod.string().uuid({ message: "Enter valid id format" }),
+});
+
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
+export type GetFolderInput = zod.infer<typeof getFolderSchema>;

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { NewFolderInput } from "./folder.schema.ts";
-import { createFolder, getAllFolders } from "./folders.service.ts";
+import { GetFolderInput, NewFolderInput } from "./folder.schema.ts";
+import { createFolder, getAllFolders, loadFolderContent } from "./folders.service.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
     try {
@@ -20,5 +20,20 @@ export const getAllFoldersHandler = async (req: FastifyRequest, res: FastifyRepl
         return res.code(200).send(folders);
     } catch (err) {
         return res.code(500).send("Failed to get folders");
+    }
+};
+
+export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: GetFolderInput }>, res: FastifyReply) => {
+    try {
+        const folderContent = await loadFolderContent(req.params.id, req.user.id);
+        if (folderContent) {
+            return res.code(200).send(folderContent);
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to get folder content");
     }
 };
