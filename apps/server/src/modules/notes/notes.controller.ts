@@ -5,6 +5,7 @@ import {
     createNote,
     deleteNote,
     editNote,
+    emptyBin,
     getAllNotes,
     getLastNoteOrder,
     getNote,
@@ -139,5 +140,14 @@ export const deleteNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInp
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to delete note");
+    }
+};
+
+export const emptyBinHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        await emptyBin(req.user.id);
+        return res.code(204).send();
+    } catch (err) {
+        return res.code(500).send("Failed to empty bin");
     }
 };

@@ -5,6 +5,7 @@ import {
     createNoteHandler,
     deleteNoteHandler,
     editNoteHandler,
+    emptyBinHandler,
     getAllNotesHandler,
     getNoteHandler,
     moveToBinHandler,
@@ -167,5 +168,20 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         deleteNoteHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().delete(
+        "/bin",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Permanently delete all notes from the bin",
+                response: {
+                    204: emptySchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        emptyBinHandler
     );
 };

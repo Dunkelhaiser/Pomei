@@ -99,3 +99,7 @@ export const deleteNote = async (id: string, userId: string) => {
     await db.delete(notes).where(eq(notes.id, id));
     return note;
 };
+
+export const emptyBin = async (userId: string) => {
+    await db.delete(notes).where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
+};
