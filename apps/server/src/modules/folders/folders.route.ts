@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { folderSchema, foldersSchema, newFolderSchema, orderSchema } from "./folder.schema.ts";
+import { folderSchema, foldersSchema, getFolderSchema, newFolderSchema, orderSchema } from "./folder.schema.ts";
 import {
     createFolderHandler,
     deleteFolderHandler,
@@ -53,6 +53,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["folders"],
                 description: "Get folder content",
+                params: getFolderSchema,
                 response: {
                     200: notesSchema,
                     400: messageSchema,
@@ -70,6 +71,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["folders"],
                 description: "Delete folder",
+                params: getFolderSchema,
                 response: {
                     204: emptySchema,
                     400: messageSchema,
@@ -87,6 +89,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["folders"],
                 description: "Edit folder",
+                params: getFolderSchema,
                 body: newFolderSchema,
                 response: {
                     200: folderSchema,
@@ -105,6 +108,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["folders"],
                 description: "Reorder folder",
+                params: getFolderSchema,
                 body: orderSchema,
                 response: {
                     200: folderSchema,
