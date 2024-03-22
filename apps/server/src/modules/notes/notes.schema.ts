@@ -38,7 +38,12 @@ export const archiveSchema = zod.object({
     archive: zod.boolean(),
 });
 
+export const moveToBinSchema = zod.object({
+    moveToBin: zod.boolean(),
+});
+
 export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
 export type GetNoteInput = zod.infer<typeof getNoteSchema>;
 export type OrderInput = zod.infer<typeof orderSchema>;
 export type ArchiveInput = zod.infer<typeof archiveSchema>;
+export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;

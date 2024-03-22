@@ -81,3 +81,12 @@ export const archiveNote = async (id: string, archive: boolean, userId: string) 
     const [archivedNote] = await db.update(notes).set({ isArchived: archive }).where(eq(notes.id, id)).returning();
     return archivedNote;
 };
+
+export const moveToBin = async (id: string, move: boolean, userId: string) => {
+    const note = await getNote(id, userId);
+    if (!note) {
+        return null;
+    }
+    const [deletedNote] = await db.update(notes).set({ isDeleted: move }).where(eq(notes.id, id)).returning();
+    return deletedNote;
+};

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ArchiveInput, GetNoteInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
+import { ArchiveInput, GetNoteInput, MoveToBinInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
 import {
     archiveNote,
     createNote,
@@ -7,6 +7,7 @@ import {
     getAllNotes,
     getLastNoteOrder,
     getNote,
+    moveToBin,
     reorderNote,
 } from "./notes.service.ts";
 
@@ -104,5 +105,23 @@ export const archiveNoteHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to archive note");
+    }
+};
+
+export const moveToBinHandler = async (
+    req: FastifyRequest<{ Params: GetNoteInput; Body: MoveToBinInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const note = await moveToBin(req.params.id, req.body.moveToBin, req.user.id);
+        if (note) {
+            return res.code(200).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send(`Failed to ${req.body.moveToBin ? "move note to bin" : "restore note"}`);
     }
 };

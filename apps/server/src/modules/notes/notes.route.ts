@@ -6,9 +6,18 @@ import {
     editNoteHandler,
     getAllNotesHandler,
     getNoteHandler,
+    moveToBinHandler,
     reorderNoteHandler,
 } from "./notes.controller.ts";
-import { archiveSchema, getNoteSchema, newNoteSchema, noteSchema, notesSchema, orderSchema } from "./notes.schema.ts";
+import {
+    archiveSchema,
+    getNoteSchema,
+    moveToBinSchema,
+    newNoteSchema,
+    noteSchema,
+    notesSchema,
+    orderSchema,
+} from "./notes.schema.ts";
 import { authHandler } from "../auth/auth.handler.ts";
 import { messageSchema } from "@/utils/schema.ts";
 
@@ -120,5 +129,24 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         archiveNoteHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().put(
+        "/bin/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Move to bin or restore note",
+                params: getNoteSchema,
+                body: moveToBinSchema,
+                response: {
+                    200: noteSchema,
+                    404: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        moveToBinHandler
     );
 };
