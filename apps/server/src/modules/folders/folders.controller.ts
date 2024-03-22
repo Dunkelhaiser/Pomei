@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetFolderInput, NewFolderInput } from "./folder.schema.ts";
-import { createFolder, deleteFolder, getAllFolders, loadFolderContent } from "./folders.service.ts";
+import { createFolder, deleteFolder, editFolder, getAllFolders, loadFolderContent } from "./folders.service.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
     try {
@@ -50,5 +50,23 @@ export const deleteFolderHandler = async (req: FastifyRequest<{ Params: GetFolde
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to delete folder");
+    }
+};
+
+export const editFolderHandler = async (
+    req: FastifyRequest<{ Params: GetFolderInput; Body: NewFolderInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const folder = await editFolder(req.params.id, req.body, req.user.id);
+        if (folder) {
+            return res.code(200).send(folder);
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to edit folder");
     }
 };

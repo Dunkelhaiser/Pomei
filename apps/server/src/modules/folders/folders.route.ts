@@ -4,6 +4,7 @@ import { folderSchema, foldersSchema, newFolderSchema } from "./folder.schema.ts
 import {
     createFolderHandler,
     deleteFolderHandler,
+    editFolderHandler,
     getAllFoldersHandler,
     loadFolderContentHandler,
 } from "./folders.controller.ts";
@@ -77,5 +78,23 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             },
         },
         deleteFolderHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().put(
+        "/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Edit folder",
+                body: newFolderSchema,
+                response: {
+                    200: folderSchema,
+                    400: messageSchema,
+                    404: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        editFolderHandler
     );
 };

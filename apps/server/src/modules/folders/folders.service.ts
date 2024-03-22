@@ -69,3 +69,13 @@ export const deleteFolder = async (folderId: string, userId: string) => {
     await db.delete(folders).where(eq(folders.id, folderId));
     return folder;
 };
+
+export const editFolder = async (folderId: string, input: NewFolderInput, userId: string) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+
+    const [updatedFolder] = await db.update(folders).set(input).where(eq(folders.id, folderId)).returning();
+    return updatedFolder;
+};
