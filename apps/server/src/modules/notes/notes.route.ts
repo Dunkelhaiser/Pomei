@@ -7,6 +7,7 @@ import {
     editNoteHandler,
     emptyBinHandler,
     getAllNotesHandler,
+    getArchiveHandler,
     getBinHandler,
     getNoteHandler,
     moveToBinHandler,
@@ -132,6 +133,21 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         archiveNoteHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/archive",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Get all notes in the archive",
+                response: {
+                    200: notesSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getArchiveHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/bin/:id",

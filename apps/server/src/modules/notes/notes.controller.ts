@@ -7,6 +7,7 @@ import {
     editNote,
     emptyBin,
     getAllNotes,
+    getArchive,
     getBin,
     getLastNoteOrder,
     getNote,
@@ -108,6 +109,15 @@ export const archiveNoteHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to archive note");
+    }
+};
+
+export const getArchiveHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        const archive = await getArchive(req.user.id);
+        return res.code(200).send(archive);
+    } catch (err) {
+        return res.code(500).send("Failed to get archive");
     }
 };
 
