@@ -59,3 +59,13 @@ export const loadFolderContent = async (folderId: string, userId: string) => {
 
     return folderNotes;
 };
+
+export const deleteFolder = async (folderId: string, userId: string) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+
+    await db.delete(folders).where(eq(folders.id, folderId));
+    return folder;
+};
