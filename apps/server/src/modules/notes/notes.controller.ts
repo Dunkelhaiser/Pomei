@@ -1,9 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetNoteInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
-import { createNote, editNote, getAllNotes, getNote, reorderNote } from "./notes.service.ts";
+import { createNote, editNote, getAllNotes, getLastNoteOrder, getNote, reorderNote } from "./notes.service.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
+        const lastNoteOrder = await getLastNoteOrder(req.user.id);
+        if (lastNoteOrder !== null) {
+            req.body.order = lastNoteOrder + 1;
+        }
         const newNote = await createNote(req.body, req.user.id);
         return res.code(201).send(newNote);
     } catch (err) {
