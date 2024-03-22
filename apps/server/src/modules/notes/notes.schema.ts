@@ -34,6 +34,11 @@ export const orderSchema = zod.object({
     order: zod.number().min(0, { message: "Order must be greater than or equal to 0" }),
 });
 
+export const archiveSchema = zod.object({
+    archive: zod.boolean(),
+});
+
 export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
 export type GetNoteInput = zod.infer<typeof getNoteSchema>;
 export type OrderInput = zod.infer<typeof orderSchema>;
+export type ArchiveInput = zod.infer<typeof archiveSchema>;

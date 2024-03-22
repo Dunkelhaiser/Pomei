@@ -1,6 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetNoteInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
-import { createNote, editNote, getAllNotes, getLastNoteOrder, getNote, reorderNote } from "./notes.service.ts";
+import { ArchiveInput, GetNoteInput, NewNoteInput, OrderInput } from "./notes.schema.ts";
+import {
+    archiveNote,
+    createNote,
+    editNote,
+    getAllNotes,
+    getLastNoteOrder,
+    getNote,
+    reorderNote,
+} from "./notes.service.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
@@ -78,5 +86,23 @@ export const reorderNoteHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to reorder note");
+    }
+};
+
+export const archiveNoteHandler = async (
+    req: FastifyRequest<{ Params: GetNoteInput; Body: ArchiveInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const note = await archiveNote(req.params.id, req.body.archive, req.user.id);
+        if (note) {
+            return res.code(200).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to archive note");
     }
 };

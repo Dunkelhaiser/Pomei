@@ -72,3 +72,12 @@ export const reorderNote = async (id: string, order: number, userId: string) => 
 
     return editedNote;
 };
+
+export const archiveNote = async (id: string, archive: boolean, userId: string) => {
+    const note = await getNote(id, userId);
+    if (!note) {
+        return null;
+    }
+    const [archivedNote] = await db.update(notes).set({ isArchived: archive }).where(eq(notes.id, id)).returning();
+    return archivedNote;
+};
