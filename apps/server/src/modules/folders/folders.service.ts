@@ -39,6 +39,14 @@ export const getFolderById = async (folderId: string, userId: string) => {
     return folder.length ? folder[0] : null;
 };
 
+export const getFolderByOrder = async (order: number, userId: string) => {
+    const folder = await db
+        .select()
+        .from(folders)
+        .where(and(eq(folders.order, order), eq(folders.userId, userId)));
+    return folder.length ? folder[0] : null;
+};
+
 export const loadFolderContent = async (folderId: string, userId: string) => {
     const folder = await getFolderById(folderId, userId);
     if (!folder) {
@@ -78,4 +86,26 @@ export const editFolder = async (folderId: string, input: NewFolderInput, userId
 
     const [updatedFolder] = await db.update(folders).set(input).where(eq(folders.id, folderId)).returning();
     return updatedFolder;
+};
+
+export const reorderFolder = async (folderId: string, order: number, userId: string) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+
+    const oldOrder = folder.order;
+    const folderToSwap = await getFolderByOrder(order, userId);
+    if (!folderToSwap) {
+        const [editedFolder] = await db.update(folders).set({ order }).where(eq(folders.id, folderId)).returning();
+        return editedFolder;
+    }
+
+    const [editedFolder] = await db
+        .update(folders)
+        .set({ order: folderToSwap.order })
+        .where(eq(folders.id, folderId))
+        .returning();
+    await db.update(folders).set({ order: oldOrder }).where(eq(folders.id, folderToSwap.id));
+    return editedFolder;
 };

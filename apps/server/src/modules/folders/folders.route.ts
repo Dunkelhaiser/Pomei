@@ -1,12 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { folderSchema, foldersSchema, newFolderSchema } from "./folder.schema.ts";
+import { folderSchema, foldersSchema, newFolderSchema, orderSchema } from "./folder.schema.ts";
 import {
     createFolderHandler,
     deleteFolderHandler,
     editFolderHandler,
     getAllFoldersHandler,
     loadFolderContentHandler,
+    reorderFolderHandler,
 } from "./folders.controller.ts";
 import { notesSchema } from "../notes/notes.schema.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
@@ -96,5 +97,23 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             },
         },
         editFolderHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().put(
+        "/reorder/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Reorder folder",
+                body: orderSchema,
+                response: {
+                    200: folderSchema,
+                    400: messageSchema,
+                    404: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        reorderFolderHandler
     );
 };

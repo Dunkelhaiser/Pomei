@@ -21,5 +21,10 @@ export const getFolderSchema = zod.object({
     id: zod.string().uuid({ message: "Enter valid id format" }),
 });
 
+export const orderSchema = zod.object({
+    order: zod.number().min(0, { message: "Order must be greater than or equal to 0" }),
+});
+
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
 export type GetFolderInput = zod.infer<typeof getFolderSchema>;
+export type OrderInput = zod.infer<typeof orderSchema>;

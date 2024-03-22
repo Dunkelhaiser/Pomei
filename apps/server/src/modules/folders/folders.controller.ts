@@ -1,6 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderInput, NewFolderInput } from "./folder.schema.ts";
-import { createFolder, deleteFolder, editFolder, getAllFolders, loadFolderContent } from "./folders.service.ts";
+import { GetFolderInput, NewFolderInput, OrderInput } from "./folder.schema.ts";
+import {
+    createFolder,
+    deleteFolder,
+    editFolder,
+    getAllFolders,
+    loadFolderContent,
+    reorderFolder,
+} from "./folders.service.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
     try {
@@ -68,5 +75,23 @@ export const editFolderHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to edit folder");
+    }
+};
+
+export const reorderFolderHandler = async (
+    req: FastifyRequest<{ Params: GetFolderInput; Body: OrderInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const folder = await reorderFolder(req.params.id, req.body.order, req.user.id);
+        if (folder) {
+            return res.code(200).send(folder);
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to reorder folder");
     }
 };
