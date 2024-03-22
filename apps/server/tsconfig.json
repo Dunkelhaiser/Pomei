@@ -27,7 +27,8 @@
         "forceConsistentCasingInFileNames": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@/auth/*": ["./src/modules/auth/*"]
         }
     },
     "include": ["src"]

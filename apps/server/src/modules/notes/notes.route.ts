@@ -22,7 +22,7 @@ import {
     notesSchema,
     orderSchema,
 } from "./notes.schema.ts";
-import { authHandler } from "../auth/auth.handler.ts";
+import { authHandler } from "@/auth/auth.handler.ts";
 import { emptySchema, messageSchema } from "@/utils/schema.ts";
 
 export const notesRoutes = async (app: FastifyInstance) => {
