@@ -31,8 +31,6 @@ export const getNoteSchema = zod.object({
 });
 
 export const getNotePaginatedSchema = zod.object({
-    // page: zod.number().min(1, { message: "Page must be greater than or equal to 1" }),
-    // limit: zod.number().min(1, { message: "Page size must be greater than or equal to 1" }),
     page: zod.preprocess(
         (val) => Number(val),
         zod.number().min(1, { message: "Page must be greater than or equal to 1" })
@@ -42,7 +40,6 @@ export const getNotePaginatedSchema = zod.object({
         zod.number().min(1, { message: "Page size must be greater than or equal to 1" })
     ),
     orderBy: zod.enum(["order", "title", "createdAt", "updatedAt"]).optional(),
-    // isAscending: zod.boolean().optional(),
     isAscending: zod
         .string()
         .refine((s) => s === "true" || s === "false")
