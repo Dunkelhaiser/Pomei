@@ -2,7 +2,12 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { lucia } from "./auth.ts";
 
 export const authHandler = async (
-    req: FastifyRequest<{ Body: unknown } | { Params: unknown } | { Body: unknown; Params: unknown }>,
+    req: FastifyRequest<
+        | { Body: unknown }
+        | { Params: unknown }
+        | { Querystring: unknown }
+        | { Body: unknown; Params: unknown; Querystring: unknown }
+    >,
     res: FastifyReply
     // eslint-disable-next-line consistent-return
 ) => {

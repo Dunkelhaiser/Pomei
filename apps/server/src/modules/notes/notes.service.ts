@@ -35,6 +35,23 @@ export const getAllNotes = async (userId: string) => {
     return notesArr;
 };
 
+export const getAllNotesPaginated = async (
+    userId: string,
+    limit: number,
+    page = 1,
+    orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
+    isAscending = true
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(eq(notes.userId, userId))
+        .orderBy(isAscending ? notes[orderBy] : desc(notes[orderBy]))
+        .offset((page - 1) * limit)
+        .limit(limit);
+    return notesArr;
+};
+
 export const createNote = async (input: NewNoteInput, userId: string) => {
     const lastNoteOrder = await getLastNoteOrder(userId);
     let order = 0;

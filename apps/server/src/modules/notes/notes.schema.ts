@@ -30,6 +30,26 @@ export const getNoteSchema = zod.object({
     id: zod.string().uuid({ message: "Enter valid id format" }),
 });
 
+export const getNotePaginatedSchema = zod.object({
+    // page: zod.number().min(1, { message: "Page must be greater than or equal to 1" }),
+    // limit: zod.number().min(1, { message: "Page size must be greater than or equal to 1" }),
+    page: zod.preprocess(
+        (val) => Number(val),
+        zod.number().min(1, { message: "Page must be greater than or equal to 1" })
+    ),
+    limit: zod.preprocess(
+        (val) => Number(val),
+        zod.number().min(1, { message: "Page size must be greater than or equal to 1" })
+    ),
+    orderBy: zod.enum(["order", "title", "createdAt", "updatedAt"]).optional(),
+    // isAscending: zod.boolean().optional(),
+    isAscending: zod
+        .string()
+        .refine((s) => s === "true" || s === "false")
+        .transform((s) => s === "true")
+        .optional(),
+});
+
 export const orderSchema = zod.object({
     order: zod.number().min(0, { message: "Order must be greater than or equal to 0" }),
 });
@@ -48,6 +68,7 @@ export const folderIdSchema = zod.object({
 
 export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
 export type GetNoteInput = zod.infer<typeof getNoteSchema>;
+export type GetNotePaginatedInput = zod.infer<typeof getNotePaginatedSchema>;
 export type OrderInput = zod.infer<typeof orderSchema>;
 export type ArchiveInput = zod.infer<typeof archiveSchema>;
 export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;

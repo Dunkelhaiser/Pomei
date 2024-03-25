@@ -8,6 +8,7 @@ import {
     editNoteHandler,
     emptyBinHandler,
     getAllNotesHandler,
+    getAllNotesPaginatedHandler,
     getArchiveHandler,
     getBinHandler,
     getNoteHandler,
@@ -18,6 +19,7 @@ import {
 import {
     archiveSchema,
     folderIdSchema,
+    getNotePaginatedSchema,
     getNoteSchema,
     moveToBinSchema,
     newNoteSchema,
@@ -65,7 +67,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
         getNoteHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
-        "/",
+        "/all",
         {
             preHandler: authHandler,
             schema: {
@@ -79,6 +81,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         getAllNotesHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Get all notes with pagination",
+                querystring: getNotePaginatedSchema,
+                response: {
+                    200: notesSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getAllNotesPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/:id",
