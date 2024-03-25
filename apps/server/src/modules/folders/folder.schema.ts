@@ -21,10 +21,28 @@ export const getFolderSchema = zod.object({
     id: zod.string().uuid({ message: "Enter valid id format" }),
 });
 
+export const getFolderPaginatedSchema = zod.object({
+    page: zod.preprocess(
+        (val) => Number(val),
+        zod.number().min(1, { message: "Page must be greater than or equal to 1" })
+    ),
+    limit: zod.preprocess(
+        (val) => Number(val),
+        zod.number().min(1, { message: "Page size must be greater than or equal to 1" })
+    ),
+    orderBy: zod.enum(["order", "name", "createdAt", "updatedAt"]).optional(),
+    isAscending: zod
+        .string()
+        .refine((s) => s === "true" || s === "false")
+        .transform((s) => s === "true")
+        .optional(),
+});
+
 export const orderSchema = zod.object({
     order: zod.number().min(0, { message: "Order must be greater than or equal to 0" }),
 });
 
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
 export type GetFolderInput = zod.infer<typeof getFolderSchema>;
+export type GetFolderPaginatedInput = zod.infer<typeof getFolderPaginatedSchema>;
 export type OrderInput = zod.infer<typeof orderSchema>;

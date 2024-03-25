@@ -8,6 +8,23 @@ export const getAllFolders = async (userId: string) => {
     return allFolders;
 };
 
+export const getAllFoldersPaginated = async (
+    userId: string,
+    limit: number,
+    page = 1,
+    orderBy: "order" | "name" | "createdAt" | "updatedAt" = "order",
+    isAscending = true
+) => {
+    const foldersArr = await db
+        .select()
+        .from(folders)
+        .where(eq(folders.userId, userId))
+        .orderBy(isAscending ? folders[orderBy] : desc(folders[orderBy]))
+        .offset((page - 1) * limit)
+        .limit(limit);
+    return foldersArr;
+};
+
 export const getFolderById = async (folderId: string, userId: string) => {
     const folder = await db
         .select()

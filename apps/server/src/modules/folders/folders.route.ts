@@ -1,11 +1,19 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { folderSchema, foldersSchema, getFolderSchema, newFolderSchema, orderSchema } from "./folder.schema.ts";
+import {
+    folderSchema,
+    foldersSchema,
+    getFolderPaginatedSchema,
+    getFolderSchema,
+    newFolderSchema,
+    orderSchema,
+} from "./folder.schema.ts";
 import {
     createFolderHandler,
     deleteFolderHandler,
     editFolderHandler,
     getAllFoldersHandler,
+    getAllFoldersPaginatedHandler,
     loadFolderContentHandler,
     reorderFolderHandler,
 } from "./folders.controller.ts";
@@ -32,7 +40,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
         createFolderHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
-        "/",
+        "/all",
         {
             preHandler: authHandler,
             schema: {
@@ -45,6 +53,23 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             },
         },
         getAllFoldersHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Get all folders with pagination",
+                querystring: getFolderPaginatedSchema,
+                response: {
+                    200: foldersSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getAllFoldersPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
         "/:id",

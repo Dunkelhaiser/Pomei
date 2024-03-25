@@ -1,10 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderInput, NewFolderInput, OrderInput } from "./folder.schema.ts";
+import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput, OrderInput } from "./folder.schema.ts";
 import {
     createFolder,
     deleteFolder,
     editFolder,
     getAllFolders,
+    getAllFoldersPaginated,
     loadFolderContent,
     reorderFolder,
 } from "./folders.service.ts";
@@ -26,6 +27,22 @@ export const getAllFoldersHandler = async (req: FastifyRequest, res: FastifyRepl
         const folders = await getAllFolders(req.user.id);
         return res.code(200).send(folders);
     } catch (err) {
+        return res.code(500).send("Failed to get folders");
+    }
+};
+
+export const getAllFoldersPaginatedHandler = async (
+    req: FastifyRequest<{ Querystring: GetFolderPaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, orderBy, isAscending } = req.query;
+    try {
+        const folders = await getAllFoldersPaginated(req.user.id, limit, page, orderBy, isAscending);
+        return res.code(200).send(folders);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
         return res.code(500).send("Failed to get folders");
     }
 };
