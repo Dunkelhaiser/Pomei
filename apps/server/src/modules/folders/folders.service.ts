@@ -10,7 +10,7 @@ export const getAllFolders = async (userId: string) => {
 
 export const getAllFoldersPaginated = async (
     userId: string,
-    limit: number,
+    limit = 10,
     page = 1,
     orderBy: "order" | "name" | "createdAt" | "updatedAt" = "order",
     isAscending = true

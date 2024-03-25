@@ -20,13 +20,12 @@ import {
     archiveSchema,
     folderIdSchema,
     getNotePaginatedSchema,
-    getNoteSchema,
     moveToBinSchema,
     newNoteSchema,
     noteSchema,
     notesSchema,
-    orderSchema,
 } from "./notes.schema.ts";
+import { getByIdSchema, orderSchema } from "../shared/shared.schema.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
 import { emptySchema, messageSchema } from "@/utils/schema.ts";
 
@@ -55,7 +54,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Get specific note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 response: {
                     200: noteSchema,
                     404: messageSchema,
@@ -106,7 +105,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Edit note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 body: newNoteSchema,
                 response: {
                     200: noteSchema,
@@ -125,7 +124,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Reorder note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 body: orderSchema,
                 response: {
                     200: noteSchema,
@@ -144,7 +143,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Archive or unarchive note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 body: archiveSchema,
                 response: {
                     200: noteSchema,
@@ -178,7 +177,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Move to bin or restore note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 body: moveToBinSchema,
                 response: {
                     200: noteSchema,
@@ -197,7 +196,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes"],
                 description: "Permanently delete note",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 response: {
                     204: emptySchema,
                     404: messageSchema,
@@ -245,7 +244,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes", "folders"],
                 description: "Add note to folder",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 body: folderIdSchema,
                 response: {
                     200: noteSchema,
@@ -264,7 +263,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["notes", "folders"],
                 description: "Remove note from folder",
-                params: getNoteSchema,
+                params: getByIdSchema,
                 response: {
                     200: noteSchema,
                     400: messageSchema,

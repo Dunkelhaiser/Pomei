@@ -1,13 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import {
-    ArchiveInput,
-    FolderIdInput,
-    GetNoteInput,
-    GetNotePaginatedInput,
-    MoveToBinInput,
-    NewNoteInput,
-    OrderInput,
-} from "./notes.schema.ts";
+import { ArchiveInput, FolderIdInput, GetNotePaginatedInput, MoveToBinInput, NewNoteInput } from "./notes.schema.ts";
 import {
     addToFolder,
     archiveNote,
@@ -24,6 +16,7 @@ import {
     removeFromFolder,
     reorderNote,
 } from "./notes.service.ts";
+import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {
@@ -37,7 +30,7 @@ export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput
     }
 };
 
-export const getNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
+export const getNoteHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const note = await getNoteById(req.params.id, req.user.id);
         if (note) {
@@ -81,7 +74,7 @@ export const getAllNotesPaginatedHandler = async (
 };
 
 export const editNoteHandler = async (
-    req: FastifyRequest<{ Params: GetNoteInput; Body: NewNoteInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: NewNoteInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -99,7 +92,7 @@ export const editNoteHandler = async (
 };
 
 export const reorderNoteHandler = async (
-    req: FastifyRequest<{ Params: GetNoteInput; Body: OrderInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: OrderInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -117,7 +110,7 @@ export const reorderNoteHandler = async (
 };
 
 export const archiveNoteHandler = async (
-    req: FastifyRequest<{ Params: GetNoteInput; Body: ArchiveInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: ArchiveInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -144,7 +137,7 @@ export const getArchiveHandler = async (req: FastifyRequest, res: FastifyReply) 
 };
 
 export const moveToBinHandler = async (
-    req: FastifyRequest<{ Params: GetNoteInput; Body: MoveToBinInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: MoveToBinInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -161,7 +154,7 @@ export const moveToBinHandler = async (
     }
 };
 
-export const deleteNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
+export const deleteNoteHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const note = await deleteNote(req.params.id, req.user.id);
         if (note) {
@@ -195,7 +188,7 @@ export const getBinHandler = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 export const addToFolderHandler = async (
-    req: FastifyRequest<{ Params: GetNoteInput; Body: FolderIdInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: FolderIdInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -212,7 +205,7 @@ export const addToFolderHandler = async (
     }
 };
 
-export const removeFromFolderHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
+export const removeFromFolderHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const note = await removeFromFolder(req.params.id, req.user.id);
         if (note) {

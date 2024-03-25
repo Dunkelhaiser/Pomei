@@ -37,7 +37,7 @@ export const getAllNotes = async (userId: string) => {
 
 export const getAllNotesPaginated = async (
     userId: string,
-    limit: number,
+    limit = 10,
     page = 1,
     orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
     isAscending = true

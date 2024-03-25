@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput, OrderInput } from "./folder.schema.ts";
+import { GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
 import {
     createFolder,
     deleteFolder,
@@ -9,6 +9,7 @@ import {
     loadFolderContent,
     reorderFolder,
 } from "./folders.service.ts";
+import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
     try {
@@ -47,7 +48,7 @@ export const getAllFoldersPaginatedHandler = async (
     }
 };
 
-export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: GetFolderInput }>, res: FastifyReply) => {
+export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const folderContent = await loadFolderContent(req.params.id, req.user.id);
         if (folderContent) {
@@ -62,7 +63,7 @@ export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: Get
     }
 };
 
-export const deleteFolderHandler = async (req: FastifyRequest<{ Params: GetFolderInput }>, res: FastifyReply) => {
+export const deleteFolderHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const folder = await deleteFolder(req.params.id, req.user.id);
         if (folder) {
@@ -78,7 +79,7 @@ export const deleteFolderHandler = async (req: FastifyRequest<{ Params: GetFolde
 };
 
 export const editFolderHandler = async (
-    req: FastifyRequest<{ Params: GetFolderInput; Body: NewFolderInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: NewFolderInput }>,
     res: FastifyReply
 ) => {
     try {
@@ -96,7 +97,7 @@ export const editFolderHandler = async (
 };
 
 export const reorderFolderHandler = async (
-    req: FastifyRequest<{ Params: GetFolderInput; Body: OrderInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: OrderInput }>,
     res: FastifyReply
 ) => {
     try {
