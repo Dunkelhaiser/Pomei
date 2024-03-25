@@ -51,7 +51,7 @@ export const getLastFolderOrder = async (userId: string) => {
     return lastFolder.length ? lastFolder[0].order : null;
 };
 
-export const searchFolderByName = async (name: string, userId: string) => {
+export const searchFolder = async (name: string, userId: string) => {
     const foldersArr = await db
         .select()
         .from(folders)

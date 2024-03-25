@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderByNameInput, GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
+import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
 import {
     createFolder,
     deleteFolder,
@@ -8,7 +8,7 @@ import {
     getAllFoldersPaginated,
     loadFolderContent,
     reorderFolder,
-    searchFolderByName,
+    searchFolder,
 } from "./folders.service.ts";
 import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
@@ -49,12 +49,9 @@ export const getAllFoldersPaginatedHandler = async (
     }
 };
 
-export const searchFolderByNameHandler = async (
-    req: FastifyRequest<{ Querystring: GetFolderByNameInput }>,
-    res: FastifyReply
-) => {
+export const searchFolderHandler = async (req: FastifyRequest<{ Querystring: GetFolderInput }>, res: FastifyReply) => {
     try {
-        const folders = await searchFolderByName(req.query.name, req.user.id);
+        const folders = await searchFolder(req.query.name, req.user.id);
         return res.code(200).send(folders);
     } catch (err) {
         if (err instanceof Error) {
