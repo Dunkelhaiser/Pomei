@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, arrayOverlaps, desc, eq, ilike } from "drizzle-orm";
 import { NewNoteInput } from "./notes.schema.ts";
 import { getFolderById } from "../folders/folders.service.ts";
 import { db } from "@/db/client.ts";
@@ -49,6 +49,19 @@ export const getAllNotesPaginated = async (
         .orderBy(isAscending ? notes[orderBy] : desc(notes[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
+    return notesArr;
+};
+
+export const searchNotes = async (userId: string, input: string, searchBy: "title" | "content" | "tags" = "title") => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
     return notesArr;
 };
 

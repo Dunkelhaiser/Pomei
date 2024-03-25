@@ -1,5 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ArchiveInput, FolderIdInput, GetNotePaginatedInput, MoveToBinInput, NewNoteInput } from "./notes.schema.ts";
+import {
+    ArchiveInput,
+    FolderIdInput,
+    GetNotePaginatedInput,
+    GetNotesInput,
+    MoveToBinInput,
+    NewNoteInput,
+} from "./notes.schema.ts";
 import {
     addToFolder,
     archiveNote,
@@ -15,6 +22,7 @@ import {
     moveToBin,
     removeFromFolder,
     reorderNote,
+    searchNotes,
 } from "./notes.service.ts";
 import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
@@ -70,6 +78,18 @@ export const getAllNotesPaginatedHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to get notes");
+    }
+};
+
+export const searchNotesHandler = async (req: FastifyRequest<{ Querystring: GetNotesInput }>, res: FastifyReply) => {
+    try {
+        const notes = await searchNotes(req.user.id, req.query.title, req.query.searchBy);
+        return res.code(200).send(notes);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search for notes");
     }
 };
 
