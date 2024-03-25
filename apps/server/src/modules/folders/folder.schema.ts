@@ -18,10 +18,15 @@ export const folderSchema = zod.object({
 });
 export const foldersSchema = folderSchema.array();
 
+export const getFolderByNameSchema = zod.object({
+    name: zod.string().trim().min(1, { message: "Name must be at least 1 character long" }),
+});
+
 export const getFolderPaginatedSchema = zod.object({
     ...getPaginated,
     orderBy: zod.enum(["order", "name", "createdAt", "updatedAt"]).optional(),
 });
 
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
+export type GetFolderByNameInput = zod.infer<typeof getFolderByNameSchema>;
 export type GetFolderPaginatedInput = zod.infer<typeof getFolderPaginatedSchema>;

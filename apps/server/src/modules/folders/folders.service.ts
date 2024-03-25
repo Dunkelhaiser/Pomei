@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, ilike } from "drizzle-orm";
 import { NewFolderInput } from "./folder.schema.ts";
 import { db } from "@/db/client.ts";
 import { folders, notes } from "@/db/schema.ts";
@@ -49,6 +49,14 @@ export const getLastFolderOrder = async (userId: string) => {
         .orderBy(desc(folders.order))
         .limit(1);
     return lastFolder.length ? lastFolder[0].order : null;
+};
+
+export const searchFolderByName = async (name: string, userId: string) => {
+    const foldersArr = await db
+        .select()
+        .from(folders)
+        .where(and(eq(folders.userId, userId), ilike(folders.name, `%${name}%`)));
+    return foldersArr;
 };
 
 export const createFolder = async (folder: NewFolderInput, userId: string) => {

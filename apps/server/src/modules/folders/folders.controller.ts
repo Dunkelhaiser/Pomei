@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
+import { GetFolderByNameInput, GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
 import {
     createFolder,
     deleteFolder,
@@ -8,6 +8,7 @@ import {
     getAllFoldersPaginated,
     loadFolderContent,
     reorderFolder,
+    searchFolderByName,
 } from "./folders.service.ts";
 import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
@@ -45,6 +46,21 @@ export const getAllFoldersPaginatedHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to get folders");
+    }
+};
+
+export const searchFolderByNameHandler = async (
+    req: FastifyRequest<{ Querystring: GetFolderByNameInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const folders = await searchFolderByName(req.query.name, req.user.id);
+        return res.code(200).send(folders);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search for folders");
     }
 };
 
