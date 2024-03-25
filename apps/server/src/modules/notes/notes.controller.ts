@@ -10,7 +10,7 @@ import {
     getAllNotes,
     getArchive,
     getBin,
-    getNote,
+    getNoteById,
     moveToBin,
     removeFromFolder,
     reorderNote,
@@ -30,7 +30,7 @@ export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput
 
 export const getNoteHandler = async (req: FastifyRequest<{ Params: GetNoteInput }>, res: FastifyReply) => {
     try {
-        const note = await getNote(req.params.id, req.user.id);
+        const note = await getNoteById(req.params.id, req.user.id);
         if (note) {
             return res.code(200).send(note);
         }

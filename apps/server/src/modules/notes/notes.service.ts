@@ -4,11 +4,19 @@ import { getFolderById } from "../folders/folders.service.ts";
 import { db } from "@/db/client.ts";
 import { notes } from "@/db/schema.ts";
 
-export const getNote = async (id: string, userId: string) => {
+export const getNoteById = async (id: string, userId: string) => {
     const note = await db
         .select()
         .from(notes)
         .where(and(eq(notes.id, id), eq(notes.userId, userId)));
+    return note.length ? note[0] : null;
+};
+
+export const getNoteByOrder = async (order: number, userId: string) => {
+    const note = await db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.order, order), eq(notes.userId, userId)));
     return note.length ? note[0] : null;
 };
 
@@ -20,14 +28,6 @@ export const getLastNoteOrder = async (userId: string) => {
         .orderBy(desc(notes.order))
         .limit(1);
     return lastNote.length ? lastNote[0].order : null;
-};
-
-export const getNoteByOrder = async (order: number, userId: string) => {
-    const note = await db
-        .select()
-        .from(notes)
-        .where(and(eq(notes.order, order), eq(notes.userId, userId)));
-    return note.length ? note[0] : null;
 };
 
 export const getAllNotes = async (userId: string) => {
@@ -53,7 +53,7 @@ export const createNote = async (input: NewNoteInput, userId: string) => {
 };
 
 export const editNote = async (id: string, input: NewNoteInput, userId: string) => {
-    const note = await getNote(id, userId);
+    const note = await getNoteById(id, userId);
     if (!note) {
         return null;
     }
@@ -63,7 +63,7 @@ export const editNote = async (id: string, input: NewNoteInput, userId: string) 
 };
 
 export const reorderNote = async (id: string, order: number, userId: string) => {
-    const note = await getNote(id, userId);
+    const note = await getNoteById(id, userId);
     if (!note) {
         return null;
     }
@@ -81,7 +81,7 @@ export const reorderNote = async (id: string, order: number, userId: string) => 
 };
 
 export const archiveNote = async (id: string, archive: boolean, userId: string) => {
-    const note = await getNote(id, userId);
+    const note = await getNoteById(id, userId);
     if (!note) {
         return null;
     }
@@ -101,7 +101,7 @@ export const getArchive = async (userId: string) => {
 };
 
 export const moveToBin = async (id: string, move: boolean, userId: string) => {
-    const note = await getNote(id, userId);
+    const note = await getNoteById(id, userId);
     if (!note) {
         return null;
     }
@@ -114,7 +114,7 @@ export const moveToBin = async (id: string, move: boolean, userId: string) => {
 };
 
 export const deleteNote = async (id: string, userId: string) => {
-    const note = await getNote(id, userId);
+    const note = await getNoteById(id, userId);
     if (!note) {
         return null;
     }
@@ -135,7 +135,7 @@ export const getBin = async (userId: string) => {
 };
 
 export const addToFolder = async (noteId: string, folderId: string, userId: string) => {
-    const note = await getNote(noteId, userId);
+    const note = await getNoteById(noteId, userId);
     if (!note) {
         return null;
     }
@@ -154,7 +154,7 @@ export const addToFolder = async (noteId: string, folderId: string, userId: stri
 };
 
 export const removeFromFolder = async (noteId: string, userId: string) => {
-    const note = await getNote(noteId, userId);
+    const note = await getNoteById(noteId, userId);
     if (!note) {
         return null;
     }

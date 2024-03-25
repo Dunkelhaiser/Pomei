@@ -8,6 +8,22 @@ export const getAllFolders = async (userId: string) => {
     return allFolders;
 };
 
+export const getFolderById = async (folderId: string, userId: string) => {
+    const folder = await db
+        .select()
+        .from(folders)
+        .where(and(eq(folders.id, folderId), eq(folders.userId, userId)));
+    return folder.length ? folder[0] : null;
+};
+
+export const getFolderByOrder = async (order: number, userId: string) => {
+    const folder = await db
+        .select()
+        .from(folders)
+        .where(and(eq(folders.order, order), eq(folders.userId, userId)));
+    return folder.length ? folder[0] : null;
+};
+
 export const getLastFolderOrder = async (userId: string) => {
     const lastFolder = await db
         .select({ order: folders.order })
@@ -29,22 +45,6 @@ export const createFolder = async (folder: NewFolderInput, userId: string) => {
         .values({ ...folder, order, userId })
         .returning();
     return newFolder;
-};
-
-export const getFolderById = async (folderId: string, userId: string) => {
-    const folder = await db
-        .select()
-        .from(folders)
-        .where(and(eq(folders.id, folderId), eq(folders.userId, userId)));
-    return folder.length ? folder[0] : null;
-};
-
-export const getFolderByOrder = async (order: number, userId: string) => {
-    const folder = await db
-        .select()
-        .from(folders)
-        .where(and(eq(folders.order, order), eq(folders.userId, userId)));
-    return folder.length ? folder[0] : null;
 };
 
 export const loadFolderContent = async (folderId: string, userId: string) => {
