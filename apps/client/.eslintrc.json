@@ -8,11 +8,12 @@
         "plugin:react-hooks/recommended",
         "plugin:@tanstack/eslint-plugin-query/recommended",
         "plugin:testing-library/dom",
-        "plugin:testing-library/react"
+        "plugin:testing-library/react",
+        "plugin:tailwindcss/recommended"
     ],
-    "ignorePatterns": ["dist", "vite.config.ts", "postcss.config.js"],
+    "ignorePatterns": ["dist", "vite.config.ts", "postcss.config.js", "tailwind.config.js"],
     "parser": "@typescript-eslint/parser",
-    "plugins": ["react-refresh"],
+    "plugins": ["react-refresh", "readable-tailwind"],
     "rules": {
         "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
         "react/self-closing-comp": "error",
@@ -26,7 +27,16 @@
         "react/jsx-no-leaked-render": "error",
         "react/jsx-pascal-case": "error",
         "react/no-array-index-key": "error",
-        "react/no-unstable-nested-components": "error"
+        "react/no-unstable-nested-components": "error",
+
+        // Tailwind CSS
+        "tailwindcss/enforces-shorthand": "error",
+        "tailwindcss/enforces-negative-arbitrary-values": "error",
+        "tailwindcss/no-custom-classname": "error",
+        "tailwindcss/no-contradicting-classname": "error",
+        "tailwindcss/migration-from-tailwind-2": "error",
+        "readable-tailwind/no-unnecessary-whitespace": "error",
+        "readable-tailwind/multiline": ["error", { "printWidth": 140, "indent": 4, "group": "newLine" }]
     },
     "parserOptions": {
         "project": ["./tsconfig.json"]
