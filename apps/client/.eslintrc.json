@@ -43,9 +43,8 @@
     },
     "overrides": [
         {
-            "files": ["*.jsx", "*.tsx"],
+            "files": ["*.jsx", "*.tsx", "!**/routes/**/*.tsx", "!**/routes/**/*.jsx"],
             "rules": {
-                "import/prefer-default-export": "error",
                 "import/no-default-export": "off"
             }
         },

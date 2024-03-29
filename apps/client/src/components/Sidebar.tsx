@@ -1,3 +1,4 @@
+import { Link as RouterLink } from "@tanstack/react-router";
 import { Archive, Folder, Home, LogIn, Menu, StickyNote, Trash } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/utils";
@@ -6,28 +7,27 @@ interface LinkProps {
     title: string;
     icon: React.ReactNode;
     href: string;
-    isActive?: boolean;
 }
 
-const Link = ({ title, icon, href, isActive = false }: LinkProps) => (
-    <a
+const Link = ({ title, icon, href }: LinkProps) => (
+    <RouterLink
         className={cn(`
-            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors
-            ${isActive ? "bg-slate-950/20 dark:bg-slate-500/15" : "hover:bg-slate-950/10 dark:hover:bg-slate-500/10"}
+            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-slate-950/10 dark:hover:bg-slate-500/10
+            [&.active]:bg-slate-950/20 [&.active]:dark:bg-slate-500/15
         `)}
-        href={href}
+        to={href}
     >
         {icon}
         {title}
-    </a>
+    </RouterLink>
 );
 
 const links = [
-    { title: "Home", icon: <Home size={16} />, href: "#", isActive: true },
-    { title: "Notes", icon: <StickyNote size={16} />, href: "#" },
-    { title: "Folders", icon: <Folder size={16} />, href: "#" },
-    { title: "Archive", icon: <Archive size={16} />, href: "#" },
-    { title: "Bin", icon: <Trash size={16} />, href: "#" },
+    { title: "Home", icon: <Home size={16} />, href: "/" },
+    { title: "Notes", icon: <StickyNote size={16} />, href: "notes" },
+    { title: "Folders", icon: <Folder size={16} />, href: "folders" },
+    { title: "Archive", icon: <Archive size={16} />, href: "archive" },
+    { title: "Bin", icon: <Trash size={16} />, href: "bin" },
 ];
 
 const Sidebar = () => {
@@ -115,7 +115,7 @@ const Sidebar = () => {
                             </li>
                         ))}
                     </ul>
-                    <Link title="Sign In" icon={<LogIn size={16} />} href="#" />
+                    <Link title="Sign In" icon={<LogIn size={16} />} href="sign_in" />
                 </nav>
             </div>
         </>
