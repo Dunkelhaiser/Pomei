@@ -6,7 +6,7 @@ import { cn } from "@/utils/utils";
 const Loader = ({ className }: { className?: string }) => (
     <div
         className={cn(
-            "absolute h-4 w-4 animate-spin rounded-full border-2 border-zinc-50",
+            "absolute h-4 w-4 animate-spin rounded-full border-2 border-slate-50",
             className,
             "border-b-transparent"
         )}
@@ -52,7 +52,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant, loading, disabled, size, children, asChild = false, ...props }, ref) => {
         const Comp = asChild ? Slot : "button";
-        // return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
         return (
             <Comp
                 ref={ref}
@@ -65,9 +64,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                         {loading && (
                             <Loader
                                 className={
-                                     
                                     variant === "ghost" || variant === "secondary" || variant === "link"
-                                        ? "border-gray-900/50"
+                                        ? "border-gray-900/50 dark:border-slate-50/60"
                                         : ""
                                 }
                             />
