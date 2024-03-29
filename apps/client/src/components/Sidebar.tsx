@@ -7,15 +7,17 @@ interface LinkProps {
     title: string;
     icon: React.ReactNode;
     href: string;
+    close?: () => void;
 }
 
-const Link = ({ title, icon, href }: LinkProps) => (
+const Link = ({ title, icon, href, close }: LinkProps) => (
     <RouterLink
         className={cn(`
             flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-slate-950/10 dark:hover:bg-slate-500/10
             [&.active]:bg-slate-950/20 [&.active]:dark:bg-slate-500/15
         `)}
         to={href}
+        onClick={close}
     >
         {icon}
         {title}
@@ -86,6 +88,7 @@ const Sidebar = () => {
                 </div>
             </div>
 
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div
                 className={`
                     absolute inset-0 z-[998] bg-slate-950/50 transition-all
@@ -103,15 +106,15 @@ const Sidebar = () => {
                     lg:w-72 lg:translate-x-0
                 `}
             >
-                <a href="#" className="px-6">
+                <RouterLink className="px-6" to="/">
                     <img src="logo.svg" className="rounded-lg bg-primary-foreground p-3" alt="Pomei Logo" />
-                </a>
+                </RouterLink>
 
                 <nav className="flex w-full grow flex-col justify-between p-6">
                     <ul className="space-y-2">
                         {links.map((link) => (
                             <li key={link.href}>
-                                <Link {...link} />
+                                <Link {...link} close={() => setIsExpanded(false)} />
                             </li>
                         ))}
                     </ul>
