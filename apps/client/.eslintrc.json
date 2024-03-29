@@ -6,6 +6,7 @@
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/strict",
         "plugin:@tanstack/eslint-plugin-query/recommended",
         "plugin:testing-library/dom",
         "plugin:testing-library/react",
