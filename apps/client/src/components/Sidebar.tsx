@@ -110,7 +110,7 @@ const Sidebar = () => {
                     <img src="logo.svg" className="rounded-lg bg-primary-foreground p-3" alt="Pomei Logo" />
                 </RouterLink>
 
-                <nav className="flex w-full grow flex-col justify-between p-6">
+                <nav className="flex w-full grow flex-col justify-between gap-y-4 p-6">
                     <ul className="space-y-2">
                         {links.map((link) => (
                             <li key={link.href}>
