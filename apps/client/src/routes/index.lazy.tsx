@@ -1,5 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
+const Page = () => <div>Hello /!</div>;
+
 export const Route = createLazyFileRoute("/")({
-    component: () => <div>Hello /!</div>,
+    component: Page,
 });
