@@ -22,12 +22,12 @@ const Page = () => (
                 </div>
                 <Button type="submit">Reset Password</Button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <p className="mt-4 text-center text-sm">
                 Remember your password?{" "}
                 <Link to="/sign_in" className="underline">
                     Sign in
                 </Link>
-            </div>
+            </p>
         </CardContent>
     </Card>
 );

@@ -31,12 +31,12 @@ const Page = () => (
                 </div>
                 <Button type="submit">Sign In</Button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <p className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}
                 <Link to="/sign_up" className="underline">
                     Sign up
                 </Link>
-            </div>
+            </p>
         </CardContent>
     </Card>
 );
