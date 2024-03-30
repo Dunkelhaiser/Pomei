@@ -12,7 +12,7 @@ const Page = () => (
         `}
     >
         <CardHeader>
-            <CardTitle className="text-2xl">Sign In</CardTitle>
+            <CardTitle className="text-2xl">Sign Up</CardTitle>
         </CardHeader>
         <CardContent>
             <div className="grid gap-4">
@@ -21,26 +21,25 @@ const Page = () => (
                     <Input id="email" type="email" placeholder="mail@example.com" required />
                 </div>
                 <div className="grid gap-2">
-                    <div className="flex items-center">
-                        <Label htmlFor="password">Password</Label>
-                        <Link to="/" className="ml-auto inline-block text-sm underline">
-                            Forgot your password?
-                        </Link>
-                    </div>
+                    <Label htmlFor="password">Password</Label>
                     <Input id="password" type="password" required />
                 </div>
-                <Button type="submit">Sign In</Button>
+                <div className="grid gap-2">
+                    <Label htmlFor="password">Confirm Password</Label>
+                    <Input id="confirm_password" type="password" required />
+                </div>
+                <Button type="submit">Sign Up</Button>
             </div>
             <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link to="/sign_up" className="underline">
-                    Sign up
+                Already have an account?{" "}
+                <Link to="/sign_in" className="underline">
+                    Sign in
                 </Link>
             </div>
         </CardContent>
     </Card>
 );
 
-export const Route = createLazyFileRoute("/(auth)/sign_in")({
+export const Route = createLazyFileRoute("/(auth)/sign_up")({
     component: Page,
 });
