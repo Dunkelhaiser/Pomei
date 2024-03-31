@@ -22,7 +22,10 @@ export const signUpSchema = zod.object({
 
 export const signInSchema = zod.object({
     email,
-    password: zod.string().min(1, { message: "Enter your password" }),
+    password: zod
+        .string()
+        .min(1, { message: "Enter your password" })
+        .min(8, { message: "Password must be at least 8 characters long" }),
 });
 
 export const userResponseSchema = zod.object({
