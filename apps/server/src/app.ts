@@ -1,4 +1,5 @@
 import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
+import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify from "fastify";
@@ -22,6 +23,9 @@ app.get("/healthcheck", () => ({
 }));
 
 void (async () => {
+    await app.register(cors, {
+        origin: env.FRONTEND_URL,
+    });
     void app.register(swagger, {
         swagger: {
             info: {

@@ -9,6 +9,7 @@ export const env = createEnv({
             .refine((s) => s === "true" || s === "false")
             .transform((s) => s === "true"),
         RESEND_KEY: z.string(),
+        FRONTEND_URL: z.string().url(),
     },
     runtimeEnv: process.env,
     emptyStringAsUndefined: true,
