@@ -5,3 +5,6 @@ export const messageSchema = zod.object({
 });
 
 export const emptySchema = zod.object({});
+
+export type EmptyResponse = zod.infer<typeof emptySchema>;
+export type MessageResponse = zod.infer<typeof messageSchema>;

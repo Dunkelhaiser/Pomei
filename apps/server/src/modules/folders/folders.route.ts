@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import schema from "shared-types";
 import {
     folderSchema,
     foldersSchema,
@@ -20,7 +21,8 @@ import {
 import { notesSchema } from "../notes/notes.schema.ts";
 import { getByIdSchema, orderSchema } from "../shared/shared.schema.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
-import { emptySchema, messageSchema } from "@/utils/schema.ts";
+
+const { emptySchema, messageSchema } = schema;
 
 export const foldersRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(

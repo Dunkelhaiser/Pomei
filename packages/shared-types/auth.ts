@@ -65,3 +65,4 @@ export type SignUpInputWithPasswordConfirmation = zod.infer<typeof signUpSchemaW
 export type SignInInput = zod.infer<typeof signInSchema>;
 export type VerificationCodeInput = zod.infer<typeof verificationCodeSchema>;
 export type ResetPasswordInput = zod.infer<typeof resetPasswordSchema>;
+export type User = zod.infer<typeof userResponseSchema>["user"];

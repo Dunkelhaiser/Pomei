@@ -1,5 +1,7 @@
 import * as AuthSchema from "./auth";
+import * as UtilSchema from "./utilSchema";
 
 export * from "./auth";
-export { AuthSchema };
-export default AuthSchema;
+export * from "./utilSchema";
+export { AuthSchema, UtilSchema };
+export default { ...AuthSchema, ...UtilSchema };

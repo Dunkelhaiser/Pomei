@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import AuthSchema from "shared-types";
+import schema from "shared-types";
 import {
     resetPasswordTokenHandler,
     resetPasswordHandler,
@@ -15,7 +15,6 @@ import {
     resendVerificationCodeHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
-import { messageSchema, emptySchema } from "@/utils/schema.ts";
 
 const {
     signInSchema,
@@ -25,7 +24,9 @@ const {
     emailSchema,
     passwordSchema,
     resetPasswordSchema,
-} = AuthSchema;
+    emptySchema,
+    messageSchema,
+} = schema;
 
 export const authRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
