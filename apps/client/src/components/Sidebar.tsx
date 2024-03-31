@@ -13,8 +13,8 @@ interface LinkProps {
 const Link = ({ title, icon, href, close }: LinkProps) => (
     <RouterLink
         className={cn(`
-            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-slate-950/10 dark:hover:bg-slate-500/10
-            [&.active]:bg-slate-950/20 [&.active]:dark:bg-slate-500/15
+            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 dark:hover:bg-foreground/5
+            [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
         `)}
         to={href}
         onClick={close}
