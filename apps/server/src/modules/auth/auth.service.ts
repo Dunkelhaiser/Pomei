@@ -4,7 +4,7 @@ import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { alphabet, generateRandomString, sha256 } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
 import { Argon2id } from "oslo/password";
-import { SignUpInput } from "./auth.schema.ts";
+import { SignUpInput } from "shared-types/auth.ts";
 import { db } from "@/db/client.ts";
 import { passwordResetCodes, users, verificationCodes } from "@/db/schema.ts";
 import { resend } from "@/utils/resend.ts";

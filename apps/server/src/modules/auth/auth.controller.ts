@@ -7,7 +7,7 @@ import {
     SignInInput,
     SignUpInput,
     VerificationCodeInput,
-} from "./auth.schema.ts";
+} from "shared-types/auth.ts";
 import {
     createUser,
     deleteUser,

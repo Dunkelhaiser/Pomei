@@ -138,6 +138,7 @@ module.exports = {
         "import/first": "error",
         "import/newline-after-import": "warn",
         "import/no-absolute-path": "error",
+        "import/no-named-as-default": "off",
         "import/no-cycle": "error",
         "import/no-extraneous-dependencies": ["error", { includeTypes: true }],
         "import/no-mutable-exports": "error",

@@ -12,6 +12,7 @@ export const csrfPlugin = fastifyPlugin(
             return;
         }
 
+        // eslint-disable-next-line consistent-return
         app.addHook("preHandler", (req, res, done) => {
             if (req.method === "GET") {
                 return done();
