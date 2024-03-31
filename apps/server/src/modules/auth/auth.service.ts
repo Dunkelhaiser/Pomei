@@ -35,11 +35,7 @@ export const createUser = async (input: SignUpInput) => {
             email,
             password: hashedPassword,
         })
-        .returning({
-            id: users.id,
-            email: users.email,
-            createdAt: users.createdAt,
-        });
+        .returning();
 
     return user;
 };
