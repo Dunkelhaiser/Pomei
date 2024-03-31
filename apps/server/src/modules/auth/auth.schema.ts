@@ -1,11 +1,7 @@
 import { z as zod } from "zod";
 
 const email = zod.string().min(1, { message: "Enter your email" }).email({ message: "Enter valid email" });
-const password = zod
-    .string()
-    .trim()
-    .min(1, { message: "Enter your password" })
-    .min(6, { message: "Password must be at least 6 characters long" });
+const password = zod.string().trim().min(1, { message: "Enter your password" });
 
 export const emailSchema = zod.object({
     email,
@@ -17,15 +13,12 @@ export const passwordSchema = zod.object({
 
 export const signUpSchema = zod.object({
     email,
-    password,
+    password: password.min(8, { message: "Password must be at least 8 characters long" }),
 });
 
 export const signInSchema = zod.object({
     email,
-    password: zod
-        .string()
-        .min(1, { message: "Enter your password" })
-        .min(8, { message: "Password must be at least 8 characters long" }),
+    password,
 });
 
 export const userResponseSchema = zod.object({
