@@ -1,10 +1,12 @@
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
+import { useContext } from "react";
 import { EmailInput, SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import { getUser, resetPasswordRequest, signIn, signUp } from "./requests";
+import { UserContext } from "@/context/User";
 
 export const useSignUp = () => {
     const navigate = useNavigate({ from: "/sign_up" });
@@ -25,7 +27,9 @@ export const useSignUp = () => {
 };
 
 export const useSignIn = () => {
+    const navigate = useNavigate({ from: "/sign_in" });
     const queryClient = new QueryClient();
+    const { setUser } = useContext(UserContext);
     return useMutation({
         mutationFn: (input: SignInInput) => signIn(input),
         onError: async (err) => {
@@ -37,7 +41,9 @@ export const useSignIn = () => {
         },
         onSuccess: async (data) => {
             await queryClient.invalidateQueries({ queryKey: ["user"] });
+            await navigate({ to: "/" });
             toast.success("Signed in successfully");
+            setUser(data.user);
             localStorage.setItem("user", JSON.stringify(data.user));
         },
     });
