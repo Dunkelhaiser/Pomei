@@ -14,6 +14,7 @@ import {
     deleteAccountHandler,
     resendVerificationCodeHandler,
     getUserHandler,
+    isAuthenticatedHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 
@@ -225,5 +226,20 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         getUserHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/is-authenticated",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["auth"],
+                description: "Check if user is authenticated",
+                response: {
+                    200: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        isAuthenticatedHandler
     );
 };

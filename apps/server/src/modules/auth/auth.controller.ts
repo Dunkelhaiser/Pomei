@@ -202,3 +202,11 @@ export const getUserHandler = async (req: FastifyRequest, res: FastifyReply) => 
         return res.status(500).send("Failed to get user");
     }
 };
+
+export const isAuthenticatedHandler = async (_req: FastifyRequest, res: FastifyReply) => {
+    try {
+        return res.code(200).send({ message: "Authenticated" });
+    } catch (err) {
+        return res.status(500).send("Failed to authenticate");
+    }
+};
