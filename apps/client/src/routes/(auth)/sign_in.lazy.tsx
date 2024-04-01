@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { SignInInput, signInSchema } from "shared-types/auth";
+import { useSignIn } from "@/api/auth/hooks";
 import Button from "@/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/Card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/Form";
@@ -16,7 +17,11 @@ const Page = () => {
         },
     });
 
-    const onSubmit = (values: SignInInput) => values;
+    const signInHandler = useSignIn();
+
+    const onSubmit = (values: SignInInput) => {
+        signInHandler.mutate(values);
+    };
 
     return (
         <Card
@@ -62,7 +67,9 @@ const Page = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Sign In</Button>
+                        <Button type="submit" loading={signInHandler.isPending}>
+                            Sign In
+                        </Button>
                     </form>
                 </Form>
                 <p className="mt-4 text-center text-sm">
