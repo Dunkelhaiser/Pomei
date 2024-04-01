@@ -1,6 +1,7 @@
 import { Link as RouterLink } from "@tanstack/react-router";
-import { Archive, Folder, Home, LogIn, Menu, StickyNote, Trash } from "lucide-react";
-import { useState } from "react";
+import { Archive, Folder, Home, LogIn, Menu, StickyNote, Trash, User } from "lucide-react";
+import { useContext, useState } from "react";
+import { UserContext } from "@/context/User";
 import { cn } from "@/utils/utils";
 
 interface LinkProps {
@@ -34,6 +35,7 @@ const links = [
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const { user } = useContext(UserContext);
 
     return (
         <>
@@ -119,7 +121,11 @@ const Sidebar = () => {
                             </li>
                         ))}
                     </ul>
-                    <Link title="Sign In" icon={<LogIn size={16} />} href="sign_in" />
+                    {user ? (
+                        <Link title="Account" icon={<User size={16} />} href="account" />
+                    ) : (
+                        <Link title="Sign In" icon={<LogIn size={16} />} href="sign_in" />
+                    )}
                 </nav>
             </div>
         </>
