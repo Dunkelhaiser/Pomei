@@ -13,6 +13,7 @@ import {
     changeEmailHandler,
     deleteAccountHandler,
     resendVerificationCodeHandler,
+    getUserHandler,
 } from "./auth.controller.ts";
 import { authHandler } from "./auth.handler.ts";
 
@@ -208,5 +209,21 @@ export const authRoutes = async (app: FastifyInstance) => {
             },
         },
         deleteAccountHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/user",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["auth"],
+                description: "Get user info",
+                response: {
+                    200: userResponseSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getUserHandler
     );
 };

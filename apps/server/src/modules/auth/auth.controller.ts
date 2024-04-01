@@ -190,3 +190,15 @@ export const deleteAccountHandler = async (req: FastifyRequest<{ Body: PasswordI
         return res.status(500).send("Failed to delete user");
     }
 };
+
+export const getUserHandler = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+        const user = await getUserById(req.user.id);
+        if (!user) {
+            return res.code(404).send({ message: "User not found" });
+        }
+        return res.code(200).send({ user });
+    } catch (err) {
+        return res.status(500).send("Failed to get user");
+    }
+};
