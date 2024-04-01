@@ -1,10 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
 import { EmailInput, SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { resetPasswordRequest, signIn, signUp } from "./requests";
+import { getUser, resetPasswordRequest, signIn, signUp } from "./requests";
 
 export const useSignUp = () => {
     const navigate = useNavigate({ from: "/sign_up" });
@@ -15,6 +15,7 @@ export const useSignUp = () => {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
             }
+            toast.error("Failed to sign up");
         },
         onSuccess: async () => {
             toast.success("Account created successfully");
@@ -23,19 +24,24 @@ export const useSignUp = () => {
     });
 };
 
-export const useSignIn = () =>
-    useMutation({
+export const useSignIn = () => {
+    const queryClient = new QueryClient();
+    return useMutation({
         mutationFn: (input: SignInInput) => signIn(input),
         onError: async (err) => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
             }
+            toast.error("Failed to sign in");
         },
-        onSuccess: () => {
+        onSuccess: async (data) => {
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
             toast.success("Signed in successfully");
+            localStorage.setItem("user", JSON.stringify(data.user));
         },
     });
+};
 
 export const useResetPasswordRequest = () => {
     const navigate = useNavigate({ from: "/sign_up" });
@@ -46,6 +52,7 @@ export const useResetPasswordRequest = () => {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
             }
+            toast.error("Failed to send reset password link");
         },
         onSuccess: async () => {
             toast.success("Reset password link sent");
@@ -53,3 +60,15 @@ export const useResetPasswordRequest = () => {
         },
     });
 };
+
+export const useGetUser = (enabled: boolean) =>
+    useQuery({
+        queryKey: ["user"],
+        queryFn: getUser,
+        retry: false,
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        enabled,
+    });
