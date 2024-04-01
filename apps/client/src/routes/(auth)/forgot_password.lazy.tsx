@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { emailSchema, EmailInput } from "shared-types/auth";
+import { useResetPasswordRequest } from "@/api/auth/hooks";
 import Button from "@/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/Card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/Form";
@@ -15,7 +16,11 @@ const Page = () => {
         },
     });
 
-    const onSubmit = (values: EmailInput) => values;
+    const resetPasswordRequestHandler = useResetPasswordRequest();
+
+    const onSubmit = (values: EmailInput) => {
+        resetPasswordRequestHandler.mutate(values);
+    };
 
     return (
         <Card
@@ -43,7 +48,9 @@ const Page = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Reset Password</Button>
+                        <Button type="submit" loading={resetPasswordRequestHandler.isPending}>
+                            Reset Password
+                        </Button>
                     </form>
                 </Form>
                 <p className="mt-4 text-center text-sm">
