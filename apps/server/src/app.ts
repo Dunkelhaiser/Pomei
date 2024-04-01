@@ -25,6 +25,7 @@ app.get("/healthcheck", () => ({
 void (async () => {
     await app.register(cors, {
         origin: env.FRONTEND_URL,
+        credentials: true,
     });
     void app.register(swagger, {
         swagger: {
