@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { signUpSchemaWithPasswordConfirmation, SignUpInputWithPasswordConfirmation } from "shared-types/auth";
+import { useSignUp } from "@/api/auth/hooks";
 import Button from "@/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/Card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/Form";
@@ -17,7 +18,11 @@ const Page = () => {
         },
     });
 
-    const onSubmit = (values: SignUpInputWithPasswordConfirmation) => values;
+    const signUpHandler = useSignUp(form.reset);
+
+    const onSubmit = (values: SignUpInputWithPasswordConfirmation) => {
+        signUpHandler.mutate({ email: values.email, password: values.password });
+    };
 
     return (
         <Card
@@ -71,7 +76,9 @@ const Page = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Sign Up</Button>
+                        <Button type="submit" loading={signUpHandler.isPending}>
+                            Sign Up
+                        </Button>
                     </form>
                 </Form>
                 <p className="mt-4 text-center text-sm">

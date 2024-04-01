@@ -2,6 +2,7 @@ import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Button from "@/ui/Button";
+import Toaster from "@/ui/Toast";
 
 const Page = () => (
     <div
@@ -21,6 +22,7 @@ const Page = () => (
         >
             <Outlet />
         </main>
+        <Toaster />
     </div>
 );
 
