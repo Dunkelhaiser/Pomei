@@ -21,3 +21,12 @@ export const getUser = async () => {
     const res = await api.get("auth/user", { credentials: "include" }).json<UserResponse>();
     return res;
 };
+
+export const isAuthenticated = async () => {
+    try {
+        const res = await api.get("auth/is-authenticated", { credentials: "include" }).json<MessageResponse>();
+        return res;
+    } catch (err) {
+        return { message: "Not Authenticated" };
+    }
+};

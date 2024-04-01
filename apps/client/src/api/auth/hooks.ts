@@ -21,7 +21,7 @@ export const useSignUp = () => {
         },
         onSuccess: async () => {
             toast.success("Account created successfully");
-            await navigate({ to: "/sign_in" });
+            await navigate({ to: "/auth/sign_in" });
         },
     });
 };
@@ -62,7 +62,7 @@ export const useResetPasswordRequest = () => {
         },
         onSuccess: async () => {
             toast.success("Reset password link sent");
-            await navigate({ to: "/sign_in" });
+            await navigate({ to: "/auth/sign_in" });
         },
     });
 };

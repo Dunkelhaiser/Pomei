@@ -110,7 +110,7 @@ const Sidebar = () => {
                 `}
             >
                 <RouterLink className="px-6" to="/">
-                    <img src="logo.svg" className="rounded-lg bg-primary-foreground p-3" alt="Pomei Logo" />
+                    <img src="/logo.svg" className="rounded-lg bg-primary-foreground p-3" alt="Pomei Logo" />
                 </RouterLink>
 
                 <nav className="flex w-full grow flex-col justify-between gap-y-4 p-6">
@@ -124,7 +124,7 @@ const Sidebar = () => {
                     {user ? (
                         <Link title="Account" icon={<User size={16} />} href="account" />
                     ) : (
-                        <Link title="Sign In" icon={<LogIn size={16} />} href="sign_in" />
+                        <Link title="Sign In" icon={<LogIn size={16} />} href="/auth/sign_in" />
                     )}
                 </nav>
             </div>
