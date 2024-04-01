@@ -56,7 +56,7 @@ const Page = () => {
                                         </Link>
                                     </div>
                                     <FormControl>
-                                        <Input {...field} />
+                                        <Input {...field} type="password" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
