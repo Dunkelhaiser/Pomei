@@ -18,7 +18,7 @@ const Page = () => {
         },
     });
 
-    const signUpHandler = useSignUp(form.reset);
+    const signUpHandler = useSignUp();
 
     const onSubmit = (values: SignUpInputWithPasswordConfirmation) => {
         signUpHandler.mutate({ email: values.email, password: values.password });

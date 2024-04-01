@@ -1,12 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
 import { SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import { signIn, signUp } from "./requests";
 
-export const useSignUp = (clearForm?: () => void) =>
-    useMutation({
+export const useSignUp = () => {
+    const navigate = useNavigate({ from: "/sign_up" });
+    return useMutation({
         mutationFn: (input: SignUpInput) => signUp(input),
         onError: async (err) => {
             if (err instanceof HTTPError) {
@@ -14,11 +16,12 @@ export const useSignUp = (clearForm?: () => void) =>
                 toast.error(error.message);
             }
         },
-        onSuccess: () => {
+        onSuccess: async () => {
             toast.success("Account created successfully");
-            clearForm?.();
+            await navigate({ to: "/sign_in" });
         },
     });
+};
 
 export const useSignIn = () =>
     useMutation({
