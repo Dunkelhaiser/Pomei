@@ -13,6 +13,7 @@ import { createFileRoute } from "@tanstack/react-router";
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
+import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 
 // Create Virtual Routes
@@ -27,6 +28,11 @@ const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_pas
 
 const AuthRoute = AuthImport.update({
     path: "/auth",
+    getParentRoute: () => rootRoute,
+} as any);
+
+const ProtectedRoute = ProtectedImport.update({
+    id: "/_protected",
     getParentRoute: () => rootRoute,
 } as any);
 
@@ -61,6 +67,10 @@ declare module "@tanstack/react-router" {
     interface FileRoutesByPath {
         "/": {
             preLoaderRoute: typeof IndexLazyImport;
+            parentRoute: typeof rootRoute;
+        };
+        "/_protected": {
+            preLoaderRoute: typeof ProtectedImport;
             parentRoute: typeof rootRoute;
         };
         "/auth": {
