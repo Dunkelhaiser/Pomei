@@ -122,9 +122,19 @@ const Sidebar = () => {
                         ))}
                     </ul>
                     {user ? (
-                        <Link title="Account" icon={<User size={16} />} href="account" />
+                        <Link
+                            title="Account"
+                            icon={<User size={16} />}
+                            href="account"
+                            close={() => setIsExpanded(false)}
+                        />
                     ) : (
-                        <Link title="Sign In" icon={<LogIn size={16} />} href="/auth/sign_in" />
+                        <Link
+                            title="Sign In"
+                            icon={<LogIn size={16} />}
+                            href="/auth/sign_in"
+                            close={() => setIsExpanded(false)}
+                        />
                     )}
                 </nav>
             </div>
