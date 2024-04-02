@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { VerificationCodeInput, verificationCodeSchema } from "shared-types/auth";
 import { useResendVerificationCode, useVerify } from "@/api/auth/hooks";
+import { UserContext } from "@/context/User";
 import Button from "@/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/Card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/ui/Form";
@@ -16,12 +18,18 @@ const Page = () => {
         },
     });
 
+    const { user } = useContext(UserContext);
+
     const resendVerificationCodeHandler = useResendVerificationCode();
     const verifyHandler = useVerify();
 
     const onSubmit = (values: VerificationCodeInput) => {
         verifyHandler.mutate(values);
     };
+
+    if (user?.verifiedAt !== null) {
+        return <Navigate to="/" />;
+    }
 
     return (
         <Card
