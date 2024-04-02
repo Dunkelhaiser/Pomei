@@ -1,7 +1,15 @@
 import { Link as RouterLink } from "@tanstack/react-router";
 import { Archive, Folder, Home, LogIn, Menu, StickyNote, Trash, User } from "lucide-react";
 import { useContext, useState } from "react";
+import { useSignOut } from "@/api/auth/hooks";
 import { UserContext } from "@/context/User";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/ui/DropdownMenu";
 import { cn } from "@/utils/utils";
 
 interface LinkProps {
@@ -14,7 +22,8 @@ interface LinkProps {
 const Link = ({ title, icon, href, close }: LinkProps) => (
     <RouterLink
         className={cn(`
-            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 dark:hover:bg-foreground/5
+            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10
+            dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
             [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
         `)}
         to={href}
@@ -36,6 +45,8 @@ const links = [
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { user } = useContext(UserContext);
+
+    const signOutHandler = useSignOut();
 
     return (
         <>
@@ -122,12 +133,31 @@ const Sidebar = () => {
                         ))}
                     </ul>
                     {user ? (
-                        <Link
-                            title="Account"
-                            icon={<User size={16} />}
-                            href="account"
-                            close={() => setIsExpanded(false)}
-                        />
+                        // <Link
+                        //     title="Account"
+                        //     icon={<User size={16} />}
+                        //     href="account"
+                        //     close={() => setIsExpanded(false)}
+                        // />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                className={cn(`
+                                                flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
+                                                [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
+                                            `)}
+                            >
+                                <User size={16} /> Account
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem asChild>
+                                    <RouterLink to="/" onClick={() => setIsExpanded(false)}>
+                                        Account
+                                    </RouterLink>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => signOutHandler.mutate()}>Sign Out</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ) : (
                         <Link
                             title="Sign In"
