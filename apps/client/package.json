@@ -23,6 +23,7 @@
         "@tanstack/react-router": "^1.24.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
+        "input-otp": "^1.2.4",
         "ky": "^1.2.3",
         "lucide-react": "^0.363.0",
         "next-themes": "^0.3.0",

@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { EmailInput, SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { getUser, resetPasswordRequest, signIn, signUp } from "./requests";
+import { getUser, resendVerificationCode, resetPasswordRequest, signIn, signUp, verify } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useSignUp = () => {
@@ -78,3 +78,31 @@ export const useGetUser = (enabled: boolean) =>
         refetchOnReconnect: false,
         enabled,
     });
+
+export const useResendVerificationCode = () =>
+    useMutation({
+        mutationFn: async () =>
+            toast.promise(resendVerificationCode, {
+                loading: "Sending...",
+                success: "Verification code sent",
+                error: "Failed to resend verification code",
+            }),
+    });
+
+export const useVerify = () => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: verify,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+            }
+            toast.error("Failed to verify account");
+        },
+        onSuccess: async () => {
+            toast.success("Account verified successfully");
+            await navigate({ to: "/" });
+        },
+    });
+};

@@ -14,6 +14,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
+import { Route as AuthVerifyImport } from "./routes/auth/verify";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 
 // Create Virtual Routes
@@ -40,6 +41,11 @@ const IndexLazyRoute = IndexLazyImport.update({
     path: "/",
     getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
+
+const AuthVerifyRoute = AuthVerifyImport.update({
+    path: "/verify",
+    getParentRoute: () => AuthRoute,
+} as any);
 
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
@@ -81,6 +87,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
+        "/auth/verify": {
+            preLoaderRoute: typeof AuthVerifyImport;
+            parentRoute: typeof AuthImport;
+        };
         "/auth/_auth/forgot_password": {
             preLoaderRoute: typeof AuthAuthForgotpasswordLazyImport;
             parentRoute: typeof AuthAuthImport;
@@ -102,6 +112,7 @@ export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
     AuthRoute.addChildren([
         AuthAuthRoute.addChildren([AuthAuthForgotpasswordLazyRoute, AuthAuthSigninLazyRoute, AuthAuthSignupLazyRoute]),
+        AuthVerifyRoute,
     ]),
 ]);
 

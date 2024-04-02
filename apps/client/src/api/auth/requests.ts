@@ -1,4 +1,4 @@
-import { EmailInput, SignInInput, SignUpInput, User, UserResponse } from "shared-types/auth";
+import { EmailInput, SignInInput, SignUpInput, User, UserResponse, VerificationCodeInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { api } from "../api";
 
@@ -29,4 +29,16 @@ export const isAuthenticated = async () => {
     } catch (err) {
         return { message: "Not Authenticated" };
     }
+};
+
+export const resendVerificationCode = async () => {
+    const res = await api
+        .post("auth/resend-verification-code", { json: null, credentials: "include" })
+        .json<MessageResponse>();
+    return res;
+};
+
+export const verify = async (data: VerificationCodeInput) => {
+    const res = await api.post("auth/verify", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
 };
