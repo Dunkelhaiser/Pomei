@@ -1,4 +1,12 @@
-import { EmailInput, SignInInput, SignUpInput, User, UserResponse, VerificationCodeInput } from "shared-types/auth";
+import {
+    EmailInput,
+    PasswordInputWithConfirmation,
+    SignInInput,
+    SignUpInput,
+    User,
+    UserResponse,
+    VerificationCodeInput,
+} from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { api } from "../api";
 
@@ -40,5 +48,10 @@ export const resendVerificationCode = async () => {
 
 export const verify = async (data: VerificationCodeInput) => {
     const res = await api.post("auth/verify", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
+
+export const resetPassword = async (data: PasswordInputWithConfirmation, token: string) => {
+    const res = await api.post(`auth/reset-password/${token}`, { json: data }).json<MessageResponse>();
     return res;
 };

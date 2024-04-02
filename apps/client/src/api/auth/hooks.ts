@@ -2,10 +2,18 @@ import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
 import { useContext } from "react";
-import { EmailInput, SignInInput, SignUpInput } from "shared-types/auth";
+import { EmailInput, PasswordInputWithConfirmation, SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { getUser, resendVerificationCode, resetPasswordRequest, signIn, signUp, verify } from "./requests";
+import {
+    getUser,
+    resendVerificationCode,
+    resetPassword,
+    resetPasswordRequest,
+    signIn,
+    signUp,
+    verify,
+} from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useSignUp = () => {
@@ -103,6 +111,24 @@ export const useVerify = () => {
         onSuccess: async () => {
             toast.success("Account verified successfully");
             await navigate({ to: "/" });
+        },
+    });
+};
+
+export const useResetPassword = (token: string) => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: (input: PasswordInputWithConfirmation) => resetPassword(input, token),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+            }
+            toast.error("Failed to reset password");
+        },
+        onSuccess: async () => {
+            toast.success("Password reset successfully");
+            await navigate({ to: "/auth/sign_in" });
         },
     });
 };

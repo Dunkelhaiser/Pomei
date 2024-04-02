@@ -24,6 +24,7 @@ const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
 const AuthAuthSignupLazyImport = createFileRoute("/auth/_auth/sign_up")();
 const AuthAuthSigninLazyImport = createFileRoute("/auth/_auth/sign_in")();
 const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_password")();
+const AuthAuthResetpasswordTokenLazyImport = createFileRoute("/auth/_auth/reset_password/$token")();
 
 // Create/Update Routes
 
@@ -67,6 +68,11 @@ const AuthAuthForgotpasswordLazyRoute = AuthAuthForgotpasswordLazyImport.update(
     getParentRoute: () => AuthAuthRoute,
 } as any).lazy(() => import("./routes/auth/_auth.forgot_password.lazy").then((d) => d.Route));
 
+const AuthAuthResetpasswordTokenLazyRoute = AuthAuthResetpasswordTokenLazyImport.update({
+    path: "/reset_password/$token",
+    getParentRoute: () => AuthAuthRoute,
+} as any).lazy(() => import("./routes/auth/_auth.reset_password.$token.lazy").then((d) => d.Route));
+
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
@@ -103,6 +109,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthSignupLazyImport;
             parentRoute: typeof AuthAuthImport;
         };
+        "/auth/_auth/reset_password/$token": {
+            preLoaderRoute: typeof AuthAuthResetpasswordTokenLazyImport;
+            parentRoute: typeof AuthAuthImport;
+        };
     }
 }
 
@@ -112,7 +122,12 @@ export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
     ProtectedRoute.addChildren([ProtectedVerifyLazyRoute]),
     AuthRoute.addChildren([
-        AuthAuthRoute.addChildren([AuthAuthForgotpasswordLazyRoute, AuthAuthSigninLazyRoute, AuthAuthSignupLazyRoute]),
+        AuthAuthRoute.addChildren([
+            AuthAuthForgotpasswordLazyRoute,
+            AuthAuthSigninLazyRoute,
+            AuthAuthSignupLazyRoute,
+            AuthAuthResetpasswordTokenLazyRoute,
+        ]),
     ]),
 ]);
 
