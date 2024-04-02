@@ -111,7 +111,7 @@ export const authRoutes = async (app: FastifyInstance) => {
         },
         verificationCodeHandler
     );
-    app.withTypeProvider<ZodTypeProvider>().get(
+    app.withTypeProvider<ZodTypeProvider>().post(
         "/resend-verification-code",
         {
             preHandler: authHandler,
