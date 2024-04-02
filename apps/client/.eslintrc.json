@@ -30,6 +30,7 @@
         "react/no-unstable-nested-components": "error",
 
         // Tailwind CSS
+        "tailwindcss/classnames-order": "off",
         "tailwindcss/enforces-shorthand": "error",
         "tailwindcss/enforces-negative-arbitrary-values": "error",
         "tailwindcss/no-custom-classname": "error",
