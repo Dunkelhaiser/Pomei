@@ -23,6 +23,7 @@ import {
     verifyVerificationCode,
 } from "./auth.service.ts";
 import { lucia } from "./auth.ts";
+import { env } from "@/env.ts";
 
 export const signUpHandler = async (req: FastifyRequest<{ Body: SignUpInput }>, res: FastifyReply) => {
     const { email, password } = req.body;
@@ -117,7 +118,7 @@ export const resetPasswordTokenHandler = async (req: FastifyRequest<{ Body: Emai
             return res.code(400).send({ message: "Invalid email" });
         }
         const resetToken = await generatePasswordResetToken(user.id);
-        const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+        const resetLink = `${env.FRONTEND_URL}/auth/reset_password/${resetToken}`;
         await sendPasswordResetLink(resetLink, email);
         return res.code(200).send({ message: "Password reset link sent" });
     } catch (err) {
