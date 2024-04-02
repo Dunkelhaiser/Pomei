@@ -7,7 +7,7 @@ import {
     UserResponse,
     VerificationCodeInput,
 } from "shared-types/auth";
-import { MessageResponse } from "shared-types/utilSchema";
+import { EmptyResponse, MessageResponse } from "shared-types/utilSchema";
 import { api } from "../api";
 
 export const signUp = async (data: SignUpInput) => {
@@ -53,5 +53,10 @@ export const verify = async (data: VerificationCodeInput) => {
 
 export const resetPassword = async (data: PasswordInputWithConfirmation, token: string) => {
     const res = await api.post(`auth/reset-password/${token}`, { json: data }).json<MessageResponse>();
+    return res;
+};
+
+export const signOut = async () => {
+    const res = await api.post("auth/sign_out", { json: null, credentials: "include" }).json<EmptyResponse>();
     return res;
 };

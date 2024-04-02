@@ -11,6 +11,7 @@ import {
     resetPassword,
     resetPasswordRequest,
     signIn,
+    signOut,
     signUp,
     verify,
 } from "./requests";
@@ -129,6 +130,20 @@ export const useResetPassword = (token: string) => {
         onSuccess: async () => {
             toast.success("Password reset successfully");
             await navigate({ to: "/auth/sign_in" });
+        },
+    });
+};
+
+export const useSignOut = () => {
+    const queryClient = new QueryClient();
+    const { setUser } = useContext(UserContext);
+    return useMutation({
+        mutationFn: async () => {
+            await signOut();
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Signed out successfully");
         },
     });
 };
