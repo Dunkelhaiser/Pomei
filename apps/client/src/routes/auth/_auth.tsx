@@ -16,8 +16,8 @@ const Page = () => (
 export const Route = createFileRoute("/auth/_auth")({
     component: Page,
     beforeLoad: async () => {
-        const res = await isAuthenticated();
-        if (res.message === "Authenticated") {
+        const authenticated = await isAuthenticated();
+        if (authenticated) {
             throw redirect({
                 to: "/",
             });

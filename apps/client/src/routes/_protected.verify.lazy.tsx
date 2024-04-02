@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { VerificationCodeInput, verificationCodeSchema } from "shared-types/auth";
 import { useResendVerificationCode, useVerify } from "@/api/auth/hooks";
@@ -79,6 +79,6 @@ const Page = () => {
     );
 };
 
-export const Route = createFileRoute("/auth/verify")({
+export const Route = createLazyFileRoute("/_protected/verify")({
     component: Page,
 });

@@ -25,9 +25,9 @@ export const getUser = async () => {
 export const isAuthenticated = async () => {
     try {
         const res = await api.get("auth/is-authenticated", { credentials: "include" }).json<MessageResponse>();
-        return res;
+        return res.message === "Authenticated";
     } catch (err) {
-        return { message: "Not Authenticated" };
+        return false;
     }
 };
 

@@ -14,13 +14,13 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
-import { Route as AuthVerifyImport } from "./routes/auth/verify";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 
 // Create Virtual Routes
 
 const AuthImport = createFileRoute("/auth")();
 const IndexLazyImport = createFileRoute("/")();
+const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
 const AuthAuthSignupLazyImport = createFileRoute("/auth/_auth/sign_up")();
 const AuthAuthSigninLazyImport = createFileRoute("/auth/_auth/sign_in")();
 const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_password")();
@@ -42,10 +42,10 @@ const IndexLazyRoute = IndexLazyImport.update({
     getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 
-const AuthVerifyRoute = AuthVerifyImport.update({
+const ProtectedVerifyLazyRoute = ProtectedVerifyLazyImport.update({
     path: "/verify",
-    getParentRoute: () => AuthRoute,
-} as any);
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected.verify.lazy").then((d) => d.Route));
 
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
@@ -87,9 +87,9 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
-        "/auth/verify": {
-            preLoaderRoute: typeof AuthVerifyImport;
-            parentRoute: typeof AuthImport;
+        "/_protected/verify": {
+            preLoaderRoute: typeof ProtectedVerifyLazyImport;
+            parentRoute: typeof ProtectedImport;
         };
         "/auth/_auth/forgot_password": {
             preLoaderRoute: typeof AuthAuthForgotpasswordLazyImport;
@@ -110,9 +110,9 @@ declare module "@tanstack/react-router" {
 
 export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
+    ProtectedRoute.addChildren([ProtectedVerifyLazyRoute]),
     AuthRoute.addChildren([
         AuthAuthRoute.addChildren([AuthAuthForgotpasswordLazyRoute, AuthAuthSigninLazyRoute, AuthAuthSignupLazyRoute]),
-        AuthVerifyRoute,
     ]),
 ]);
 
