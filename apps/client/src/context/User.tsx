@@ -1,7 +1,9 @@
+import { Link } from "@tanstack/react-router";
 import { createContext, useEffect, useMemo, useState } from "react";
 import { User } from "shared-types/auth";
 import { toast } from "sonner";
 import { useGetUser } from "@/api/auth/hooks";
+import Button from "@/ui/Button";
 
 interface UserContextType {
     user: User | null;
@@ -34,6 +36,19 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
         if (getUserHandler.data) {
             localStorage.setItem("user", JSON.stringify(getUserHandler.data.user));
+        }
+        if (getUserHandler.data?.user.verifiedAt === null) {
+            toast.warning("Please verify your email", {
+                important: true,
+                description: "We have sent you an email with a verification code.",
+                action: (
+                    <Button variant="ghost" className="text-accent-foreground" size="sm" type="button" asChild>
+                        <Link to="/verify">Verify</Link>
+                    </Button>
+                ),
+                dismissible: false,
+                duration: Infinity,
+            });
         }
     }, [getUserHandler.data, getUserHandler.isError]);
 
