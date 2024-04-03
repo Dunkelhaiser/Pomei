@@ -15,12 +15,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
+import { Route as ProtectedSettingsGeneralImport } from "./routes/_protected/settings/general";
 
 // Create Virtual Routes
 
 const AuthImport = createFileRoute("/auth")();
 const IndexLazyImport = createFileRoute("/")();
 const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
+const ProtectedSettingsLazyImport = createFileRoute("/_protected/settings")();
 const AuthAuthSignupLazyImport = createFileRoute("/auth/_auth/sign_up")();
 const AuthAuthSigninLazyImport = createFileRoute("/auth/_auth/sign_in")();
 const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_password")();
@@ -46,7 +48,12 @@ const IndexLazyRoute = IndexLazyImport.update({
 const ProtectedVerifyLazyRoute = ProtectedVerifyLazyImport.update({
     path: "/verify",
     getParentRoute: () => ProtectedRoute,
-} as any).lazy(() => import("./routes/_protected.verify.lazy").then((d) => d.Route));
+} as any).lazy(() => import("./routes/_protected/verify.lazy").then((d) => d.Route));
+
+const ProtectedSettingsLazyRoute = ProtectedSettingsLazyImport.update({
+    path: "/settings",
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected/settings.lazy").then((d) => d.Route));
 
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
@@ -67,6 +74,11 @@ const AuthAuthForgotpasswordLazyRoute = AuthAuthForgotpasswordLazyImport.update(
     path: "/forgot_password",
     getParentRoute: () => AuthAuthRoute,
 } as any).lazy(() => import("./routes/auth/_auth.forgot_password.lazy").then((d) => d.Route));
+
+const ProtectedSettingsGeneralRoute = ProtectedSettingsGeneralImport.update({
+    path: "/general",
+    getParentRoute: () => ProtectedSettingsLazyRoute,
+} as any);
 
 const AuthAuthResetpasswordTokenLazyRoute = AuthAuthResetpasswordTokenLazyImport.update({
     path: "/reset_password/$token",
@@ -93,9 +105,17 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
+        "/_protected/settings": {
+            preLoaderRoute: typeof ProtectedSettingsLazyImport;
+            parentRoute: typeof ProtectedImport;
+        };
         "/_protected/verify": {
             preLoaderRoute: typeof ProtectedVerifyLazyImport;
             parentRoute: typeof ProtectedImport;
+        };
+        "/_protected/settings/general": {
+            preLoaderRoute: typeof ProtectedSettingsGeneralImport;
+            parentRoute: typeof ProtectedSettingsLazyImport;
         };
         "/auth/_auth/forgot_password": {
             preLoaderRoute: typeof AuthAuthForgotpasswordLazyImport;
@@ -120,7 +140,10 @@ declare module "@tanstack/react-router" {
 
 export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
-    ProtectedRoute.addChildren([ProtectedVerifyLazyRoute]),
+    ProtectedRoute.addChildren([
+        ProtectedSettingsLazyRoute.addChildren([ProtectedSettingsGeneralRoute]),
+        ProtectedVerifyLazyRoute,
+    ]),
     AuthRoute.addChildren([
         AuthAuthRoute.addChildren([
             AuthAuthForgotpasswordLazyRoute,

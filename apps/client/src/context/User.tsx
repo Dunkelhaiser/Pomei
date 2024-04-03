@@ -35,6 +35,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             toast.error("Session expired");
         }
         if (getUserHandler.data) {
+            setUser(getUserHandler.data.user);
             localStorage.setItem("user", JSON.stringify(getUserHandler.data.user));
         }
         if (getUserHandler.data?.user.verifiedAt === null) {

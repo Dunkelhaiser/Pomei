@@ -6,6 +6,7 @@ import { EmailInput, PasswordInputWithConfirmation, SignInInput, SignUpInput } f
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import {
+    changeEmail,
     getUser,
     resendVerificationCode,
     resetPassword,
@@ -144,6 +145,24 @@ export const useSignOut = () => {
             setUser(null);
             localStorage.removeItem("user");
             toast.success("Signed out successfully");
+        },
+    });
+};
+
+export const useChangeEmail = () => {
+    const queryClient = new QueryClient();
+    return useMutation({
+        mutationFn: changeEmail,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+            }
+            toast.error("Failed to change email");
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            toast.success("Email changed successfully");
         },
     });
 };

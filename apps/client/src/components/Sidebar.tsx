@@ -147,7 +147,7 @@ const Sidebar = () => {
                                 <DropdownMenuLabel className="text-xs">{user.email}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
-                                    <RouterLink to="/settings" onClick={() => setIsExpanded(false)}>
+                                    <RouterLink to="/settings/general" onClick={() => setIsExpanded(false)}>
                                         Settings
                                     </RouterLink>
                                 </DropdownMenuItem>

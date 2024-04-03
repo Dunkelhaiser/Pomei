@@ -60,3 +60,8 @@ export const signOut = async () => {
     const res = await api.post("auth/sign_out", { json: null, credentials: "include" }).json<EmptyResponse>();
     return res;
 };
+
+export const changeEmail = async (data: EmailInput) => {
+    const res = await api.post("auth/change-email", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
