@@ -2,12 +2,13 @@ import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
 import { useContext } from "react";
-import { EmailInput, PasswordInputWithConfirmation, SignInInput, SignUpInput } from "shared-types/auth";
+import { EmailInput, PasswordInput, PasswordInputWithConfirmation, SignInInput, SignUpInput } from "shared-types/auth";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import {
     changeEmail,
     changePassword,
+    deleteAccount,
     getUser,
     resendVerificationCode,
     resetPassword,
@@ -214,6 +215,30 @@ export const useTerminateAllSessions = () => {
             localStorage.removeItem("user");
             toast.success("Terminated all sessions successfully");
             await navigate({ to: "/auth/sign_in" });
+        },
+    });
+};
+
+export const useDeleteAccount = () => {
+    const queryClient = new QueryClient();
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
+    return useMutation({
+        mutationFn: async (input: PasswordInput) => deleteAccount(input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to delete account");
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Account deleted successfully");
+            await navigate({ to: "/auth/sign_up" });
         },
     });
 };

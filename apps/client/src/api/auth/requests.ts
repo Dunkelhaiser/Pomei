@@ -1,6 +1,7 @@
 import {
     EmailInput,
     NewPasswordInputWithConfirmation,
+    PasswordInput,
     PasswordInputWithConfirmation,
     SignInInput,
     SignUpInput,
@@ -74,5 +75,10 @@ export const changePassword = async (data: NewPasswordInputWithConfirmation) => 
 
 export const terminateAllSessions = async () => {
     const res = await api.post("auth/terminate", { json: null, credentials: "include" }).json<EmptyResponse>();
+    return res;
+};
+
+export const deleteAccount = async (data: PasswordInput) => {
+    const res = await api.delete("auth", { json: data, credentials: "include" }).json<EmptyResponse>();
     return res;
 };
