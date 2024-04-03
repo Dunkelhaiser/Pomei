@@ -15,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
+import { Route as ProtectedSettingsSecurityImport } from "./routes/_protected/settings/security";
 import { Route as ProtectedSettingsGeneralImport } from "./routes/_protected/settings/general";
 
 // Create Virtual Routes
@@ -75,6 +76,11 @@ const AuthAuthForgotpasswordLazyRoute = AuthAuthForgotpasswordLazyImport.update(
     getParentRoute: () => AuthAuthRoute,
 } as any).lazy(() => import("./routes/auth/_auth.forgot_password.lazy").then((d) => d.Route));
 
+const ProtectedSettingsSecurityRoute = ProtectedSettingsSecurityImport.update({
+    path: "/security",
+    getParentRoute: () => ProtectedSettingsLazyRoute,
+} as any);
+
 const ProtectedSettingsGeneralRoute = ProtectedSettingsGeneralImport.update({
     path: "/general",
     getParentRoute: () => ProtectedSettingsLazyRoute,
@@ -117,6 +123,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof ProtectedSettingsGeneralImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
         };
+        "/_protected/settings/security": {
+            preLoaderRoute: typeof ProtectedSettingsSecurityImport;
+            parentRoute: typeof ProtectedSettingsLazyImport;
+        };
         "/auth/_auth/forgot_password": {
             preLoaderRoute: typeof AuthAuthForgotpasswordLazyImport;
             parentRoute: typeof AuthAuthImport;
@@ -141,7 +151,7 @@ declare module "@tanstack/react-router" {
 export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
     ProtectedRoute.addChildren([
-        ProtectedSettingsLazyRoute.addChildren([ProtectedSettingsGeneralRoute]),
+        ProtectedSettingsLazyRoute.addChildren([ProtectedSettingsGeneralRoute, ProtectedSettingsSecurityRoute]),
         ProtectedVerifyLazyRoute,
     ]),
     AuthRoute.addChildren([

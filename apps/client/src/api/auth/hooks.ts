@@ -7,6 +7,7 @@ import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import {
     changeEmail,
+    changePassword,
     getUser,
     resendVerificationCode,
     resetPassword,
@@ -169,6 +170,31 @@ export const useChangeEmail = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ["user"] });
             toast.success("Email changed successfully");
+        },
+    });
+};
+
+export const useChangePassword = () => {
+    const queryClient = new QueryClient();
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
+
+    return useMutation({
+        mutationFn: changePassword,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to change password");
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Password changed successfully");
+            await navigate({ to: "/auth/sign_in" });
         },
     });
 };

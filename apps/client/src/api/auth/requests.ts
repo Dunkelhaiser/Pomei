@@ -1,5 +1,6 @@
 import {
     EmailInput,
+    NewPasswordInputWithConfirmation,
     PasswordInputWithConfirmation,
     SignInInput,
     SignUpInput,
@@ -63,5 +64,10 @@ export const signOut = async () => {
 
 export const changeEmail = async (data: EmailInput) => {
     const res = await api.post("auth/change-email", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
+
+export const changePassword = async (data: NewPasswordInputWithConfirmation) => {
+    const res = await api.post("auth/change-password", { json: data, credentials: "include" }).json<MessageResponse>();
     return res;
 };

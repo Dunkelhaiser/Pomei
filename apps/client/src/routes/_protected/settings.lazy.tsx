@@ -26,7 +26,7 @@ const Page = () => (
                         </Link>
                     </li>
                     <li>
-                        <Link to="/" className="[&.active]:font-semibold [&.active]:text-primary">
+                        <Link to="/settings/security" className="[&.active]:font-semibold [&.active]:text-primary">
                             Security
                         </Link>
                     </li>
