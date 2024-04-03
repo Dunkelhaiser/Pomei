@@ -15,6 +15,7 @@ import {
     signIn,
     signOut,
     signUp,
+    terminateAllSessions,
     verify,
 } from "./requests";
 import { UserContext } from "@/context/User";
@@ -196,6 +197,22 @@ export const useChangePassword = () => {
             setUser(null);
             localStorage.removeItem("user");
             toast.success("Password changed successfully");
+            await navigate({ to: "/auth/sign_in" });
+        },
+    });
+};
+
+export const useTerminateAllSessions = () => {
+    const queryClient = new QueryClient();
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
+    return useMutation({
+        mutationFn: async () => {
+            await terminateAllSessions();
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Terminated all sessions successfully");
             await navigate({ to: "/auth/sign_in" });
         },
     });

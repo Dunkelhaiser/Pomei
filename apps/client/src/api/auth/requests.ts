@@ -71,3 +71,8 @@ export const changePassword = async (data: NewPasswordInputWithConfirmation) => 
     const res = await api.post("auth/change-password", { json: data, credentials: "include" }).json<MessageResponse>();
     return res;
 };
+
+export const terminateAllSessions = async () => {
+    const res = await api.post("auth/terminate", { json: null, credentials: "include" }).json<EmptyResponse>();
+    return res;
+};

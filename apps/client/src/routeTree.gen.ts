@@ -17,6 +17,7 @@ import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 import { Route as ProtectedSettingsSecurityImport } from "./routes/_protected/settings/security";
 import { Route as ProtectedSettingsGeneralImport } from "./routes/_protected/settings/general";
+import { Route as ProtectedSettingsDangerzoneImport } from "./routes/_protected/settings/danger_zone";
 
 // Create Virtual Routes
 
@@ -86,6 +87,11 @@ const ProtectedSettingsGeneralRoute = ProtectedSettingsGeneralImport.update({
     getParentRoute: () => ProtectedSettingsLazyRoute,
 } as any);
 
+const ProtectedSettingsDangerzoneRoute = ProtectedSettingsDangerzoneImport.update({
+    path: "/danger_zone",
+    getParentRoute: () => ProtectedSettingsLazyRoute,
+} as any);
+
 const AuthAuthResetpasswordTokenLazyRoute = AuthAuthResetpasswordTokenLazyImport.update({
     path: "/reset_password/$token",
     getParentRoute: () => AuthAuthRoute,
@@ -119,6 +125,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof ProtectedVerifyLazyImport;
             parentRoute: typeof ProtectedImport;
         };
+        "/_protected/settings/danger_zone": {
+            preLoaderRoute: typeof ProtectedSettingsDangerzoneImport;
+            parentRoute: typeof ProtectedSettingsLazyImport;
+        };
         "/_protected/settings/general": {
             preLoaderRoute: typeof ProtectedSettingsGeneralImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
@@ -151,7 +161,11 @@ declare module "@tanstack/react-router" {
 export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
     ProtectedRoute.addChildren([
-        ProtectedSettingsLazyRoute.addChildren([ProtectedSettingsGeneralRoute, ProtectedSettingsSecurityRoute]),
+        ProtectedSettingsLazyRoute.addChildren([
+            ProtectedSettingsDangerzoneRoute,
+            ProtectedSettingsGeneralRoute,
+            ProtectedSettingsSecurityRoute,
+        ]),
         ProtectedVerifyLazyRoute,
     ]),
     AuthRoute.addChildren([

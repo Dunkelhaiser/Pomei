@@ -36,7 +36,10 @@ const Page = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/" className="[&.active]:font-semibold [&.active]:text-destructive">
+                            <Link
+                                to="/settings/danger_zone"
+                                className="[&.active]:font-semibold [&.active]:text-destructive"
+                            >
                                 Danger Zone
                             </Link>
                         </li>
