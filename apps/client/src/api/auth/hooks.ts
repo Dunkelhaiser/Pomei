@@ -143,6 +143,7 @@ export const useResetPassword = (token: string) => {
 
 export const useSignOut = () => {
     const queryClient = new QueryClient();
+    const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
     return useMutation({
         mutationFn: async () => {
@@ -151,6 +152,7 @@ export const useSignOut = () => {
             setUser(null);
             localStorage.removeItem("user");
             toast.success("Signed out successfully");
+            await navigate({ to: "/auth/sign_in" });
         },
     });
 };
