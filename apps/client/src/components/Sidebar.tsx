@@ -133,12 +133,6 @@ const Sidebar = () => {
                         ))}
                     </ul>
                     {user ? (
-                        // <Link
-                        //     title="Account"
-                        //     icon={<User size={16} />}
-                        //     href="account"
-                        //     close={() => setIsExpanded(false)}
-                        // />
                         <DropdownMenu>
                             <DropdownMenuTrigger
                                 className={cn(`
