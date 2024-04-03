@@ -195,8 +195,8 @@ export const authRoutes = async (app: FastifyInstance) => {
         },
         changeEmailHandler
     );
-    app.withTypeProvider<ZodTypeProvider>().post(
-        "/delete",
+    app.withTypeProvider<ZodTypeProvider>().delete(
+        "/",
         {
             preHandler: authHandler,
             schema: {
