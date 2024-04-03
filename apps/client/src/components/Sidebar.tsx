@@ -7,6 +7,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/ui/DropdownMenu";
@@ -143,9 +144,11 @@ const Sidebar = () => {
                                 <User size={16} /> Account
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
+                                <DropdownMenuLabel className="text-xs">{user.email}</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
-                                    <RouterLink to="/" onClick={() => setIsExpanded(false)}>
-                                        Account
+                                    <RouterLink to="/settings" onClick={() => setIsExpanded(false)}>
+                                        Settings
                                     </RouterLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
