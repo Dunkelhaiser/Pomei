@@ -26,6 +26,7 @@ export const useSignUp = () => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to sign up");
         },
@@ -46,6 +47,7 @@ export const useSignIn = () => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to sign in");
         },
@@ -67,6 +69,7 @@ export const useResetPasswordRequest = () => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to send reset password link");
         },
@@ -107,6 +110,7 @@ export const useVerify = () => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to verify account");
         },
@@ -125,6 +129,7 @@ export const useResetPassword = (token: string) => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to reset password");
         },
@@ -157,6 +162,7 @@ export const useChangeEmail = () => {
             if (err instanceof HTTPError) {
                 const error = (await err.response.json()) as MessageResponse;
                 toast.error(error.message);
+                return;
             }
             toast.error("Failed to change email");
         },
