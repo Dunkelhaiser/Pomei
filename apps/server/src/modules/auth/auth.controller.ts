@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { Argon2id } from "oslo/password";
 import {
     EmailInput,
+    NewPasswordInput,
     PasswordInput,
     ResetPasswordInput,
     SignInInput,
@@ -145,10 +146,21 @@ export const resetPasswordHandler = async (
     }
 };
 
-export const changePasswordHandler = async (req: FastifyRequest<{ Body: PasswordInput }>, res: FastifyReply) => {
+export const changePasswordHandler = async (req: FastifyRequest<{ Body: NewPasswordInput }>, res: FastifyReply) => {
     try {
-        const { password } = req.body;
+        const { oldPassword, password } = req.body;
+
+        const user = await getUserByEmail(req.user.email);
+        if (!user) {
+            return res.code(400).send({ message: "Invalid credentials" });
+        }
+        const validPassword = await new Argon2id().verify(user.password, oldPassword);
+        if (!validPassword) {
+            return res.code(400).send({ message: "Invalid old password" });
+        }
+
         await updatePassword(req.user.id, password);
+        await lucia.invalidateUserSessions(req.user.id);
         return res.code(200).send({ message: "Password updated" });
     } catch (err) {
         if (err instanceof Error) {

@@ -25,6 +25,22 @@ export const passwordSchemaWithConfirmation = zod
         path: ["confirmPassword"],
     });
 
+export const newPasswordSchema = zod.object({
+    oldPassword: password,
+    password: passwordChecked,
+});
+
+export const newPasswordSchemaWithConfirmation = zod
+    .object({
+        oldPassword: password,
+        password: passwordChecked,
+        confirmPassword: zod.string().trim().min(1, { message: "Confirm your new password" }),
+    })
+    .refine((schemaData) => schemaData.password === schemaData.confirmPassword, {
+        message: "Passwords must match",
+        path: ["confirmPassword"],
+    });
+
 export const signUpSchema = zod.object({
     email: emailChecked,
     password: passwordChecked,
@@ -71,6 +87,8 @@ export const resetPasswordSchema = zod.object({
 export type EmailInput = zod.infer<typeof emailSchema>;
 export type PasswordInput = zod.infer<typeof passwordSchema>;
 export type PasswordInputWithConfirmation = zod.infer<typeof passwordSchemaWithConfirmation>;
+export type NewPasswordInput = zod.infer<typeof newPasswordSchema>;
+export type NewPasswordInputWithConfirmation = zod.infer<typeof newPasswordSchemaWithConfirmation>;
 export type SignUpInput = zod.infer<typeof signUpSchema>;
 export type SignUpInputWithPasswordConfirmation = zod.infer<typeof signUpSchemaWithPasswordConfirmation>;
 export type SignInInput = zod.infer<typeof signInSchema>;

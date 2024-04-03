@@ -28,6 +28,7 @@ const {
     resetPasswordSchema,
     emptySchema,
     messageSchema,
+    newPasswordSchema,
 } = schema;
 
 export const authRoutes = async (app: FastifyInstance) => {
@@ -167,7 +168,7 @@ export const authRoutes = async (app: FastifyInstance) => {
             schema: {
                 tags: ["auth"],
                 description: "Change password",
-                body: passwordSchema,
+                body: newPasswordSchema,
                 response: {
                     200: messageSchema,
                     400: messageSchema,
