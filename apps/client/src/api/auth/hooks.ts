@@ -160,7 +160,7 @@ export const useSignOut = () => {
 };
 
 export const useChangeEmail = () => {
-    const queryClient = new QueryClient();
+    const { refetchUser } = useContext(UserContext);
     return useMutation({
         mutationFn: changeEmail,
         onError: async (err) => {
@@ -172,7 +172,7 @@ export const useChangeEmail = () => {
             toast.error("Failed to change email");
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            await refetchUser();
             toast.success("Email changed successfully");
         },
     });

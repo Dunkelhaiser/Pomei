@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { User } from "shared-types/auth";
 import { toast } from "sonner";
 import { useGetUser } from "@/api/auth/hooks";
@@ -9,6 +9,7 @@ interface UserContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     isAuthorized: boolean;
+    refetchUser: () => Promise<void>;
 }
 
 const iUserContextState = {
@@ -16,6 +17,8 @@ const iUserContextState = {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     setUser: () => {},
     isAuthorized: false,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    refetchUser: async () => {},
 };
 
 export const UserContext = createContext<UserContextType>(iUserContextState);
@@ -27,6 +30,19 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const isAuthorized = useMemo(() => Boolean(user?.id && user.email), [user]);
 
     const getUserHandler = useGetUser(isAuthorized);
+
+    const refetchUser = useCallback(async () => {
+        await getUserHandler.refetch();
+        if (getUserHandler.isError) {
+            localStorage.removeItem("user");
+            setUser(null);
+            toast.error("Session expired");
+        }
+        if (getUserHandler.data) {
+            setUser(getUserHandler.data.user);
+            localStorage.setItem("user", JSON.stringify(getUserHandler.data.user));
+        }
+    }, [getUserHandler]);
 
     useEffect(() => {
         if (getUserHandler.isError) {
@@ -58,8 +74,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             user,
             isAuthorized,
             setUser,
+            refetchUser,
         }),
-        [user, isAuthorized]
+        [user, isAuthorized, refetchUser]
     );
     return <UserContext.Provider value={values}>{children}</UserContext.Provider>;
 };
