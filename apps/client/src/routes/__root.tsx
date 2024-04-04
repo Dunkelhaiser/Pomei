@@ -1,30 +1,37 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
+import { useContext } from "react";
 import Sidebar from "@/components/Sidebar";
+import { ThemeContext } from "@/context/Theme";
 import Button from "@/ui/Button";
 import Toaster from "@/ui/Toast";
 
-const Page = () => (
-    <div
-        className={`
-            flex h-screen flex-col
-            lg:flex-row
-        `}
-    >
-        <Sidebar />
-        <main
+const Page = () => {
+    const { theme } = useContext(ThemeContext);
+
+    return (
+        <div
             className={`
-                relative w-full grow bg-background p-4 text-foreground
-                sm:p-6
-                md:px-8 md:py-7
-                lg:pl-12 lg:pr-14
+                ${theme === "dark" ? "dark" : ""}
+                flex h-screen flex-col
+                lg:flex-row
             `}
         >
-            <Outlet />
-        </main>
-        <Toaster />
-    </div>
-);
+            <Sidebar />
+            <main
+                className={`
+                    relative w-full grow bg-background p-4 text-foreground
+                    sm:p-6
+                    md:px-8 md:py-7
+                    lg:pl-12 lg:pr-14
+                `}
+            >
+                <Outlet />
+            </main>
+            <Toaster />
+        </div>
+    );
+};
 
 const NotFound = () => (
     <section

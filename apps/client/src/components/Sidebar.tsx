@@ -1,7 +1,8 @@
 import { Link as RouterLink } from "@tanstack/react-router";
-import { Archive, Folder, Home, LogIn, Menu, StickyNote, Trash, User } from "lucide-react";
+import { Archive, Folder, Home, LogIn, Menu, Monitor, Moon, StickyNote, Sun, Trash, User } from "lucide-react";
 import { useContext, useState } from "react";
 import { useSignOut } from "@/api/auth/hooks";
+import { ThemeContext } from "@/context/Theme";
 import { UserContext } from "@/context/User";
 import {
     DropdownMenu,
@@ -11,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/ui/DropdownMenu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/Select";
 import { cn } from "@/utils/utils";
 
 interface LinkProps {
@@ -36,6 +38,43 @@ const Link = ({ title, icon, to, close, disabled }: LinkProps) => (
         {title}
     </RouterLink>
 );
+
+const ThemeSwitcher = () => {
+    const { theme, isSystem, changeTheme } = useContext(ThemeContext);
+
+    return (
+        <Select onValueChange={changeTheme} defaultValue={isSystem ? "system" : theme ?? "system"}>
+            <SelectTrigger
+                className={`
+                    border-none bg-transparent text-primary-foreground
+                    hover:bg-foreground/10
+                    focus-visible:bg-foreground/10
+                    dark:hover:bg-card-foreground/5 dark:focus-visible:bg-card-foreground/5
+                    [&.active]:bg-foreground/20 [&.active]:dark:bg-card-foreground/10
+                `}
+            >
+                <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="light">
+                    <div className="flex items-center gap-x-3">
+                        <Sun size={16} /> Light
+                    </div>
+                </SelectItem>
+                <SelectItem value="dark">
+                    <div className="flex items-center gap-x-3">
+                        <Moon size={16} /> Dark
+                    </div>
+                </SelectItem>
+                <SelectItem value="system">
+                    <div className="flex items-center gap-x-3">
+                        <Monitor size={16} /> System
+                    </div>
+                </SelectItem>
+            </SelectContent>
+        </Select>
+    );
+};
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -136,36 +175,41 @@ const Sidebar = () => {
                             </li>
                         ))}
                     </ul>
-                    {user ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className={cn(`
+                    <div className="flex flex-col gap-4">
+                        {user ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger
+                                    className={cn(`
                                                 flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
                                                 [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
                                             `)}
-                            >
-                                <User size={16} /> Account
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuLabel className="text-xs">{user.email}</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <RouterLink to="/settings/general" onClick={() => setIsExpanded(false)}>
-                                        Settings
-                                    </RouterLink>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => signOutHandler.mutate()}>Sign Out</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
-                        <Link
-                            title="Sign In"
-                            icon={<LogIn size={16} />}
-                            to="/auth/sign_in"
-                            close={() => setIsExpanded(false)}
-                        />
-                    )}
+                                >
+                                    <User size={16} /> Account
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuLabel className="text-xs">{user.email}</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <RouterLink to="/settings/general" onClick={() => setIsExpanded(false)}>
+                                            Settings
+                                        </RouterLink>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => signOutHandler.mutate()}>
+                                        Sign Out
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Link
+                                title="Sign In"
+                                icon={<LogIn size={16} />}
+                                to="/auth/sign_in"
+                                close={() => setIsExpanded(false)}
+                            />
+                        )}
+                        <ThemeSwitcher />
+                    </div>
                 </nav>
             </div>
         </>
