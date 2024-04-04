@@ -26,7 +26,7 @@ const Link = ({ title, icon, to, close, disabled }: LinkProps) => (
         className={cn(
             "flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors",
             !disabled &&
-                "hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5 [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10",
+                "hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-card-foreground/5 dark:focus-visible:bg-card-foreground/5 [&.active]:bg-foreground/20 [&.active]:dark:bg-card-foreground/10",
             disabled && "cursor-not-allowed opacity-50"
         )}
         to={to}
@@ -118,6 +118,7 @@ const Sidebar = () => {
                 className={`
                     fixed top-0 z-[999] flex h-screen w-64 -translate-x-full flex-col overflow-y-auto bg-primary pb-10 pt-7
                     transition-transform
+                    dark:bg-card
                     lg:static
                     ${isExpanded && "translate-x-0"}
                     lg:w-72 lg:translate-x-0
