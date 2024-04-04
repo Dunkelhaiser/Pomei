@@ -49,8 +49,8 @@ const ThemeSwitcher = () => {
                     border-none bg-transparent text-primary-foreground
                     hover:bg-foreground/10
                     focus-visible:bg-foreground/10
-                    dark:hover:bg-card-foreground/5 dark:focus-visible:bg-card-foreground/5
-                    [&.active]:bg-foreground/20 [&.active]:dark:bg-card-foreground/10
+                    aria-expanded:bg-foreground/10
+                    dark:hover:bg-card-foreground/5 dark:focus-visible:bg-card-foreground/5 dark:aria-expanded:bg-card-foreground/5
                 `}
             >
                 <SelectValue placeholder="Theme" />
@@ -180,8 +180,8 @@ const Sidebar = () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger
                                     className={cn(`
-                                                flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
-                                                [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
+                                                flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10 aria-expanded:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
+                                                dark:aria-expanded:bg-foreground/5
                                             `)}
                                 >
                                     <User size={16} /> Account
