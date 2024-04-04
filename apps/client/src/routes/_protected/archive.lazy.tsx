@@ -3,10 +3,10 @@ import { Section, SectionHeader } from "@/ui/Section";
 
 const Page = () => (
     <Section>
-        <SectionHeader>Home</SectionHeader>
+        <SectionHeader>Archive</SectionHeader>
     </Section>
 );
 
-export const Route = createLazyFileRoute("/")({
+export const Route = createLazyFileRoute("/_protected/archive")({
     component: Page,
 });

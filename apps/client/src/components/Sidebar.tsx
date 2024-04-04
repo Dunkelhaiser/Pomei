@@ -16,12 +16,12 @@ import { cn } from "@/utils/utils";
 interface LinkProps {
     title: string;
     icon: React.ReactNode;
-    href: string;
+    to: string;
     close?: () => void;
     disabled?: boolean;
 }
 
-const Link = ({ title, icon, href, close, disabled }: LinkProps) => (
+const Link = ({ title, icon, to, close, disabled }: LinkProps) => (
     <RouterLink
         className={cn(
             "flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors",
@@ -29,7 +29,7 @@ const Link = ({ title, icon, href, close, disabled }: LinkProps) => (
                 "hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5 [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10",
             disabled && "cursor-not-allowed opacity-50"
         )}
-        to={href}
+        to={to}
         onClick={close}
     >
         {icon}
@@ -44,12 +44,12 @@ const Sidebar = () => {
     const signOutHandler = useSignOut();
 
     const links = [
-        { title: "Home", icon: <Home size={16} />, href: "/" },
-        { title: "Notes", icon: <StickyNote size={16} />, href: "notes" },
-        { title: "Folders", icon: <Folder size={16} />, href: "folders", disabled: !user },
-        { title: "Archive", icon: <Archive size={16} />, href: "archive", disabled: !user },
-        { title: "Bin", icon: <Trash size={16} />, href: "bin", disabled: !user },
-    ];
+        { title: "Home", icon: <Home size={16} />, to: "/" },
+        { title: "Notes", icon: <StickyNote size={16} />, to: "/notes" },
+        { title: "Folders", icon: <Folder size={16} />, to: "/folders", disabled: !user },
+        { title: "Archive", icon: <Archive size={16} />, to: "/archive", disabled: !user },
+        { title: "Bin", icon: <Trash size={16} />, to: "/bin", disabled: !user },
+    ] satisfies LinkProps[];
 
     return (
         <>
@@ -130,7 +130,7 @@ const Sidebar = () => {
                 <nav className="flex w-full grow flex-col justify-between gap-y-4 p-6">
                     <ul className="space-y-2">
                         {links.map((link) => (
-                            <li key={link.href}>
+                            <li key={link.to}>
                                 <Link {...link} close={() => setIsExpanded(false)} />
                             </li>
                         ))}
@@ -161,7 +161,7 @@ const Sidebar = () => {
                         <Link
                             title="Sign In"
                             icon={<LogIn size={16} />}
-                            href="/auth/sign_in"
+                            to="/auth/sign_in"
                             close={() => setIsExpanded(false)}
                         />
                     )}

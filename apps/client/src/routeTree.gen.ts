@@ -23,11 +23,17 @@ import { Route as ProtectedSettingsDangerzoneImport } from "./routes/_protected/
 
 const AuthImport = createFileRoute("/auth")();
 const IndexLazyImport = createFileRoute("/")();
+const NotesIndexLazyImport = createFileRoute("/notes/")();
+const NotesNoteIdLazyImport = createFileRoute("/notes/$noteId")();
 const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
 const ProtectedSettingsLazyImport = createFileRoute("/_protected/settings")();
+const ProtectedBinLazyImport = createFileRoute("/_protected/bin")();
+const ProtectedArchiveLazyImport = createFileRoute("/_protected/archive")();
+const ProtectedFoldersIndexLazyImport = createFileRoute("/_protected/folders/")();
 const AuthAuthSignupLazyImport = createFileRoute("/auth/_auth/sign_up")();
 const AuthAuthSigninLazyImport = createFileRoute("/auth/_auth/sign_in")();
 const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_password")();
+const ProtectedFoldersFolderIdLazyImport = createFileRoute("/_protected/folders/$folderId")();
 const AuthAuthResetpasswordTokenLazyImport = createFileRoute("/auth/_auth/reset_password/$token")();
 
 // Create/Update Routes
@@ -47,6 +53,16 @@ const IndexLazyRoute = IndexLazyImport.update({
     getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 
+const NotesIndexLazyRoute = NotesIndexLazyImport.update({
+    path: "/notes/",
+    getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/notes/index.lazy").then((d) => d.Route));
+
+const NotesNoteIdLazyRoute = NotesNoteIdLazyImport.update({
+    path: "/notes/$noteId",
+    getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/notes/$noteId.lazy").then((d) => d.Route));
+
 const ProtectedVerifyLazyRoute = ProtectedVerifyLazyImport.update({
     path: "/verify",
     getParentRoute: () => ProtectedRoute,
@@ -57,10 +73,25 @@ const ProtectedSettingsLazyRoute = ProtectedSettingsLazyImport.update({
     getParentRoute: () => ProtectedRoute,
 } as any).lazy(() => import("./routes/_protected/settings.lazy").then((d) => d.Route));
 
+const ProtectedBinLazyRoute = ProtectedBinLazyImport.update({
+    path: "/bin",
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected/bin.lazy").then((d) => d.Route));
+
+const ProtectedArchiveLazyRoute = ProtectedArchiveLazyImport.update({
+    path: "/archive",
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected/archive.lazy").then((d) => d.Route));
+
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
     getParentRoute: () => AuthRoute,
 } as any);
+
+const ProtectedFoldersIndexLazyRoute = ProtectedFoldersIndexLazyImport.update({
+    path: "/folders/",
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected/folders/index.lazy").then((d) => d.Route));
 
 const AuthAuthSignupLazyRoute = AuthAuthSignupLazyImport.update({
     path: "/sign_up",
@@ -76,6 +107,11 @@ const AuthAuthForgotpasswordLazyRoute = AuthAuthForgotpasswordLazyImport.update(
     path: "/forgot_password",
     getParentRoute: () => AuthAuthRoute,
 } as any).lazy(() => import("./routes/auth/_auth.forgot_password.lazy").then((d) => d.Route));
+
+const ProtectedFoldersFolderIdLazyRoute = ProtectedFoldersFolderIdLazyImport.update({
+    path: "/folders/$folderId",
+    getParentRoute: () => ProtectedRoute,
+} as any).lazy(() => import("./routes/_protected/folders/$folderId.lazy").then((d) => d.Route));
 
 const ProtectedSettingsSecurityRoute = ProtectedSettingsSecurityImport.update({
     path: "/security",
@@ -117,6 +153,14 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
+        "/_protected/archive": {
+            preLoaderRoute: typeof ProtectedArchiveLazyImport;
+            parentRoute: typeof ProtectedImport;
+        };
+        "/_protected/bin": {
+            preLoaderRoute: typeof ProtectedBinLazyImport;
+            parentRoute: typeof ProtectedImport;
+        };
         "/_protected/settings": {
             preLoaderRoute: typeof ProtectedSettingsLazyImport;
             parentRoute: typeof ProtectedImport;
@@ -124,6 +168,14 @@ declare module "@tanstack/react-router" {
         "/_protected/verify": {
             preLoaderRoute: typeof ProtectedVerifyLazyImport;
             parentRoute: typeof ProtectedImport;
+        };
+        "/notes/$noteId": {
+            preLoaderRoute: typeof NotesNoteIdLazyImport;
+            parentRoute: typeof rootRoute;
+        };
+        "/notes/": {
+            preLoaderRoute: typeof NotesIndexLazyImport;
+            parentRoute: typeof rootRoute;
         };
         "/_protected/settings/danger_zone": {
             preLoaderRoute: typeof ProtectedSettingsDangerzoneImport;
@@ -137,6 +189,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof ProtectedSettingsSecurityImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
         };
+        "/_protected/folders/$folderId": {
+            preLoaderRoute: typeof ProtectedFoldersFolderIdLazyImport;
+            parentRoute: typeof ProtectedImport;
+        };
         "/auth/_auth/forgot_password": {
             preLoaderRoute: typeof AuthAuthForgotpasswordLazyImport;
             parentRoute: typeof AuthAuthImport;
@@ -148,6 +204,10 @@ declare module "@tanstack/react-router" {
         "/auth/_auth/sign_up": {
             preLoaderRoute: typeof AuthAuthSignupLazyImport;
             parentRoute: typeof AuthAuthImport;
+        };
+        "/_protected/folders/": {
+            preLoaderRoute: typeof ProtectedFoldersIndexLazyImport;
+            parentRoute: typeof ProtectedImport;
         };
         "/auth/_auth/reset_password/$token": {
             preLoaderRoute: typeof AuthAuthResetpasswordTokenLazyImport;
@@ -161,12 +221,16 @@ declare module "@tanstack/react-router" {
 export const routeTree = rootRoute.addChildren([
     IndexLazyRoute,
     ProtectedRoute.addChildren([
+        ProtectedArchiveLazyRoute,
+        ProtectedBinLazyRoute,
         ProtectedSettingsLazyRoute.addChildren([
             ProtectedSettingsDangerzoneRoute,
             ProtectedSettingsGeneralRoute,
             ProtectedSettingsSecurityRoute,
         ]),
         ProtectedVerifyLazyRoute,
+        ProtectedFoldersFolderIdLazyRoute,
+        ProtectedFoldersIndexLazyRoute,
     ]),
     AuthRoute.addChildren([
         AuthAuthRoute.addChildren([
@@ -176,6 +240,8 @@ export const routeTree = rootRoute.addChildren([
             AuthAuthResetpasswordTokenLazyRoute,
         ]),
     ]),
+    NotesNoteIdLazyRoute,
+    NotesIndexLazyRoute,
 ]);
 
 /* prettier-ignore-end */
