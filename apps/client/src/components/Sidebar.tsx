@@ -18,15 +18,17 @@ interface LinkProps {
     icon: React.ReactNode;
     href: string;
     close?: () => void;
+    disabled?: boolean;
 }
 
-const Link = ({ title, icon, href, close }: LinkProps) => (
+const Link = ({ title, icon, href, close, disabled }: LinkProps) => (
     <RouterLink
-        className={cn(`
-            flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10
-            dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5
-            [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10
-        `)}
+        className={cn(
+            "flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors",
+            !disabled &&
+                "hover:bg-foreground/10 focus-visible:bg-foreground/10 dark:hover:bg-foreground/5 dark:focus-visible:bg-foreground/5 [&.active]:bg-foreground/20 [&.active]:dark:bg-foreground/10",
+            disabled && "cursor-not-allowed opacity-50"
+        )}
         to={href}
         onClick={close}
     >
@@ -35,19 +37,19 @@ const Link = ({ title, icon, href, close }: LinkProps) => (
     </RouterLink>
 );
 
-const links = [
-    { title: "Home", icon: <Home size={16} />, href: "/" },
-    { title: "Notes", icon: <StickyNote size={16} />, href: "notes" },
-    { title: "Folders", icon: <Folder size={16} />, href: "folders" },
-    { title: "Archive", icon: <Archive size={16} />, href: "archive" },
-    { title: "Bin", icon: <Trash size={16} />, href: "bin" },
-];
-
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { user } = useContext(UserContext);
 
     const signOutHandler = useSignOut();
+
+    const links = [
+        { title: "Home", icon: <Home size={16} />, href: "/" },
+        { title: "Notes", icon: <StickyNote size={16} />, href: "notes" },
+        { title: "Folders", icon: <Folder size={16} />, href: "folders", disabled: !user },
+        { title: "Archive", icon: <Archive size={16} />, href: "archive", disabled: !user },
+        { title: "Bin", icon: <Trash size={16} />, href: "bin", disabled: !user },
+    ];
 
     return (
         <>
