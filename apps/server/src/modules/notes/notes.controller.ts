@@ -1,12 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
+    GetByIdInput,
+    OrderInput,
     ArchiveInput,
     FolderIdInput,
     GetNotePaginatedInput,
     GetNotesInput,
     MoveToBinInput,
     NewNoteInput,
-} from "./notes.schema.ts";
+} from "shared-types";
 import {
     addToFolder,
     archiveNote,
@@ -24,7 +26,6 @@ import {
     reorderNote,
     searchNotes,
 } from "./notes.service.ts";
-import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
     try {

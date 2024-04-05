@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "./folder.schema.ts";
+import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput, GetByIdInput, OrderInput } from "shared-types";
 import {
     createFolder,
     deleteFolder,
@@ -10,7 +10,6 @@ import {
     reorderFolder,
     searchFolder,
 } from "./folders.service.ts";
-import { GetByIdInput, OrderInput } from "../shared/shared.schema.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
     try {

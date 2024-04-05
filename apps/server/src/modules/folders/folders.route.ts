@@ -2,13 +2,6 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import schema from "shared-types";
 import {
-    folderSchema,
-    foldersSchema,
-    getFolderSchema,
-    getFolderPaginatedSchema,
-    newFolderSchema,
-} from "./folder.schema.ts";
-import {
     createFolderHandler,
     deleteFolderHandler,
     editFolderHandler,
@@ -18,11 +11,20 @@ import {
     reorderFolderHandler,
     searchFolderHandler,
 } from "./folders.controller.ts";
-import { notesSchema } from "../notes/notes.schema.ts";
-import { getByIdSchema, orderSchema } from "../shared/shared.schema.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
 
-const { emptySchema, messageSchema } = schema;
+const {
+    emptySchema,
+    getByIdSchema,
+    orderSchema,
+    messageSchema,
+    folderSchema,
+    foldersSchema,
+    getFolderSchema,
+    getFolderPaginatedSchema,
+    newFolderSchema,
+    notesSchema,
+} = schema;
 
 export const foldersRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(

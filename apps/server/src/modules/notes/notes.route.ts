@@ -18,7 +18,11 @@ import {
     reorderNoteHandler,
     searchNotesHandler,
 } from "./notes.controller.ts";
-import {
+import { authHandler } from "@/auth/auth.handler.ts";
+
+const {
+    emptySchema,
+    messageSchema,
     archiveSchema,
     folderIdSchema,
     getNotePaginatedSchema,
@@ -27,11 +31,9 @@ import {
     newNoteSchema,
     noteSchema,
     notesSchema,
-} from "./notes.schema.ts";
-import { getByIdSchema, orderSchema } from "../shared/shared.schema.ts";
-import { authHandler } from "@/auth/auth.handler.ts";
-
-const { emptySchema, messageSchema } = schema;
+    getByIdSchema,
+    orderSchema,
+} = schema;
 
 export const notesRoutes = async (app: FastifyInstance) => {
     app.withTypeProvider<ZodTypeProvider>().post(
