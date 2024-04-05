@@ -64,46 +64,37 @@ export const useSignIn = () => {
     });
 };
 
-export const useResetPasswordRequest = () => {
-    const navigate = useNavigate({ from: "/sign_up" });
+export const useSignOut = () => {
+    const queryClient = new QueryClient();
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
     return useMutation({
-        mutationFn: (input: EmailInput) => resetPasswordRequest(input),
-        onError: async (err) => {
-            if (err instanceof HTTPError) {
-                const error = (await err.response.json()) as MessageResponse;
-                toast.error(error.message);
-                return;
-            }
-            toast.error("Failed to send reset password link");
-        },
-        onSuccess: async () => {
-            toast.success("Reset password link sent");
+        mutationFn: async () => {
+            await signOut();
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Signed out successfully");
             await navigate({ to: "/auth/sign_in" });
         },
     });
 };
 
-export const useGetUser = (enabled: boolean) =>
-    useQuery({
-        queryKey: ["user"],
-        queryFn: getUser,
-        retry: false,
-        staleTime: Infinity,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        enabled,
+export const useTerminateAllSessions = () => {
+    const queryClient = new QueryClient();
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
+    return useMutation({
+        mutationFn: async () => {
+            await terminateAllSessions();
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            setUser(null);
+            localStorage.removeItem("user");
+            toast.success("Terminated all sessions successfully");
+            await navigate({ to: "/auth/sign_in" });
+        },
     });
-
-export const useResendVerificationCode = () =>
-    useMutation({
-        mutationFn: async () =>
-            toast.promise(resendVerificationCode, {
-                loading: "Sending...",
-                success: "Verification code sent",
-                error: "Failed to resend verification code",
-            }),
-    });
+};
 
 export const useVerify = () => {
     const navigate = useNavigate();
@@ -124,6 +115,35 @@ export const useVerify = () => {
     });
 };
 
+export const useResendVerificationCode = () =>
+    useMutation({
+        mutationFn: async () =>
+            toast.promise(resendVerificationCode, {
+                loading: "Sending...",
+                success: "Verification code sent",
+                error: "Failed to resend verification code",
+            }),
+    });
+
+export const useResetPasswordRequest = () => {
+    const navigate = useNavigate({ from: "/sign_up" });
+    return useMutation({
+        mutationFn: (input: EmailInput) => resetPasswordRequest(input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to send reset password link");
+        },
+        onSuccess: async () => {
+            toast.success("Reset password link sent");
+            await navigate({ to: "/auth/sign_in" });
+        },
+    });
+};
+
 export const useResetPassword = (token: string) => {
     const navigate = useNavigate();
     return useMutation({
@@ -139,41 +159,6 @@ export const useResetPassword = (token: string) => {
         onSuccess: async () => {
             toast.success("Password reset successfully");
             await navigate({ to: "/auth/sign_in" });
-        },
-    });
-};
-
-export const useSignOut = () => {
-    const queryClient = new QueryClient();
-    const navigate = useNavigate();
-    const { setUser } = useContext(UserContext);
-    return useMutation({
-        mutationFn: async () => {
-            await signOut();
-            await queryClient.invalidateQueries({ queryKey: ["user"] });
-            setUser(null);
-            localStorage.removeItem("user");
-            toast.success("Signed out successfully");
-            await navigate({ to: "/auth/sign_in" });
-        },
-    });
-};
-
-export const useChangeEmail = () => {
-    const { refetchUser } = useContext(UserContext);
-    return useMutation({
-        mutationFn: changeEmail,
-        onError: async (err) => {
-            if (err instanceof HTTPError) {
-                const error = (await err.response.json()) as MessageResponse;
-                toast.error(error.message);
-                return;
-            }
-            toast.error("Failed to change email");
-        },
-        onSuccess: async () => {
-            await refetchUser();
-            toast.success("Email changed successfully");
         },
     });
 };
@@ -203,18 +188,21 @@ export const useChangePassword = () => {
     });
 };
 
-export const useTerminateAllSessions = () => {
-    const queryClient = new QueryClient();
-    const navigate = useNavigate();
-    const { setUser } = useContext(UserContext);
+export const useChangeEmail = () => {
+    const { refetchUser } = useContext(UserContext);
     return useMutation({
-        mutationFn: async () => {
-            await terminateAllSessions();
-            await queryClient.invalidateQueries({ queryKey: ["user"] });
-            setUser(null);
-            localStorage.removeItem("user");
-            toast.success("Terminated all sessions successfully");
-            await navigate({ to: "/auth/sign_in" });
+        mutationFn: changeEmail,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to change email");
+        },
+        onSuccess: async () => {
+            await refetchUser();
+            toast.success("Email changed successfully");
         },
     });
 };
@@ -242,3 +230,15 @@ export const useDeleteAccount = () => {
         },
     });
 };
+
+export const useGetUser = (enabled: boolean) =>
+    useQuery({
+        queryKey: ["user"],
+        queryFn: getUser,
+        retry: false,
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        enabled,
+    });

@@ -22,8 +22,50 @@ export const signIn = async (data: SignInInput) => {
     return res;
 };
 
+export const signOut = async () => {
+    const res = await api.post("auth/sign_out", { json: null, credentials: "include" }).json<EmptyResponse>();
+    return res;
+};
+
+export const terminateAllSessions = async () => {
+    const res = await api.post("auth/terminate", { json: null, credentials: "include" }).json<EmptyResponse>();
+    return res;
+};
+
+export const verify = async (data: VerificationCodeInput) => {
+    const res = await api.post("auth/verify", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
+
+export const resendVerificationCode = async () => {
+    const res = await api
+        .post("auth/resend-verification-code", { json: null, credentials: "include" })
+        .json<MessageResponse>();
+    return res;
+};
+
 export const resetPasswordRequest = async (data: EmailInput) => {
     const res = await api.post("auth/reset-password", { json: data }).json<MessageResponse>();
+    return res;
+};
+
+export const resetPassword = async (data: PasswordInputWithConfirmation, token: string) => {
+    const res = await api.post(`auth/reset-password/${token}`, { json: data }).json<MessageResponse>();
+    return res;
+};
+
+export const changePassword = async (data: NewPasswordInputWithConfirmation) => {
+    const res = await api.post("auth/change-password", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
+
+export const changeEmail = async (data: EmailInput) => {
+    const res = await api.post("auth/change-email", { json: data, credentials: "include" }).json<MessageResponse>();
+    return res;
+};
+
+export const deleteAccount = async (data: PasswordInput) => {
+    const res = await api.delete("auth", { json: data, credentials: "include" }).json<EmptyResponse>();
     return res;
 };
 
@@ -39,46 +81,4 @@ export const isAuthenticated = async () => {
     } catch (err) {
         return false;
     }
-};
-
-export const resendVerificationCode = async () => {
-    const res = await api
-        .post("auth/resend-verification-code", { json: null, credentials: "include" })
-        .json<MessageResponse>();
-    return res;
-};
-
-export const verify = async (data: VerificationCodeInput) => {
-    const res = await api.post("auth/verify", { json: data, credentials: "include" }).json<MessageResponse>();
-    return res;
-};
-
-export const resetPassword = async (data: PasswordInputWithConfirmation, token: string) => {
-    const res = await api.post(`auth/reset-password/${token}`, { json: data }).json<MessageResponse>();
-    return res;
-};
-
-export const signOut = async () => {
-    const res = await api.post("auth/sign_out", { json: null, credentials: "include" }).json<EmptyResponse>();
-    return res;
-};
-
-export const changeEmail = async (data: EmailInput) => {
-    const res = await api.post("auth/change-email", { json: data, credentials: "include" }).json<MessageResponse>();
-    return res;
-};
-
-export const changePassword = async (data: NewPasswordInputWithConfirmation) => {
-    const res = await api.post("auth/change-password", { json: data, credentials: "include" }).json<MessageResponse>();
-    return res;
-};
-
-export const terminateAllSessions = async () => {
-    const res = await api.post("auth/terminate", { json: null, credentials: "include" }).json<EmptyResponse>();
-    return res;
-};
-
-export const deleteAccount = async (data: PasswordInput) => {
-    const res = await api.delete("auth", { json: data, credentials: "include" }).json<EmptyResponse>();
-    return res;
 };
