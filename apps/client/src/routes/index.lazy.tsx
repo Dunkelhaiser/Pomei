@@ -1,11 +1,33 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Section, SectionHeader } from "@/ui/Section";
+import { useNotes } from "@/api/notes/hooks";
+import Note from "@/components/Note";
+import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
-const Page = () => (
-    <Section>
-        <SectionHeader>Home</SectionHeader>
-    </Section>
-);
+const Page = () => {
+    const notes = useNotes({ page: 1, limit: 4, orderBy: "updatedAt", isAscending: false });
+
+    return (
+        <Section>
+            <SectionHeader>Home</SectionHeader>
+            <SectionContent>
+                <section className="space-y-4">
+                    <h2 className="text-xl font-semibold">Latest Notes</h2>
+                    <div
+                        className={`
+                            grid grid-cols-1 gap-4
+                            md:grid-cols-2
+                            xl:grid-cols-4
+                        `}
+                    >
+                        {notes.isLoading
+                            ? "Loading..."
+                            : notes.data?.map((note) => <Note lineClamp="line-clamp-6" note={note} key={note.id} />)}
+                    </div>
+                </section>
+            </SectionContent>
+        </Section>
+    );
+};
 
 export const Route = createLazyFileRoute("/")({
     component: Page,
