@@ -1,5 +1,5 @@
 import { and, desc, eq, ilike } from "drizzle-orm";
-import { NewFolderInput } from "./folder.schema.ts";
+import { NewFolderInput } from "shared-types";
 import { db } from "@/db/client.ts";
 import { folders, notes } from "@/db/schema.ts";
 

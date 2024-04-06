@@ -1,5 +1,5 @@
 import { and, arrayOverlaps, desc, eq, ilike } from "drizzle-orm";
-import { NewNoteInput } from "./notes.schema.ts";
+import { NewNoteInput } from "shared-types";
 import { getFolderById } from "../folders/folders.service.ts";
 import { db } from "@/db/client.ts";
 import { notes } from "@/db/schema.ts";
