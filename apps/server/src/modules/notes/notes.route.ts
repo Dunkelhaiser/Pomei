@@ -6,6 +6,7 @@ import {
     archiveNoteHandler,
     createNoteHandler,
     deleteNoteHandler,
+    duplicateNoteHandler,
     editNoteHandler,
     emptyBinHandler,
     getAllNotesHandler,
@@ -139,6 +140,24 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         editNoteHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().post(
+        "/duplicate/:id",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Duplicate note",
+                params: getByIdSchema,
+                response: {
+                    201: noteSchema,
+                    404: messageSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        duplicateNoteHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/reorder/:id",

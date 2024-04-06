@@ -14,6 +14,7 @@ import {
     archiveNote,
     createNote,
     deleteNote,
+    duplicateNote,
     editNote,
     emptyBin,
     getAllNotes,
@@ -109,6 +110,21 @@ export const editNoteHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to edit note");
+    }
+};
+
+export const duplicateNoteHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
+    try {
+        const note = await duplicateNote(req.params.id, req.user.id);
+        if (note) {
+            return res.code(201).send(note);
+        }
+        return res.code(404).send({ message: "Note not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to duplicate note");
     }
 };
 

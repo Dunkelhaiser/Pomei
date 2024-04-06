@@ -92,6 +92,31 @@ export const editNote = async (id: string, input: NewNoteInput, userId: string) 
     return editedNote;
 };
 
+export const duplicateNote = async (id: string, userId: string) => {
+    const note = await getNoteById(id, userId);
+    if (!note) {
+        return null;
+    }
+    const lastNoteOrder = await getLastNoteOrder(userId);
+    let order = 0;
+    if (lastNoteOrder !== null) {
+        order = lastNoteOrder + 1;
+    }
+    const [duplicatedNote] = await db
+        .insert(notes)
+        .values({
+            title: note.title,
+            content: note.content,
+            tags: note.tags,
+            isArchived: note.isArchived,
+            folderId: note.folderId,
+            userId: note.userId,
+            order,
+        })
+        .returning();
+    return duplicatedNote;
+};
+
 export const reorderNote = async (id: string, order: number, userId: string) => {
     const note = await getNoteById(id, userId);
     if (!note) {
