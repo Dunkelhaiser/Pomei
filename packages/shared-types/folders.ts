@@ -34,8 +34,6 @@ export const getFolderPaginatedSchema = zod.object({
 
 export type NewFolderInput = zod.infer<typeof newFolderSchema>;
 export type GetFolderInput = zod.infer<typeof getFolderSchema>;
-export type GetFolderPaginatedInput = Omit<zod.infer<typeof getFolderPaginatedSchema>, "isAscending"> & {
-    isAscending?: "true" | "false";
-};
+export type GetFolderPaginatedInput = zod.infer<typeof getFolderPaginatedSchema>;
 export type Folder = zod.infer<typeof folderSchema>;
 export type FoldersPaginated = zod.infer<typeof foldersPaginatedSchema>;

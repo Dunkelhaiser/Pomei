@@ -55,9 +55,7 @@ export const getNotesSchema = zod.object({
 });
 
 export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
-export type GetNotePaginatedInput = Omit<zod.infer<typeof getNotePaginatedSchema>, "isAscending"> & {
-    isAscending?: "true" | "false";
-};
+export type GetNotePaginatedInput = zod.infer<typeof getNotePaginatedSchema>;
 export type ArchiveInput = zod.infer<typeof archiveSchema>;
 export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;
 export type FolderIdInput = zod.infer<typeof folderIdSchema>;

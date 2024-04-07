@@ -18,11 +18,7 @@ export const getPaginated = {
             zod.number().min(1, { message: "Page size must be greater than or equal to 1" })
         )
         .optional(),
-    isAscending: zod
-        .string()
-        .refine((s) => s === "true" || s === "false")
-        .transform((s) => s === "true")
-        .optional(),
+    order: zod.enum(["ascending", "descending"]).optional(),
 };
 
 export const resPaginated = {
