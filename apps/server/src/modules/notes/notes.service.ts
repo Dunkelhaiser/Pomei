@@ -45,13 +45,13 @@ export const getAllNotesPaginated = async (
     limit = 10,
     page = 1,
     orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
-    isAscending = true
+    order = "ascending"
 ) => {
     const notesArr = await db
         .select()
         .from(notes)
         .where(eq(notes.userId, userId))
-        .orderBy(isAscending ? notes[orderBy] : desc(notes[orderBy]))
+        .orderBy(order === "ascending" ? notes[orderBy] : desc(notes[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
     const totalCount = await getNotesCount(userId);

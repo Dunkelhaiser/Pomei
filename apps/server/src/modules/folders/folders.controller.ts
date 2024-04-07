@@ -36,9 +36,9 @@ export const getAllFoldersPaginatedHandler = async (
     req: FastifyRequest<{ Querystring: GetFolderPaginatedInput }>,
     res: FastifyReply
 ) => {
-    const { page, limit, orderBy, isAscending } = req.query;
+    const { page, limit, orderBy, order } = req.query;
     try {
-        const data = await getAllFoldersPaginated(req.user.id, limit, page, orderBy, isAscending);
+        const data = await getAllFoldersPaginated(req.user.id, limit, page, orderBy, order);
         return res.code(200).send(data);
     } catch (err) {
         if (err instanceof Error) {

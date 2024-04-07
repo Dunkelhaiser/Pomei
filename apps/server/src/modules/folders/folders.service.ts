@@ -18,13 +18,13 @@ export const getAllFoldersPaginated = async (
     limit = 10,
     page = 1,
     orderBy: "order" | "name" | "createdAt" | "updatedAt" = "order",
-    isAscending = true
+    order = "ascending"
 ) => {
     const foldersArr = await db
         .select()
         .from(folders)
         .where(eq(folders.userId, userId))
-        .orderBy(isAscending ? folders[orderBy] : desc(folders[orderBy]))
+        .orderBy(order === "ascending" ? folders[orderBy] : desc(folders[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
     const totalCount = await getFoldersCount(userId);
