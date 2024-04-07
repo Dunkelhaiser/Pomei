@@ -20,9 +20,9 @@ import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader, SectionSubHeader } from "@/ui/Section";
 
 const Page = () => {
-    const { sort, ascending } = Route.useSearch();
+    const { sort, order } = Route.useSearch();
     const navigate = Route.useNavigate();
-    const notes = useNotesInfinity({ page: 1, limit: 4, orderBy: sort, isAscending: ascending });
+    const notes = useNotesInfinity({ page: 1, limit: 4, orderBy: sort, order });
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,
     });
@@ -42,30 +42,30 @@ const Page = () => {
         const notesSortValid =
             notesSort === "order" || notesSort === "title" || notesSort === "createdAt" || notesSort === "updatedAt";
 
-        const notesOrderValid = notesOrder === "true" || notesOrder === "false";
+        const notesOrderValid = notesOrder === "ascending" || notesOrder === "descending";
 
         if (!notesSortValid) {
             localStorage.setItem("notesSort", "order");
         }
-        if (!notesSort) {
-            localStorage.setItem("notesOrder", "true");
+        if (!notesOrderValid) {
+            localStorage.setItem("notesOrder", "ascending");
         }
         void navigate({
             to: "/notes",
             search: {
                 sort: notesSortValid ? notesSort : "order",
-                ascending: notesOrderValid ? notesOrder : "true",
+                order: notesOrderValid ? notesOrder : "ascending",
             },
         });
     }, [navigate]);
 
     const handleSort = (sortValue: "title" | "createdAt" | "updatedAt" | "order") => {
-        void navigate({ to: "/notes", search: { sort: sortValue, ascending } });
+        void navigate({ to: "/notes", search: { sort: sortValue, order } });
         localStorage.setItem("notesSort", sortValue);
     };
 
-    const handleOrder = (orderValue: "true" | "false") => {
-        void navigate({ to: "/notes", search: { sort, ascending: orderValue } });
+    const handleOrder = (orderValue: "ascending" | "descending") => {
+        void navigate({ to: "/notes", search: { sort, order: orderValue } });
         localStorage.setItem("notesOrder", orderValue);
     };
 
@@ -128,10 +128,16 @@ const Page = () => {
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked={ascending === "true"} onClick={() => handleOrder("true")}>
+                        <DropdownMenuCheckboxItem
+                            checked={order === "ascending"}
+                            onClick={() => handleOrder("ascending")}
+                        >
                             Ascending
                         </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem checked={ascending === "false"} onClick={() => handleOrder("false")}>
+                        <DropdownMenuCheckboxItem
+                            checked={order === "descending"}
+                            onClick={() => handleOrder("descending")}
+                        >
                             Descending
                         </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
@@ -248,7 +254,7 @@ const Page = () => {
 
 const routeParamsSchema = zod.object({
     sort: zod.enum(["title", "createdAt", "updatedAt", "order"]).catch("order"),
-    ascending: zod.enum(["true", "false"]).catch("true"),
+    order: zod.enum(["ascending", "descending"]).catch("ascending"),
 });
 
 export const Route = createFileRoute("/notes/")({
