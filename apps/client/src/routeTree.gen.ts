@@ -14,6 +14,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
+import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 import { Route as ProtectedSettingsSecurityImport } from "./routes/_protected/settings/security";
 import { Route as ProtectedSettingsGeneralImport } from "./routes/_protected/settings/general";
@@ -23,7 +24,6 @@ import { Route as ProtectedSettingsDangerzoneImport } from "./routes/_protected/
 
 const AuthImport = createFileRoute("/auth")();
 const IndexLazyImport = createFileRoute("/")();
-const NotesIndexLazyImport = createFileRoute("/notes/")();
 const NotesNoteIdLazyImport = createFileRoute("/notes/$noteId")();
 const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
 const ProtectedSettingsLazyImport = createFileRoute("/_protected/settings")();
@@ -53,10 +53,10 @@ const IndexLazyRoute = IndexLazyImport.update({
     getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 
-const NotesIndexLazyRoute = NotesIndexLazyImport.update({
+const NotesIndexRoute = NotesIndexImport.update({
     path: "/notes/",
     getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/notes/index.lazy").then((d) => d.Route));
+} as any);
 
 const NotesNoteIdLazyRoute = NotesNoteIdLazyImport.update({
     path: "/notes/$noteId",
@@ -174,7 +174,7 @@ declare module "@tanstack/react-router" {
             parentRoute: typeof rootRoute;
         };
         "/notes/": {
-            preLoaderRoute: typeof NotesIndexLazyImport;
+            preLoaderRoute: typeof NotesIndexImport;
             parentRoute: typeof rootRoute;
         };
         "/_protected/settings/danger_zone": {
@@ -241,7 +241,7 @@ export const routeTree = rootRoute.addChildren([
         ]),
     ]),
     NotesNoteIdLazyRoute,
-    NotesIndexLazyRoute,
+    NotesIndexRoute,
 ]);
 
 /* prettier-ignore-end */
