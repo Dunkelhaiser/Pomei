@@ -25,5 +25,10 @@ export const getPaginated = {
         .optional(),
 };
 
+export const resPaginated = {
+    totalPages: zod.number(),
+    totalCount: zod.number(),
+};
+
 export type GetByIdInput = zod.infer<typeof getByIdSchema>;
 export type OrderInput = zod.infer<typeof orderSchema>;

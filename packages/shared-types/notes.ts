@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { getPaginated } from "./shared.ts";
+import { getPaginated, resPaginated } from "./shared.ts";
 
 export const newNoteSchema = zod.object({
     title: zod.string().trim().max(255, { message: "Title must be less than 255 characters long" }).nullable(),
@@ -26,6 +26,11 @@ export const noteSchema = zod.object({
     updatedAt: zod.date(),
 });
 export const notesSchema = noteSchema.array();
+
+export const notesPaginatedSchema = zod.object({
+    notes: notesSchema,
+    ...resPaginated,
+});
 
 export const getNotePaginatedSchema = zod.object({
     ...getPaginated,
@@ -56,3 +61,4 @@ export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;
 export type FolderIdInput = zod.infer<typeof folderIdSchema>;
 export type GetNotesInput = zod.infer<typeof getNotesSchema>;
 export type Note = zod.infer<typeof noteSchema>;
+export type NotesPaginated = zod.infer<typeof notesPaginatedSchema>;

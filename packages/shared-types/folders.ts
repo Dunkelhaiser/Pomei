@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { getPaginated } from "./shared.ts";
+import { getPaginated, resPaginated } from "./shared.ts";
 
 const hexRegex = /^#(?:[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
@@ -18,6 +18,11 @@ export const folderSchema = zod.object({
 });
 export const foldersSchema = folderSchema.array();
 
+export const foldersPaginatedSchema = zod.object({
+    folders: foldersSchema,
+    ...resPaginated,
+});
+
 export const getFolderSchema = zod.object({
     name: zod.string().trim().min(1, { message: "Name must be at least 1 character long" }),
 });
@@ -31,3 +36,4 @@ export type NewFolderInput = zod.infer<typeof newFolderSchema>;
 export type GetFolderInput = zod.infer<typeof getFolderSchema>;
 export type GetFolderPaginatedInput = zod.infer<typeof getFolderPaginatedSchema>;
 export type Folder = zod.infer<typeof folderSchema>;
+export type FoldersPaginated = zod.infer<typeof foldersPaginatedSchema>;
