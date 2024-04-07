@@ -1,17 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
+import Loader from "./Loader";
 import { cn } from "@/utils/utils";
-
-const Loader = ({ className }: { className?: string }) => (
-    <div
-        className={cn(
-            "absolute h-4 w-4 animate-spin rounded-full border-2 border-slate-50",
-            className,
-            "border-b-transparent"
-        )}
-    />
-);
 
 const variants = cva(
     `
@@ -67,7 +58,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                                 className={
                                     variant === "ghost" || variant === "secondary" || variant === "link"
                                         ? "border-gray-900/50 dark:border-slate-50/60"
-                                        : ""
+                                        : "border-slate-50"
                                 }
                             />
                         )}
