@@ -55,11 +55,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                     <>
                         {loading && (
                             <Loader
-                                className={
-                                    variant === "ghost" || variant === "secondary" || variant === "link"
-                                        ? "border-gray-900/50 dark:border-slate-50/60"
-                                        : "border-slate-50"
-                                }
+                                className={`
+                                    size-4
+                                    ${
+                                        variant === "ghost" || variant === "secondary" || variant === "link"
+                                            ? "border-gray-900/50 dark:border-slate-50/60"
+                                            : "border-slate-50"
+                                    }
+                                `}
                             />
                         )}
                         <span

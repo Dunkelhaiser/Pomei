@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useNotes } from "@/api/notes/hooks";
 import Note from "@/components/Note";
+import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
 const Page = () => {
@@ -14,14 +15,16 @@ const Page = () => {
                     <h2 className="text-xl font-semibold">Latest Notes</h2>
                     <div
                         className={`
-                            grid grid-cols-1 gap-4
+                            grid min-h-24 grid-cols-1 gap-4
                             md:grid-cols-2
                             xl:grid-cols-4
                         `}
                     >
-                        {notes.isLoading
-                            ? "Loading..."
-                            : notes.data?.map((note) => <Note lineClamp="line-clamp-6" note={note} key={note.id} />)}
+                        {notes.isLoading ? (
+                            <Loader className="col-span-full self-center justify-self-center" />
+                        ) : (
+                            notes.data?.map((note) => <Note lineClamp="line-clamp-6" note={note} key={note.id} />)
+                        )}
                     </div>
                 </section>
             </SectionContent>
