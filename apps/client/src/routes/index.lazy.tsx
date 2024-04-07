@@ -5,7 +5,7 @@ import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
 const Page = () => {
-    const notes = useNotes({ page: 1, limit: 4, orderBy: "updatedAt", isAscending: "false" });
+    const notes = useNotes({ page: 1, limit: 4, orderBy: "updatedAt", order: "descending" });
 
     return (
         <Section>
