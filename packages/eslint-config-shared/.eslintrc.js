@@ -18,7 +18,7 @@ module.exports = {
         "object-shorthand": "error",
         eqeqeq: "error",
         yoda: "error",
-        "arrow-body-style": ["error", "as-needed"],
+        "arrow-body-style": "off",
         "no-label-var": "error",
         "no-undef-init": "warn",
         "new-cap": ["error", { capIsNew: false }],
