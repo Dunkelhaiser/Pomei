@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike } from "drizzle-orm";
+import { and, count, desc, eq, ilike } from "drizzle-orm";
 import { NewFolderInput } from "shared-types";
 import { db } from "@/db/client.ts";
 import { folders, notes } from "@/db/schema.ts";
@@ -6,6 +6,11 @@ import { folders, notes } from "@/db/schema.ts";
 export const getAllFolders = async (userId: string) => {
     const allFolders = await db.select().from(folders).where(eq(folders.userId, userId)).orderBy(folders.order);
     return allFolders;
+};
+
+export const getFoldersCount = async (userId: string) => {
+    const foldersCount = await db.select({ count: count() }).from(folders).where(eq(folders.userId, userId));
+    return foldersCount[0].count;
 };
 
 export const getAllFoldersPaginated = async (
@@ -22,7 +27,13 @@ export const getAllFoldersPaginated = async (
         .orderBy(isAscending ? folders[orderBy] : desc(folders[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
-    return foldersArr;
+    const totalCount = await getFoldersCount(userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        folders: foldersArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const getFolderById = async (folderId: string, userId: string) => {

@@ -24,6 +24,7 @@ const {
     getFolderPaginatedSchema,
     newFolderSchema,
     notesSchema,
+    foldersPaginatedSchema,
 } = schema;
 
 export const foldersRoutes = async (app: FastifyInstance) => {
@@ -68,7 +69,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
                 description: "Get all folders with pagination",
                 querystring: getFolderPaginatedSchema,
                 response: {
-                    200: foldersSchema,
+                    200: foldersPaginatedSchema,
                     400: messageSchema,
                     500: messageSchema,
                 },

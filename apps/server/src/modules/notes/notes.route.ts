@@ -34,6 +34,7 @@ const {
     notesSchema,
     getByIdSchema,
     orderSchema,
+    notesPaginatedSchema,
 } = schema;
 
 export const notesRoutes = async (app: FastifyInstance) => {
@@ -97,7 +98,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
                 description: "Get all notes with pagination",
                 querystring: getNotePaginatedSchema,
                 response: {
-                    200: notesSchema,
+                    200: notesPaginatedSchema,
                     400: messageSchema,
                     500: messageSchema,
                 },

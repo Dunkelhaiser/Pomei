@@ -73,8 +73,8 @@ export const getAllNotesPaginatedHandler = async (
 ) => {
     const { page, limit, orderBy, isAscending } = req.query;
     try {
-        const notes = await getAllNotesPaginated(req.user.id, limit, page, orderBy, isAscending);
-        return res.code(200).send(notes);
+        const data = await getAllNotesPaginated(req.user.id, limit, page, orderBy, isAscending);
+        return res.code(200).send(data);
     } catch (err) {
         if (err instanceof Error) {
             return res.code(400).send({ message: err.message });

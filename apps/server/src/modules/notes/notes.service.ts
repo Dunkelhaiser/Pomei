@@ -1,4 +1,4 @@
-import { and, arrayOverlaps, desc, eq, ilike } from "drizzle-orm";
+import { and, arrayOverlaps, count, desc, eq, ilike } from "drizzle-orm";
 import { NewNoteInput } from "shared-types";
 import { getFolderById } from "../folders/folders.service.ts";
 import { db } from "@/db/client.ts";
@@ -35,6 +35,11 @@ export const getAllNotes = async (userId: string) => {
     return notesArr;
 };
 
+export const getNotesCount = async (userId: string) => {
+    const notesCount = await db.select({ count: count() }).from(notes).where(eq(notes.userId, userId));
+    return notesCount[0].count;
+};
+
 export const getAllNotesPaginated = async (
     userId: string,
     limit = 10,
@@ -49,7 +54,13 @@ export const getAllNotesPaginated = async (
         .orderBy(isAscending ? notes[orderBy] : desc(notes[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
-    return notesArr;
+    const totalCount = await getNotesCount(userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const searchNotes = async (userId: string, input: string, searchBy: "title" | "content" | "tags" = "title") => {

@@ -38,8 +38,8 @@ export const getAllFoldersPaginatedHandler = async (
 ) => {
     const { page, limit, orderBy, isAscending } = req.query;
     try {
-        const folders = await getAllFoldersPaginated(req.user.id, limit, page, orderBy, isAscending);
-        return res.code(200).send(folders);
+        const data = await getAllFoldersPaginated(req.user.id, limit, page, orderBy, isAscending);
+        return res.code(200).send(data);
     } catch (err) {
         if (err instanceof Error) {
             return res.code(400).send({ message: err.message });
