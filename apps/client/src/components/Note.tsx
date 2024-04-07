@@ -77,7 +77,9 @@ const Note = ({ note, lineClamp }: Props) => {
                 </DropdownMenu>
             </CardHeader>
             <CardContent className="space-y-3">
-                <p className={cn("text-sm text-muted-foreground", lineClamp)}>{note.content}</p>
+                <p className={cn("text-sm text-muted-foreground dark:text-card-foreground/50", lineClamp)}>
+                    {note.content}
+                </p>
                 <p className="text-xs text-muted-foreground/95">{date}</p>
             </CardContent>
         </Card>
