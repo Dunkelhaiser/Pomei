@@ -23,7 +23,9 @@ const Page = () => {
                         {notes.isLoading ? (
                             <Loader className="col-span-full self-center justify-self-center" />
                         ) : (
-                            notes.data?.map((note) => <Note lineClamp="line-clamp-6" note={note} key={note.id} />)
+                            notes.data?.notes.map((note) => (
+                                <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />
+                            ))
                         )}
                     </div>
                 </section>
