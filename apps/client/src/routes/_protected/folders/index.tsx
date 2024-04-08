@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownNarrowWide, ListFilter } from "lucide-react";
 import { useEffect, useState } from "react";
 import { z as zod } from "zod";
-import { useGetFolders, useSearchFolders } from "@/api/folders/hooks";
+import { useGetFoldersInfinity, useSearchFolders } from "@/api/folders/hooks";
 import Folder from "@/components/Folder";
 import { useIntersection } from "@/hooks/useIntersection";
 import Button from "@/ui/Button";
@@ -22,7 +22,7 @@ const Page = () => {
     const [search, setSearch] = useState("");
     const { sort, order } = Route.useSearch();
     const navigate = Route.useNavigate();
-    const folders = useGetFolders({ page: 1, limit: 4, orderBy: sort, order });
+    const folders = useGetFoldersInfinity({ page: 1, limit: 4, orderBy: sort, order });
     const searchFolders = useSearchFolders({ name: search });
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,

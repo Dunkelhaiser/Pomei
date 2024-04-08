@@ -4,7 +4,17 @@ import { GetFolderInput, GetFolderPaginatedInput } from "shared-types/folders";
 import { getFolders, searchFolders } from "./requests";
 import { UserContext } from "@/context/User";
 
-export const useGetFolders = (input: GetFolderPaginatedInput) => {
+export const useFolders = (input: GetFolderPaginatedInput) => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useQuery({
+        queryKey: ["folders", input],
+        queryFn: () => getFolders(input),
+        enabled: isAuthorized,
+    });
+};
+
+export const useGetFoldersInfinity = (input: GetFolderPaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
 
     return useInfiniteQuery({
@@ -24,7 +34,7 @@ export const useGetFolders = (input: GetFolderPaginatedInput) => {
 export const useSearchFolders = (input: GetFolderInput) => {
     const { isAuthorized } = useContext(UserContext);
     return useQuery({
-        queryKey: ["notes", "search", input],
+        queryKey: ["folders", "search", input],
         queryFn: () => searchFolders(input),
         enabled: isAuthorized && input.name.length > 0,
     });
