@@ -21,3 +21,8 @@ export const getArchive = async () => {
     const res = await api.get("notes/archive", { credentials: "include" }).json<Note[]>();
     return res;
 };
+
+export const duplicateNote = async (params: GetByIdInput) => {
+    const res = await api.post(`notes/duplicate/${params.id}`, { json: null, credentials: "include" }).json<Note>();
+    return res;
+};

@@ -3,7 +3,7 @@ import { EllipsisVertical } from "lucide-react";
 import { Note as NoteType } from "shared-types/notes";
 import { Card, CardContent, CardHeader } from "./ui/Card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/DropdownMenu";
-import { useArchiveNote } from "@/api/notes/hooks";
+import { useArchiveNote, useDuplicateNote } from "@/api/notes/hooks";
 import { cn } from "@/utils/utils";
 
 interface Props {
@@ -20,7 +20,8 @@ const Note = ({ note, lineClamp }: Props) => {
         minute: "numeric",
     });
 
-    const archiveNote = useArchiveNote();
+    const archiveNoteHandler = useArchiveNote();
+    const duplicateNoteHandler = useDuplicateNote();
 
     return (
         <Card
@@ -62,11 +63,16 @@ const Note = ({ note, lineClamp }: Props) => {
                         <EllipsisVertical size={18} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => duplicateNoteHandler.mutate({ id: note.id })}>
+                            Duplicate
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Add To Folder</DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() =>
-                                archiveNote.mutate({ input: { archive: !note.isArchived }, params: { id: note.id } })
+                                archiveNoteHandler.mutate({
+                                    input: { archive: !note.isArchived },
+                                    params: { id: note.id },
+                                })
                             }
                         >
                             {note.isArchived ? "Unarchive" : "Archive"}

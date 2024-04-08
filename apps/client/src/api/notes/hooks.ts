@@ -5,7 +5,7 @@ import { ArchiveInput, GetNotePaginatedInput, GetNotesInput } from "shared-types
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { archiveNote, getArchive, getNotes, searchNotes } from "./requests";
+import { archiveNote, duplicateNote, getArchive, getNotes, searchNotes } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -72,5 +72,25 @@ export const useGetArchive = () => {
         queryKey: ["notes", "archive"],
         queryFn: getArchive,
         enabled: isAuthorized,
+    });
+};
+
+export const useDuplicateNote = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: duplicateNote,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to duplicate note");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            toast.success("Note duplicated successfully");
+        },
     });
 };
