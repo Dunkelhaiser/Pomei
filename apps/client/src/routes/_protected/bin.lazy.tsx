@@ -26,7 +26,7 @@ const Page = () => {
             <SectionHeader>Bin</SectionHeader>
             <SectionSubHeader>
                 <AlertDialog>
-                    <AlertDialogTrigger>
+                    <AlertDialogTrigger asChild>
                         <Button
                             variant="destructive"
                             size="sm"
