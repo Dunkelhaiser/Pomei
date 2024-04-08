@@ -95,16 +95,40 @@ const Note = ({ note, lineClamp }: Props) => {
                             >
                                 {note.isArchived ? "Unarchive" : "Archive"}
                             </DropdownMenuItem>
-                            <AlertDialogTrigger className="w-full" asChild>
-                                <DropdownMenuItem
-                                    className={`
-                                        text-destructive
-                                        focus-visible:text-destructive
-                                    `}
-                                >
-                                    Delete
-                                </DropdownMenuItem>
-                            </AlertDialogTrigger>
+                            {!note.isDeleted ? (
+                                <AlertDialogTrigger className="w-full" asChild>
+                                    <DropdownMenuItem
+                                        className={`
+                                            text-destructive
+                                            focus:text-destructive
+                                        `}
+                                    >
+                                        Delete
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                            ) : (
+                                <>
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            moveToBinHandler.mutate({
+                                                input: { moveToBin: false },
+                                                params: { id: note.id },
+                                            })
+                                        }
+                                    >
+                                        Restore
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => deleteNoteHandler.mutate({ id: note.id })}
+                                        className={`
+                                            text-destructive
+                                            focus:text-destructive
+                                        `}
+                                    >
+                                        Delete
+                                    </DropdownMenuItem>
+                                </>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <AlertDialogContent>
@@ -129,7 +153,7 @@ const Note = ({ note, lineClamp }: Props) => {
                                         deleteNoteHandler.mutate({ id: note.id });
                                     } else {
                                         moveToBinHandler.mutate({
-                                            input: { moveToBin: !note.isDeleted },
+                                            input: { moveToBin: true },
                                             params: { id: note.id },
                                         });
                                     }

@@ -44,3 +44,13 @@ export const deleteNote = async (params: GetByIdInput) => {
     const res = await api.delete(`notes/${params.id}`, { credentials: "include" }).json<EmptyResponse>();
     return res;
 };
+
+export const getBin = async () => {
+    const res = await api.get("notes/bin", { credentials: "include" }).json<Note[]>();
+    return res;
+};
+
+export const emptyBin = async () => {
+    const res = await api.delete("notes/bin", { credentials: "include" }).json<EmptyResponse>();
+    return res;
+};

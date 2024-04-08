@@ -5,7 +5,17 @@ import { ArchiveInput, GetNotePaginatedInput, GetNotesInput, MoveToBinInput } fr
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { archiveNote, deleteNote, duplicateNote, getArchive, getNotes, moveToBin, searchNotes } from "./requests";
+import {
+    archiveNote,
+    deleteNote,
+    duplicateNote,
+    emptyBin,
+    getArchive,
+    getBin,
+    getNotes,
+    moveToBin,
+    searchNotes,
+} from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -131,6 +141,36 @@ export const useDeleteNote = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["notes"] });
             toast.success("Note deleted successfully");
+        },
+    });
+};
+
+export const useGetBin = () => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useQuery({
+        queryKey: ["notes", "bin"],
+        queryFn: getBin,
+        enabled: isAuthorized,
+    });
+};
+
+export const useEmptyBin = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: emptyBin,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to empty bin");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes", "bin"] });
+            toast.success("Bin emptied successfully");
         },
     });
 };
