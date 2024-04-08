@@ -1,7 +1,11 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { HTTPError } from "ky";
 import { useContext } from "react";
-import { GetNotePaginatedInput, GetNotesInput } from "shared-types/notes";
-import { getNotes, searchNotes } from "./requests";
+import { ArchiveInput, GetNotePaginatedInput, GetNotesInput } from "shared-types/notes";
+import { GetByIdInput } from "shared-types/shared";
+import { MessageResponse } from "shared-types/utilSchema";
+import { toast } from "sonner";
+import { archiveNote, getNotes, searchNotes } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -37,5 +41,26 @@ export const useSearchNotes = (input: GetNotesInput) => {
         queryKey: ["notes/search", input],
         queryFn: () => searchNotes(input),
         enabled: isAuthorized && input.title.length > 0,
+    });
+};
+
+export const useArchiveNote = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ input, params }: { input: ArchiveInput; params: GetByIdInput }) =>
+            archiveNote(input, params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to modify note");
+        },
+        onSuccess: (data) => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            toast.success(data.isArchived ? "Note archivated successfully" : "Note unarchivated successfully");
+        },
     });
 };

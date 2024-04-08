@@ -3,6 +3,7 @@ import { EllipsisVertical } from "lucide-react";
 import { Note as NoteType } from "shared-types/notes";
 import { Card, CardContent, CardHeader } from "./ui/Card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/DropdownMenu";
+import { useArchiveNote } from "@/api/notes/hooks";
 import { cn } from "@/utils/utils";
 
 interface Props {
@@ -18,6 +19,8 @@ const Note = ({ note, lineClamp }: Props) => {
         hour: "numeric",
         minute: "numeric",
     });
+
+    const archiveNote = useArchiveNote();
 
     return (
         <Card
@@ -59,19 +62,22 @@ const Note = ({ note, lineClamp }: Props) => {
                         <EllipsisVertical size={18} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem>
-                            <button type="button">Duplicate</button>
+                        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                        <DropdownMenuItem>Add To Folder</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                archiveNote.mutate({ input: { archive: !note.isArchived }, params: { id: note.id } })
+                            }
+                        >
+                            {note.isArchived ? "Unarchive" : "Archive"}
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <button type="button">Add To Folder</button>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <button type="button">Archive</button>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <button type="button" className="text-destructive">
-                                Delete
-                            </button>
+                        <DropdownMenuItem
+                            className={`
+                                text-destructive
+                                focus-visible:text-destructive
+                            `}
+                        >
+                            Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
