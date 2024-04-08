@@ -50,7 +50,7 @@ export const getAllNotesPaginated = async (
     const notesArr = await db
         .select()
         .from(notes)
-        .where(eq(notes.userId, userId))
+        .where(and(eq(notes.userId, userId), eq(notes.isDeleted, false), eq(notes.isArchived, false)))
         .orderBy(order === "ascending" ? notes[orderBy] : desc(notes[orderBy]))
         .offset((page - 1) * limit)
         .limit(limit);
