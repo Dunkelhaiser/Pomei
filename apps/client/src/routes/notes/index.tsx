@@ -35,37 +35,12 @@ const Page = () => {
         if (isIntersecting && notes.hasNextPage) void notes.fetchNextPage();
     }, [isIntersecting, notes]);
 
-    useEffect(() => {
-        const notesSort = localStorage.getItem("notesSort");
-        const notesOrder = localStorage.getItem("notesOrder");
-
-        const notesSortValid = notesSort === "title" || notesSort === "createdAt" || notesSort === "updatedAt";
-
-        const notesOrderValid = notesOrder === "ascending" || notesOrder === "descending";
-
-        if (!notesSortValid) {
-            localStorage.setItem("notesSort", "title");
-        }
-        if (!notesOrderValid) {
-            localStorage.setItem("notesOrder", "ascending");
-        }
-        void navigate({
-            to: "/notes",
-            search: {
-                sort: notesSortValid ? notesSort : "title",
-                order: notesOrderValid ? notesOrder : "ascending",
-            },
-        });
-    }, [navigate]);
-
     const handleSort = (sortValue: "title" | "createdAt" | "updatedAt") => {
         void navigate({ to: "/notes", search: { sort: sortValue, order } });
-        localStorage.setItem("notesSort", sortValue);
     };
 
     const handleOrder = (orderValue: "ascending" | "descending") => {
         void navigate({ to: "/notes", search: { sort, order: orderValue } });
-        localStorage.setItem("notesOrder", orderValue);
     };
 
     return (
