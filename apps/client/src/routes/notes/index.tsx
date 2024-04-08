@@ -39,13 +39,12 @@ const Page = () => {
         const notesSort = localStorage.getItem("notesSort");
         const notesOrder = localStorage.getItem("notesOrder");
 
-        const notesSortValid =
-            notesSort === "order" || notesSort === "title" || notesSort === "createdAt" || notesSort === "updatedAt";
+        const notesSortValid = notesSort === "title" || notesSort === "createdAt" || notesSort === "updatedAt";
 
         const notesOrderValid = notesOrder === "ascending" || notesOrder === "descending";
 
         if (!notesSortValid) {
-            localStorage.setItem("notesSort", "order");
+            localStorage.setItem("notesSort", "title");
         }
         if (!notesOrderValid) {
             localStorage.setItem("notesOrder", "ascending");
@@ -53,13 +52,13 @@ const Page = () => {
         void navigate({
             to: "/notes",
             search: {
-                sort: notesSortValid ? notesSort : "order",
+                sort: notesSortValid ? notesSort : "title",
                 order: notesOrderValid ? notesOrder : "ascending",
             },
         });
     }, [navigate]);
 
-    const handleSort = (sortValue: "title" | "createdAt" | "updatedAt" | "order") => {
+    const handleSort = (sortValue: "title" | "createdAt" | "updatedAt") => {
         void navigate({ to: "/notes", search: { sort: sortValue, order } });
         localStorage.setItem("notesSort", sortValue);
     };
@@ -91,9 +90,6 @@ const Page = () => {
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked={sort === "order"} onClick={() => handleSort("order")}>
-                            Order
-                        </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem checked={sort === "title"} onClick={() => handleSort("title")}>
                             Title
                         </DropdownMenuCheckboxItem>
@@ -251,7 +247,7 @@ const Page = () => {
 };
 
 const routeParamsSchema = zod.object({
-    sort: zod.enum(["title", "createdAt", "updatedAt", "order"]).catch("order"),
+    sort: zod.enum(["title", "createdAt", "updatedAt"]).catch("title"),
     order: zod.enum(["ascending", "descending"]).catch("ascending"),
 });
 
