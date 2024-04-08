@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownNarrowWide, ListFilter } from "lucide-react";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { z as zod } from "zod";
 import { useNotesInfinity } from "@/api/notes/hooks";
 import Note from "@/components/Note";
@@ -215,16 +215,14 @@ const Page = () => {
                                 <div className="grid gap-4">
                                     {notes.data?.pages.map((page) =>
                                         page.notes.map((note, i) => (
-                                            <>
-                                                {i === 1 && (
-                                                    <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
-                                                )}
+                                            <Fragment key={note.id}>
+                                                {i === 1 && <Note lineClamp="line-clamp-[18]" note={note} />}
                                                 {i === 3 && (
-                                                    <div key={note.id} ref={ref}>
+                                                    <div ref={ref}>
                                                         <Note lineClamp="line-clamp-[18]" note={note} />
                                                     </div>
                                                 )}
-                                            </>
+                                            </Fragment>
                                         ))
                                     )}
                                 </div>
