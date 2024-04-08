@@ -95,7 +95,7 @@ const Note = ({ note, lineClamp }: Props) => {
                             >
                                 {note.isArchived ? "Unarchive" : "Archive"}
                             </DropdownMenuItem>
-                            <AlertDialogTrigger className="w-full">
+                            <AlertDialogTrigger className="w-full" asChild>
                                 <DropdownMenuItem
                                     className={`
                                         text-destructive
