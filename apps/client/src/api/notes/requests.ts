@@ -16,3 +16,8 @@ export const archiveNote = async (input: ArchiveInput, params: GetByIdInput) => 
     const res = await api.put(`notes/archive/${params.id}`, { json: input, credentials: "include" }).json<Note>();
     return res;
 };
+
+export const getArchive = async () => {
+    const res = await api.get("notes/archive", { credentials: "include" }).json<Note[]>();
+    return res;
+};

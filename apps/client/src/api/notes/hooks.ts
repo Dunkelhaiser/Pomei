@@ -5,7 +5,7 @@ import { ArchiveInput, GetNotePaginatedInput, GetNotesInput } from "shared-types
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { archiveNote, getNotes, searchNotes } from "./requests";
+import { archiveNote, getArchive, getNotes, searchNotes } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -38,7 +38,7 @@ export const useNotesInfinity = (input: GetNotePaginatedInput) => {
 export const useSearchNotes = (input: GetNotesInput) => {
     const { isAuthorized } = useContext(UserContext);
     return useQuery({
-        queryKey: ["notes/search", input],
+        queryKey: ["notes", "search", input],
         queryFn: () => searchNotes(input),
         enabled: isAuthorized && input.title.length > 0,
     });
@@ -62,5 +62,15 @@ export const useArchiveNote = () => {
             void queryClient.invalidateQueries({ queryKey: ["notes"] });
             toast.success(data.isArchived ? "Note archivated successfully" : "Note unarchivated successfully");
         },
+    });
+};
+
+export const useGetArchive = () => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useQuery({
+        queryKey: ["notes", "archive"],
+        queryFn: getArchive,
+        enabled: isAuthorized,
     });
 };
