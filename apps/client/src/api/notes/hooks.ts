@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import { GetNotePaginatedInput } from "shared-types/notes";
-import { getNotes } from "./requests";
+import { GetNotePaginatedInput, GetNotesInput } from "shared-types/notes";
+import { getNotes, searchNotes } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -28,5 +28,14 @@ export const useNotesInfinity = (input: GetNotePaginatedInput) => {
             }
             return null;
         },
+    });
+};
+
+export const useSearchNotes = (input: GetNotesInput) => {
+    const { isAuthorized } = useContext(UserContext);
+    return useQuery({
+        queryKey: ["notes/search", input],
+        queryFn: () => searchNotes(input),
+        enabled: isAuthorized && input.title.length > 0,
     });
 };
