@@ -23,9 +23,9 @@ const Page = () => {
 
     return (
         <Section>
-            <AlertDialog>
-                <SectionHeader>Bin</SectionHeader>
-                <SectionSubHeader>
+            <SectionHeader>Bin</SectionHeader>
+            <SectionSubHeader>
+                <AlertDialog>
                     <AlertDialogTrigger>
                         <Button
                             variant="destructive"
@@ -37,38 +37,38 @@ const Page = () => {
                             Empty Bin
                         </Button>
                     </AlertDialogTrigger>
-                </SectionSubHeader>
-                <SectionContent
-                    className={`
-                        grid min-h-24 grid-cols-1 items-start gap-4
-                        md:grid-cols-2
-                        xl:grid-cols-4
-                    `}
-                >
-                    {/*eslint-disable-next-line no-nested-ternary*/}
-                    {bin.isLoading ? (
-                        <Loader className="col-span-full self-center justify-self-center" />
-                    ) : bin.data && bin.data.length > 0 ? (
-                        bin.data.map((note) => <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />)
-                    ) : (
-                        <p>Bin is empty</p>
-                    )}
-                </SectionContent>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Empty Bin?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            All notes in the bin will be permanently deleted.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" onClick={() => emptyBinHandler.mutate()}>
-                            Empty
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Empty Bin?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                All notes in the bin will be permanently deleted.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction variant="destructive" onClick={() => emptyBinHandler.mutate()}>
+                                Empty
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </SectionSubHeader>
+            <SectionContent
+                className={`
+                    grid min-h-24 grid-cols-1 items-start gap-4
+                    md:grid-cols-2
+                    xl:grid-cols-4
+                `}
+            >
+                {/*eslint-disable-next-line no-nested-ternary*/}
+                {bin.isLoading ? (
+                    <Loader className="col-span-full self-center justify-self-center" />
+                ) : bin.data && bin.data.length > 0 ? (
+                    bin.data.map((note) => <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />)
+                ) : (
+                    <p>Bin is empty</p>
+                )}
+            </SectionContent>
         </Section>
     );
 };
