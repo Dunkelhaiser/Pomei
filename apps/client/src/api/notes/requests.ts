@@ -1,5 +1,13 @@
-import { ArchiveInput, GetNotePaginatedInput, GetNotesInput, Note, NotesPaginated } from "shared-types/notes";
+import {
+    ArchiveInput,
+    GetNotePaginatedInput,
+    GetNotesInput,
+    MoveToBinInput,
+    Note,
+    NotesPaginated,
+} from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
+import { EmptyResponse } from "shared-types/utilSchema";
 import { api } from "../api";
 
 export const getNotes = async (input: GetNotePaginatedInput) => {
@@ -24,5 +32,15 @@ export const getArchive = async () => {
 
 export const duplicateNote = async (params: GetByIdInput) => {
     const res = await api.post(`notes/duplicate/${params.id}`, { json: null, credentials: "include" }).json<Note>();
+    return res;
+};
+
+export const moveToBin = async (input: MoveToBinInput, params: GetByIdInput) => {
+    const res = await api.put(`notes/bin/${params.id}`, { json: input, credentials: "include" }).json<Note>();
+    return res;
+};
+
+export const deleteNote = async (params: GetByIdInput) => {
+    const res = await api.delete(`notes/${params.id}`, { credentials: "include" }).json<EmptyResponse>();
     return res;
 };

@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HTTPError } from "ky";
 import { useContext } from "react";
-import { ArchiveInput, GetNotePaginatedInput, GetNotesInput } from "shared-types/notes";
+import { ArchiveInput, GetNotePaginatedInput, GetNotesInput, MoveToBinInput } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { archiveNote, duplicateNote, getArchive, getNotes, searchNotes } from "./requests";
+import { archiveNote, deleteNote, duplicateNote, getArchive, getNotes, moveToBin, searchNotes } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useNotes = (input: GetNotePaginatedInput) => {
@@ -91,6 +91,46 @@ export const useDuplicateNote = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["notes"] });
             toast.success("Note duplicated successfully");
+        },
+    });
+};
+
+export const useMoveToBin = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ input, params }: { input: MoveToBinInput; params: GetByIdInput }) => moveToBin(input, params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to modify note");
+        },
+        onSuccess: (data) => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            toast.success(data.isDeleted ? "Note moved to bin successfully" : "Note restored successfully");
+        },
+    });
+};
+
+export const useDeleteNote = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: deleteNote,
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to delete note");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            toast.success("Note deleted successfully");
         },
     });
 };

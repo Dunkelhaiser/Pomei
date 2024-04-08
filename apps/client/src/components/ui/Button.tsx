@@ -4,7 +4,8 @@ import { forwardRef } from "react";
 import Loader from "./Loader";
 import { cn } from "@/utils/utils";
 
-const variants = cva(
+// eslint-disable-next-line react-refresh/only-export-components
+export const variants = cva(
     `
         inline-flex items-center justify-center gap-x-1.5 whitespace-nowrap rounded-md text-sm font-medium shadow-sm ring-offset-background
         transition
