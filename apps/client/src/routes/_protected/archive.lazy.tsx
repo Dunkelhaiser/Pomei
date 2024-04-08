@@ -9,7 +9,7 @@ const Page = () => {
 
     return (
         <Section>
-            <SectionHeader>Notes</SectionHeader>
+            <SectionHeader>Archive</SectionHeader>
             <SectionContent
                 className={`
                     grid min-h-24 grid-cols-1 items-start gap-4
