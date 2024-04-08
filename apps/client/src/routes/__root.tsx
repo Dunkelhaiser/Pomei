@@ -67,7 +67,27 @@ const NotFound = () => (
     </section>
 );
 
+const Error = () => (
+    <section
+        className={`
+            px-4 py-10 text-center
+            sm:px-6
+            lg:flex lg:h-full lg:flex-col lg:items-center lg:justify-center lg:px-8
+        `}
+    >
+        <p
+            className={`
+                text-gray-600
+                dark:text-gray-400
+            `}
+        >
+            Looks like something went wrong. Please try again later.
+        </p>
+    </section>
+);
+
 export const Route = createRootRoute({
     component: Page,
     notFoundComponent: NotFound,
+    errorComponent: Error,
 });
