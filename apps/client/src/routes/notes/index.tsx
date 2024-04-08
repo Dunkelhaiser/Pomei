@@ -27,9 +27,9 @@ const Page = () => {
         threshold: 0,
     });
 
-    const mobile = useMediaQuery("(max-width: 639px)");
-    const tablet = useMediaQuery("(min-width: 640px) and (max-width: 1023px)");
-    const desktop = useMediaQuery("(min-width: 1024px)");
+    const mobile = useMediaQuery("(max-width: 767px)");
+    const tablet = useMediaQuery("(min-width: 768px) and (max-width: 1279px)");
+    const desktop = useMediaQuery("(min-width: 1280px)");
 
     useEffect(() => {
         if (isIntersecting && notes.hasNextPage) void notes.fetchNextPage();
