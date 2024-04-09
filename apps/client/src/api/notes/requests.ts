@@ -7,7 +7,6 @@ import {
     NotesPaginated,
 } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
-import { EmptyResponse } from "shared-types/utilSchema";
 import { api } from "../api";
 
 export const getNotes = async (input: GetNotePaginatedInput) => {
@@ -41,8 +40,7 @@ export const moveToBin = async (input: MoveToBinInput, params: GetByIdInput) => 
 };
 
 export const deleteNote = async (params: GetByIdInput) => {
-    const res = await api.delete(`notes/${params.id}`, { credentials: "include" }).json<EmptyResponse>();
-    return res;
+    await api.delete(`notes/${params.id}`, { credentials: "include" });
 };
 
 export const getBin = async () => {
@@ -51,6 +49,5 @@ export const getBin = async () => {
 };
 
 export const emptyBin = async () => {
-    const res = await api.delete("notes/bin", { credentials: "include" }).json<EmptyResponse>();
-    return res;
+    await api.delete("notes/bin", { credentials: "include" });
 };

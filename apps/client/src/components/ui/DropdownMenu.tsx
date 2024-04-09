@@ -1,5 +1,5 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { Check, ChevronRight, Circle } from "lucide-react";
+import { Check, ChevronRight, Circle, EllipsisVertical } from "lucide-react";
 import { forwardRef } from "react";
 import { cn } from "@/utils/utils";
 
@@ -154,6 +154,22 @@ const DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTML
 );
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
+const EllipsisBtn = () => {
+    return (
+        <DropdownMenuTrigger
+            type="button"
+            className={`
+                z-50 justify-self-end transition-all duration-300
+                lg:invisible lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100 lg:group-has-[a:focus-visible]:visible
+                lg:group-has-[button:focus-visible]:visible lg:group-has-[a:focus-visible]:opacity-100
+                lg:group-has-[button:focus-visible]:opacity-100 lg:aria-expanded:visible lg:aria-expanded:opacity-100
+            `}
+        >
+            <EllipsisVertical size={18} />
+        </DropdownMenuTrigger>
+    );
+};
+
 export {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -170,4 +186,5 @@ export {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
     DropdownMenuRadioGroup,
+    EllipsisBtn,
 };
