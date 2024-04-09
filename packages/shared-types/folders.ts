@@ -4,7 +4,11 @@ import { getPaginated, resPaginated } from "./shared.ts";
 const hexRegex = /^#(?:[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const newFolderSchema = zod.object({
-    name: zod.string().trim().max(25, { message: "Name must be less than 25 characters long" }),
+    name: zod
+        .string()
+        .trim()
+        .min(1, { message: "Name must be at least 1 character long" })
+        .max(25, { message: "Name must be less than 25 characters long" }),
     color: zod.string().trim().regex(hexRegex, { message: "Invalid color code" }),
 });
 
