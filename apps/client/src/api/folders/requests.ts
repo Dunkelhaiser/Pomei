@@ -5,6 +5,7 @@ import {
     GetFolderPaginatedInput,
     NewFolderInput,
 } from "shared-types/folders";
+import { GetByIdInput } from "shared-types/shared";
 import { api } from "../api";
 
 export const getFolders = async (input: GetFolderPaginatedInput) => {
@@ -19,5 +20,10 @@ export const searchFolders = async (input: GetFolderInput) => {
 
 export const createFolder = async (input: NewFolderInput) => {
     const res = await api.post("folders", { json: input, credentials: "include" }).json<Folder>();
+    return res;
+};
+
+export const editFolder = async (input: NewFolderInput, params: GetByIdInput) => {
+    const res = await api.put(`folders/${params.id}`, { json: input, credentials: "include" }).json<Folder>();
     return res;
 };

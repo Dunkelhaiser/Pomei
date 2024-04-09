@@ -2,9 +2,10 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { HTTPError } from "ky";
 import { useContext } from "react";
 import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "shared-types/folders";
+import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { createFolder, getFolders, searchFolders } from "./requests";
+import { createFolder, editFolder, getFolders, searchFolders } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useFolders = (input: GetFolderPaginatedInput) => {
@@ -59,6 +60,26 @@ export const useCreateFolder = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["folders"] });
             toast.success("Folder created successfully");
+        },
+    });
+};
+
+export const useEditFolder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ input, params }: { input: NewFolderInput; params: GetByIdInput }) => editFolder(input, params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to edit folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Folder edited successfully");
         },
     });
 };
