@@ -3,6 +3,7 @@ import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput, GetByIdInput, 
 import {
     createFolder,
     deleteFolder,
+    deleteFolderWithNotes,
     editFolder,
     getAllFolders,
     getAllFoldersPaginated,
@@ -78,6 +79,24 @@ export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: Get
 export const deleteFolderHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const folder = await deleteFolder(req.params.id, req.user.id);
+        if (folder) {
+            return res.code(204).send();
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to delete folder");
+    }
+};
+
+export const deleteFolderWithNotesHandler = async (
+    req: FastifyRequest<{ Params: GetByIdInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const folder = await deleteFolderWithNotes(req.params.id, req.user.id);
         if (folder) {
             return res.code(204).send();
         }

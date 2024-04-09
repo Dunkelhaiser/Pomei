@@ -4,6 +4,7 @@ import schema from "shared-types";
 import {
     createFolderHandler,
     deleteFolderHandler,
+    deleteFolderWithNotesHandler,
     editFolderHandler,
     getAllFoldersHandler,
     getAllFoldersPaginatedHandler,
@@ -129,6 +130,24 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             },
         },
         deleteFolderHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().delete(
+        "/:id/notes",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Delete folder with notes",
+                params: getByIdSchema,
+                response: {
+                    204: emptySchema,
+                    400: messageSchema,
+                    404: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        deleteFolderWithNotesHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/:id",

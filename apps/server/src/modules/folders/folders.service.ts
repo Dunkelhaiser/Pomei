@@ -114,6 +114,17 @@ export const deleteFolder = async (folderId: string, userId: string) => {
     return folder;
 };
 
+export const deleteFolderWithNotes = async (folderId: string, userId: string) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+
+    await db.update(notes).set({ isDeleted: true, isArchived: false }).where(eq(notes.folderId, folderId));
+    await db.delete(folders).where(eq(folders.id, folderId));
+    return folder;
+};
+
 export const editFolder = async (folderId: string, input: NewFolderInput, userId: string) => {
     const folder = await getFolderById(folderId, userId);
     if (!folder) {
