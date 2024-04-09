@@ -3,6 +3,7 @@ import { ArrowDownNarrowWide, ListFilter } from "lucide-react";
 import { useEffect, useState } from "react";
 import { z as zod } from "zod";
 import { useGetFoldersInfinity, useSearchFolders } from "@/api/folders/hooks";
+import NewFolder from "@/components/dialogs/NewFolder";
 import Folder from "@/components/Folder";
 import { useIntersection } from "@/hooks/useIntersection";
 import Button from "@/ui/Button";
@@ -123,6 +124,7 @@ const Page = () => {
                     xl:grid-cols-4
                 `}
             >
+                <NewFolder />
                 {/* eslint-disable no-nested-ternary */}
                 {search.length > 0 ? (
                     searchFolders.isLoading ? (

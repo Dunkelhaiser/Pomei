@@ -1,7 +1,10 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { HTTPError } from "ky";
 import { useContext } from "react";
-import { GetFolderInput, GetFolderPaginatedInput } from "shared-types/folders";
-import { getFolders, searchFolders } from "./requests";
+import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "shared-types/folders";
+import { MessageResponse } from "shared-types/utilSchema";
+import { toast } from "sonner";
+import { createFolder, getFolders, searchFolders } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useFolders = (input: GetFolderPaginatedInput) => {
@@ -37,5 +40,25 @@ export const useSearchFolders = (input: GetFolderInput) => {
         queryKey: ["folders", "search", input],
         queryFn: () => searchFolders(input),
         enabled: isAuthorized && input.name.length > 0,
+    });
+};
+
+export const useCreateFolder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (input: NewFolderInput) => createFolder(input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to create folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Folder created successfully");
+        },
     });
 };
