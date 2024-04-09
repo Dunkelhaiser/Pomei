@@ -81,20 +81,25 @@ const Note = ({ note, lineClamp }: Props) => {
                             <EllipsisVertical size={18} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => duplicateNoteHandler.mutate({ id: note.id })}>
-                                Duplicate
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>Add To Folder</DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    archiveNoteHandler.mutate({
-                                        input: { archive: !note.isArchived },
-                                        params: { id: note.id },
-                                    })
-                                }
-                            >
-                                {note.isArchived ? "Unarchive" : "Archive"}
-                            </DropdownMenuItem>
+                            {!note.isDeleted && (
+                                <DropdownMenuItem onClick={() => duplicateNoteHandler.mutate({ id: note.id })}>
+                                    Duplicate
+                                </DropdownMenuItem>
+                            )}
+                            {!note.isArchived ||
+                                (!note.isDeleted && <DropdownMenuItem>Add To Folder</DropdownMenuItem>)}
+                            {!note.isDeleted && (
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        archiveNoteHandler.mutate({
+                                            input: { archive: !note.isArchived },
+                                            params: { id: note.id },
+                                        })
+                                    }
+                                >
+                                    {note.isArchived ? "Unarchive" : "Archive"}
+                                </DropdownMenuItem>
+                            )}
                             {!note.isDeleted ? (
                                 <AlertDialogTrigger className="w-full" asChild>
                                     <DropdownMenuItem
