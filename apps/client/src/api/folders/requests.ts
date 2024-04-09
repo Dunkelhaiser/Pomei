@@ -27,3 +27,11 @@ export const editFolder = async (input: NewFolderInput, params: GetByIdInput) =>
     const res = await api.put(`folders/${params.id}`, { json: input, credentials: "include" }).json<Folder>();
     return res;
 };
+
+export const deleteFolder = async (params: GetByIdInput) => {
+    await api.delete(`folders/${params.id}`, { credentials: "include" });
+};
+
+export const deleteFolderWithNotes = async (params: GetByIdInput) => {
+    await api.delete(`folders/${params.id}/notes`, { credentials: "include" });
+};

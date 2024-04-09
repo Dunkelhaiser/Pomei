@@ -1,16 +1,20 @@
 import { Link } from "@tanstack/react-router";
 import { EllipsisVertical, Folder as FolderIcon } from "lucide-react";
+import { useState } from "react";
 import { Folder as FolderType } from "shared-types/folders";
+import DeleteFolder from "./dialogs/DeleteFolder";
 import EditFolder from "./dialogs/EditFolder";
 import { Card, CardContent, CardHeader } from "./ui/Card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/DropdownMenu";
-import { AlertDialogTrigger } from "./ui/Modal";
 
 interface FolderProps {
     folder: FolderType;
 }
 
 const Folder = ({ folder }: FolderProps) => {
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+
     return (
         <Card
             className={`
@@ -26,6 +30,8 @@ const Folder = ({ folder }: FolderProps) => {
                 has-[button:focus-visible]:ring-offset-0
             `}
         >
+            <EditFolder folder={folder} open={openEdit} setOpen={setOpenEdit} />
+            <DeleteFolder folder={folder} open={openDelete} setOpen={setOpenDelete} />
             <CardContent className="grid place-items-center p-6 pb-4">
                 <FolderIcon size={72} color={folder.color} fill={folder.color} />
             </CardContent>
@@ -40,35 +46,32 @@ const Folder = ({ folder }: FolderProps) => {
                 >
                     {folder.name}
                 </Link>
-                <EditFolder folder={folder}>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger
-                            type="button"
+                <DropdownMenu>
+                    <DropdownMenuTrigger
+                        type="button"
+                        className={`
+                            z-50 justify-self-end transition-all duration-300
+                            lg:invisible lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100
+                            lg:group-has-[a:focus-visible]:visible lg:group-has-[button:focus-visible]:visible
+                            lg:group-has-[a:focus-visible]:opacity-100 lg:group-has-[button:focus-visible]:opacity-100
+                            lg:aria-expanded:visible lg:aria-expanded:opacity-100
+                        `}
+                    >
+                        <EllipsisVertical size={18} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => setOpenEdit(true)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem
                             className={`
-                                z-50 justify-self-end transition-all duration-300
-                                lg:invisible lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100
-                                lg:group-has-[a:focus-visible]:visible lg:group-has-[button:focus-visible]:visible
-                                lg:group-has-[a:focus-visible]:opacity-100 lg:group-has-[button:focus-visible]:opacity-100
-                                lg:aria-expanded:visible lg:aria-expanded:opacity-100
+                                text-destructive
+                                focus:text-destructive
                             `}
+                            onClick={() => setOpenDelete(true)}
                         >
-                            <EllipsisVertical size={18} />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <AlertDialogTrigger className="w-full" asChild>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem
-                                className={`
-                                    text-destructive
-                                    focus:text-destructive
-                                `}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </EditFolder>
+                            Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </CardHeader>
         </Card>
     );

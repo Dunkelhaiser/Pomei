@@ -5,7 +5,7 @@ import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "shared-
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { createFolder, editFolder, getFolders, searchFolders } from "./requests";
+import { createFolder, deleteFolder, deleteFolderWithNotes, editFolder, getFolders, searchFolders } from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useFolders = (input: GetFolderPaginatedInput) => {
@@ -80,6 +80,46 @@ export const useEditFolder = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["folders"] });
             toast.success("Folder edited successfully");
+        },
+    });
+};
+
+export const useDeleteFolder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (params: GetByIdInput) => deleteFolder(params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to delete folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Folder deleted successfully");
+        },
+    });
+};
+
+export const useDeleteFolderWithNotes = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (params: GetByIdInput) => deleteFolderWithNotes(params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to delete folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Folder deleted successfully");
         },
     });
 };

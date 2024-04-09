@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FolderIcon } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Folder, NewFolderInput, newFolderSchema } from "shared-types/folders";
 import { useEditFolder } from "@/api/folders/hooks";
@@ -18,11 +17,11 @@ import {
 
 interface Props {
     folder: Folder;
-    children: React.ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
-const EditFolder = ({ folder, children }: Props) => {
-    const [open, setOpen] = useState(false);
+const EditFolder = ({ folder, open, setOpen }: Props) => {
     const form = useForm<NewFolderInput>({
         resolver: zodResolver(newFolderSchema),
         defaultValues: {
@@ -40,7 +39,6 @@ const EditFolder = ({ folder, children }: Props) => {
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
-            {children}
             <AlertDialogContent onCloseAutoFocus={() => form.reset()}>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Edit Folder</AlertDialogTitle>
