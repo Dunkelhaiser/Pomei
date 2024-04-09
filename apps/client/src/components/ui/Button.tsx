@@ -28,6 +28,7 @@ export const variants = cva(
                 lg: "h-11 rounded-md px-8",
                 link: "h-auto p-0 underline",
                 icon: "size-10",
+                floating: "fixed bottom-5 right-6 z-50 size-14 rounded-full sm:bottom-7 sm:right-10 lg:right-[80px]",
             },
         },
         defaultVariants: {
