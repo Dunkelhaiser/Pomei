@@ -119,7 +119,7 @@ export const verifyPasswordResetToken = async (token: string) => {
 
 export const updatePassword = async (userId: string, password: string) => {
     const hashedPassword = await new Argon2id().hash(password);
-    await db.update(users).set({ password: hashedPassword }).where(eq(users.id, userId));
+    await db.update(users).set({ password: hashedPassword, updatedAt: new Date() }).where(eq(users.id, userId));
 };
 
 export const updateEmail = async (userId: string, email: string) => {
@@ -127,7 +127,7 @@ export const updateEmail = async (userId: string, email: string) => {
     if (existingEmail) {
         throw new Error("Email is already used");
     }
-    await db.update(users).set({ email }).where(eq(users.id, userId));
+    await db.update(users).set({ email, updatedAt: new Date() }).where(eq(users.id, userId));
 };
 
 export const deleteUser = async (userId: string) => {

@@ -131,7 +131,11 @@ export const editFolder = async (folderId: string, input: NewFolderInput, userId
         return null;
     }
 
-    const [updatedFolder] = await db.update(folders).set(input).where(eq(folders.id, folderId)).returning();
+    const [updatedFolder] = await db
+        .update(folders)
+        .set({ ...input, updatedAt: new Date() })
+        .where(eq(folders.id, folderId))
+        .returning();
     return updatedFolder;
 };
 
@@ -144,13 +148,17 @@ export const reorderFolder = async (folderId: string, order: number, userId: str
     const oldOrder = folder.order;
     const folderToSwap = await getFolderByOrder(order, userId);
     if (!folderToSwap) {
-        const [editedFolder] = await db.update(folders).set({ order }).where(eq(folders.id, folderId)).returning();
+        const [editedFolder] = await db
+            .update(folders)
+            .set({ order, updatedAt: new Date() })
+            .where(eq(folders.id, folderId))
+            .returning();
         return editedFolder;
     }
 
     const [editedFolder] = await db
         .update(folders)
-        .set({ order: folderToSwap.order })
+        .set({ order: folderToSwap.order, updatedAt: new Date() })
         .where(eq(folders.id, folderId))
         .returning();
     await db.update(folders).set({ order: oldOrder }).where(eq(folders.id, folderToSwap.id));

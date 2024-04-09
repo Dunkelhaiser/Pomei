@@ -98,7 +98,7 @@ export const editNote = async (id: string, input: NewNoteInput, userId: string) 
     if (!note) {
         return null;
     }
-    const updatedNote = { ...note, ...input };
+    const updatedNote = { ...note, ...input, updatedAt: new Date() };
     const [editedNote] = await db.update(notes).set(updatedNote).where(eq(notes.id, id)).returning();
     return editedNote;
 };
@@ -136,7 +136,11 @@ export const reorderNote = async (id: string, order: number, userId: string) => 
     const oldOrder = note.order;
     const noteToSwap = await getNoteByOrder(order, userId);
     if (!noteToSwap) {
-        const [editedNote] = await db.update(notes).set({ order }).where(eq(notes.id, id)).returning();
+        const [editedNote] = await db
+            .update(notes)
+            .set({ order, updatedAt: new Date() })
+            .where(eq(notes.id, id))
+            .returning();
         return editedNote;
     }
 
@@ -154,7 +158,11 @@ export const archiveNote = async (id: string, archive: boolean, userId: string) 
     if (note.isDeleted) {
         throw new Error("Note is in bin");
     }
-    const [archivedNote] = await db.update(notes).set({ isArchived: archive }).where(eq(notes.id, id)).returning();
+    const [archivedNote] = await db
+        .update(notes)
+        .set({ isArchived: archive, updatedAt: new Date() })
+        .where(eq(notes.id, id))
+        .returning();
     return archivedNote;
 };
 
@@ -215,7 +223,11 @@ export const addToFolder = async (noteId: string, folderId: string, userId: stri
         throw new Error("Folder does not exist");
     }
 
-    const [editedNote] = await db.update(notes).set({ folderId }).where(eq(notes.id, noteId)).returning();
+    const [editedNote] = await db
+        .update(notes)
+        .set({ folderId, updatedAt: new Date() })
+        .where(eq(notes.id, noteId))
+        .returning();
     return editedNote;
 };
 
@@ -229,6 +241,10 @@ export const removeFromFolder = async (noteId: string, userId: string) => {
         throw new Error("Note not in folder");
     }
 
-    const [editedNote] = await db.update(notes).set({ folderId: null }).where(eq(notes.id, noteId)).returning();
+    const [editedNote] = await db
+        .update(notes)
+        .set({ folderId: null, updatedAt: new Date() })
+        .where(eq(notes.id, noteId))
+        .returning();
     return editedNote;
 };
