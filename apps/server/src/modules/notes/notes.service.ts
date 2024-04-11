@@ -282,6 +282,20 @@ export const getBinPaginated = async (
     };
 };
 
+export const searchBin = async (userId: string, input: string, searchBy: "title" | "content" | "tags" = "title") => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isDeleted, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
+    return notesArr;
+};
+
 export const getBin = async (userId: string) => {
     const bin = await db
         .select()
