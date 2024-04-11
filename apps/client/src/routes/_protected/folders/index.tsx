@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { z as zod } from "zod";
 import { useGetFoldersInfinity, useSearchFolders } from "@/api/folders/hooks";
 import NewFolder from "@/components/dialogs/NewFolder";
 import Folder from "@/components/Folder";
 import FoldersSearch from "@/components/headers/FoldersSearch";
 import { useIntersection } from "@/hooks/useIntersection";
+import { foldersParamsSchema } from "@/types/routes";
 import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
@@ -62,13 +62,7 @@ const Page = () => {
     );
 };
 
-const routeParamsSchema = zod.object({
-    sort: zod.enum(["name", "createdAt", "updatedAt"]).catch("name"),
-    order: zod.enum(["ascending", "descending"]).catch("ascending"),
-    search: zod.string().optional(),
-});
-
 export const Route = createFileRoute("/_protected/folders/")({
     component: Page,
-    validateSearch: (search) => routeParamsSchema.parse(search),
+    validateSearch: (search) => foldersParamsSchema.parse(search),
 });

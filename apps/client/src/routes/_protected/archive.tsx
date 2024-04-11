@@ -1,12 +1,12 @@
 /* eslint-disable no-nested-ternary */
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useEffect } from "react";
-import { z as zod } from "zod";
 import { useGetArchive, useSearchArchive } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import Note from "@/components/Note";
 import { useIntersection } from "@/hooks/useIntersection";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { notesParamsSchema } from "@/types/routes";
 import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
@@ -145,14 +145,7 @@ const Page = () => {
     );
 };
 
-const routeParamsSchema = zod.object({
-    sort: zod.enum(["title", "createdAt", "updatedAt"]).catch("title"),
-    order: zod.enum(["ascending", "descending"]).catch("ascending"),
-    searchBy: zod.enum(["title", "tags", "content"]).catch("title"),
-    search: zod.string().optional(),
-});
-
 export const Route = createFileRoute("/_protected/archive")({
     component: Page,
-    validateSearch: (search) => routeParamsSchema.parse(search),
+    validateSearch: (search) => notesParamsSchema.parse(search),
 });
