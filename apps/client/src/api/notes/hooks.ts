@@ -14,6 +14,7 @@ import {
     getBin,
     getNotes,
     moveToBin,
+    searchArchive,
     searchNotes,
 } from "./requests";
 import { UserContext } from "@/context/User";
@@ -89,6 +90,15 @@ export const useGetArchive = (input: GetNotePaginatedInput) => {
             }
             return null;
         },
+    });
+};
+
+export const useSearchArchive = (input: GetNotesInput) => {
+    const { isAuthorized } = useContext(UserContext);
+    return useQuery({
+        queryKey: ["notes", "search", "archive", input],
+        queryFn: () => searchArchive(input),
+        enabled: isAuthorized && input.title.length > 0,
     });
 };
 

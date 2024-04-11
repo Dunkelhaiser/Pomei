@@ -1,7 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useEffect } from "react";
 import { z as zod } from "zod";
-import { useGetArchive } from "@/api/notes/hooks";
+import { useGetArchive, useSearchArchive } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import Note from "@/components/Note";
 import { useIntersection } from "@/hooks/useIntersection";
@@ -10,8 +11,9 @@ import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
 const Page = () => {
-    const { sort, order, search } = Route.useSearch();
+    const { sort, order, searchBy, search } = Route.useSearch();
     const archive = useGetArchive({ page: 1, limit: 4, orderBy: sort, order });
+    const searchArchive = useSearchArchive({ title: search ?? "", searchBy });
 
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,
@@ -35,12 +37,15 @@ const Page = () => {
                     xl:grid-cols-4
                 `}
             >
-                {/*eslint-disable-next-line no-nested-ternary*/}
-                {search ? //     searchNotes.data.map((note) => <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />) // ) : searchNotes.data && searchNotes.data.length > 0 ? ( //     <Loader className="col-span-full self-center justify-self-center" /> // searchNotes.isLoading ? (
-                // ) : (
-                //     <p>No notes found</p>
-                // )
-                null : archive.isLoading ? (
+                {search ? (
+                    searchArchive.isLoading ? (
+                        <Loader className="col-span-full self-center justify-self-center" />
+                    ) : searchArchive.data && searchArchive.data.length > 0 ? (
+                        searchArchive.data.map((note) => <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />)
+                    ) : (
+                        <p>No notes found</p>
+                    )
+                ) : archive.isLoading ? (
                     <Loader className="col-span-full self-center justify-self-center" />
                 ) : (
                     <>

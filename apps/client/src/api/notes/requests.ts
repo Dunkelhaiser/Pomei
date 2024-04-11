@@ -29,6 +29,11 @@ export const getArchive = async (input: GetNotePaginatedInput) => {
     return res;
 };
 
+export const searchArchive = async (input: GetNotesInput) => {
+    const res = await api.get("notes/archive/search", { searchParams: input, credentials: "include" }).json<Note[]>();
+    return res;
+};
+
 export const duplicateNote = async (params: GetByIdInput) => {
     const res = await api.post(`notes/duplicate/${params.id}`, { json: null, credentials: "include" }).json<Note>();
     return res;
