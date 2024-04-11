@@ -1,31 +1,19 @@
 /* eslint-disable no-nested-ternary */
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDownNarrowWide, ListFilter, Search } from "lucide-react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { z as zod } from "zod";
 import { useNotesInfinity, useSearchNotes } from "@/api/notes/hooks";
+import NotesSearch from "@/components/headers/NotesSearch";
 import Note from "@/components/Note";
 import { useIntersection } from "@/hooks/useIntersection";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Button from "@/ui/Button";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/ui/DropdownMenu";
-import Input from "@/ui/Input";
 import Loader from "@/ui/Loader";
-import { Section, SectionContent, SectionHeader, SectionSubHeader } from "@/ui/Section";
+import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
 const Page = () => {
-    const [search, setSearch] = useState("");
-    const { sort, order, searchBy } = Route.useSearch();
-    const navigate = Route.useNavigate();
+    const { sort, order, searchBy, search } = Route.useSearch();
     const notes = useNotesInfinity({ page: 1, limit: 4, orderBy: sort, order });
-    const searchNotes = useSearchNotes({ title: search, searchBy });
+    const searchNotes = useSearchNotes({ title: search ?? "", searchBy });
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,
     });
@@ -38,128 +26,10 @@ const Page = () => {
         if (isIntersecting && notes.hasNextPage) void notes.fetchNextPage();
     }, [isIntersecting, notes]);
 
-    const handleSort = (sortValue: "title" | "createdAt" | "updatedAt") => {
-        void navigate({ to: "/notes", search: { sort: sortValue, order, searchBy } });
-    };
-
-    const handleOrder = (orderValue: "ascending" | "descending") => {
-        void navigate({ to: "/notes", search: { sort, order: orderValue, searchBy } });
-    };
-
-    const handleSearchBy = (searchByValue: "title" | "tags" | "content") => {
-        void navigate({ to: "/notes", search: { sort, order, searchBy: searchByValue } });
-    };
-
     return (
         <Section>
             <SectionHeader>Notes</SectionHeader>
-            <SectionSubHeader className="flex gap-4">
-                <Input
-                    placeholder="Search..."
-                    className="bg-card"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button className="gap-1">
-                            <Search className="size-3.5" />
-                            <span
-                                className={`
-                                    sr-only
-                                    sm:not-sr-only sm:whitespace-nowrap
-                                `}
-                            >
-                                Search
-                            </span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Search By</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem
-                            checked={searchBy === "title"}
-                            onClick={() => handleSearchBy("title")}
-                        >
-                            Title
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem checked={searchBy === "tags"} onClick={() => handleSearchBy("tags")}>
-                            Tags
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem
-                            checked={searchBy === "content"}
-                            onClick={() => handleSearchBy("content")}
-                        >
-                            Content
-                        </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button className="gap-1">
-                            <ListFilter className="size-3.5" />
-                            <span
-                                className={`
-                                    sr-only
-                                    sm:not-sr-only sm:whitespace-nowrap
-                                `}
-                            >
-                                Sort
-                            </span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked={sort === "title"} onClick={() => handleSort("title")}>
-                            Title
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem
-                            checked={sort === "createdAt"}
-                            onClick={() => handleSort("createdAt")}
-                        >
-                            Created At
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem
-                            checked={sort === "updatedAt"}
-                            onClick={() => handleSort("updatedAt")}
-                        >
-                            Updated At
-                        </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button className="gap-1">
-                            <ArrowDownNarrowWide className="size-3.5" />
-                            <span
-                                className={`
-                                    sr-only
-                                    sm:not-sr-only sm:whitespace-nowrap
-                                `}
-                            >
-                                Order
-                            </span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem
-                            checked={order === "ascending"}
-                            onClick={() => handleOrder("ascending")}
-                        >
-                            Ascending
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem
-                            checked={order === "descending"}
-                            onClick={() => handleOrder("descending")}
-                        >
-                            Descending
-                        </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </SectionSubHeader>
+            <NotesSearch />
             <SectionContent
                 className={`
                     grid min-h-24 grid-cols-1 items-start gap-4
@@ -167,7 +37,7 @@ const Page = () => {
                     xl:grid-cols-4
                 `}
             >
-                {search.length > 0 ? (
+                {search ? (
                     searchNotes.isLoading ? (
                         <Loader className="col-span-full self-center justify-self-center" />
                     ) : searchNotes.data && searchNotes.data.length > 0 ? (
@@ -279,6 +149,7 @@ const routeParamsSchema = zod.object({
     sort: zod.enum(["title", "createdAt", "updatedAt"]).catch("title"),
     order: zod.enum(["ascending", "descending"]).catch("ascending"),
     searchBy: zod.enum(["title", "tags", "content"]).catch("title"),
+    search: zod.string().optional(),
 });
 
 export const Route = createFileRoute("/notes/")({
