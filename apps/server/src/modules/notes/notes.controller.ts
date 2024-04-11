@@ -8,6 +8,7 @@ import {
     GetNotesInput,
     MoveToBinInput,
     NewNoteInput,
+    SearchNotesPaginatedInput,
 } from "shared-types";
 import {
     addToFolder,
@@ -28,8 +29,11 @@ import {
     removeFromFolder,
     reorderNote,
     searchArchive,
+    searchArchivePaginated,
     searchBin,
+    searchBinPaginated,
     searchNotes,
+    searchNotesPaginated,
 } from "./notes.service.ts";
 
 export const createNoteHandler = async (req: FastifyRequest<{ Body: NewNoteInput }>, res: FastifyReply) => {
@@ -91,6 +95,22 @@ export const searchNotesHandler = async (req: FastifyRequest<{ Querystring: GetN
     try {
         const notes = await searchNotes(req.user.id, req.query.title, req.query.searchBy);
         return res.code(200).send(notes);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search for notes");
+    }
+};
+
+export const searchNotesPaginatedHandler = async (
+    req: FastifyRequest<{ Querystring: SearchNotesPaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, title, searchBy } = req.query;
+    try {
+        const data = await searchNotesPaginated(req.user.id, title, searchBy, limit, page);
+        return res.code(200).send(data);
     } catch (err) {
         if (err instanceof Error) {
             return res.code(400).send({ message: err.message });
@@ -205,6 +225,22 @@ export const searchArchiveHandler = async (req: FastifyRequest<{ Querystring: Ge
     }
 };
 
+export const searchArchivePaginatedHandler = async (
+    req: FastifyRequest<{ Querystring: SearchNotesPaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, title, searchBy } = req.query;
+    try {
+        const data = await searchArchivePaginated(req.user.id, title, searchBy, limit, page);
+        return res.code(200).send(data);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search archive");
+    }
+};
+
 export const moveToBinHandler = async (
     req: FastifyRequest<{ Params: GetByIdInput; Body: MoveToBinInput }>,
     res: FastifyReply
@@ -267,6 +303,22 @@ export const searchBinHandler = async (req: FastifyRequest<{ Querystring: GetNot
     try {
         const notes = await searchBin(req.user.id, req.query.title, req.query.searchBy);
         return res.code(200).send(notes);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search bin");
+    }
+};
+
+export const searchBinPaginatedHandler = async (
+    req: FastifyRequest<{ Querystring: SearchNotesPaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, title, searchBy } = req.query;
+    try {
+        const data = await searchBinPaginated(req.user.id, title, searchBy, limit, page);
+        return res.code(200).send(data);
     } catch (err) {
         if (err instanceof Error) {
             return res.code(400).send({ message: err.message });

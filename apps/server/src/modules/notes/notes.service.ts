@@ -40,6 +40,23 @@ export const getNotesCount = async (userId: string) => {
     return notesCount[0].count;
 };
 
+export const getNotesCountSearch = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title"
+) => {
+    const notesCount = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
+    return notesCount[0].count;
+};
+
 export const getArchiveSize = async (userId: string) => {
     const archiveSize = await db
         .select({ count: count() })
@@ -48,11 +65,47 @@ export const getArchiveSize = async (userId: string) => {
     return archiveSize[0].count;
 };
 
+export const getArchiveSizeSearch = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title"
+) => {
+    const archiveSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isArchived, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
+    return archiveSize[0].count;
+};
+
 export const getBinSize = async (userId: string) => {
     const archiveSize = await db
         .select({ count: count() })
         .from(notes)
         .where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
+    return archiveSize[0].count;
+};
+
+export const getBinSizeSearch = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title"
+) => {
+    const archiveSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isDeleted, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
     return archiveSize[0].count;
 };
 
@@ -92,6 +145,36 @@ export const searchNotes = async (userId: string, input: string, searchBy: "titl
             )
         );
     return notesArr;
+};
+
+export const searchNotesPaginated = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title",
+    limit = 10,
+    page = 1
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isDeleted, false),
+                eq(notes.isArchived, false),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        )
+        .orderBy(notes.title)
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getNotesCountSearch(userId, input, searchBy);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const createNote = async (input: NewNoteInput, userId: string) => {
@@ -233,6 +316,35 @@ export const searchArchive = async (
     return notesArr;
 };
 
+export const searchArchivePaginated = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title",
+    limit = 10,
+    page = 1
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isArchived, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        )
+        .orderBy(notes.title)
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getArchiveSizeSearch(userId, input, searchBy);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
+};
+
 export const moveToBin = async (id: string, move: boolean, userId: string) => {
     const note = await getNoteById(id, userId);
     if (!note) {
@@ -294,6 +406,35 @@ export const searchBin = async (userId: string, input: string, searchBy: "title"
             )
         );
     return notesArr;
+};
+
+export const searchBinPaginated = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title",
+    limit = 10,
+    page = 1
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isDeleted, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        )
+        .orderBy(notes.title)
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getBinSizeSearch(userId, input, searchBy);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const getBin = async (userId: string) => {

@@ -54,11 +54,19 @@ export const getNotesSchema = zod.object({
     searchBy: zod.enum(["title", "content", "tags"]).optional(),
 });
 
+export const searchNotesPaginatedSchema = zod.object({
+    title: zod.string().trim().min(1, { message: "Title must be at least 1 character long" }),
+    searchBy: zod.enum(["title", "content", "tags"]).optional(),
+    page: getPaginated.page,
+    limit: getPaginated.limit,
+});
+
 export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
 export type GetNotePaginatedInput = zod.infer<typeof getNotePaginatedSchema>;
 export type ArchiveInput = zod.infer<typeof archiveSchema>;
 export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;
 export type FolderIdInput = zod.infer<typeof folderIdSchema>;
 export type GetNotesInput = zod.infer<typeof getNotesSchema>;
+export type SearchNotesPaginatedInput = zod.infer<typeof searchNotesPaginatedSchema>;
 export type Note = zod.infer<typeof noteSchema>;
 export type NotesPaginated = zod.infer<typeof notesPaginatedSchema>;

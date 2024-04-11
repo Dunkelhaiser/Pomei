@@ -20,8 +20,11 @@ import {
     removeFromFolderHandler,
     reorderNoteHandler,
     searchArchiveHandler,
+    searchArchivePaginatedHandler,
     searchBinHandler,
+    searchBinPaginatedHandler,
     searchNotesHandler,
+    searchNotesPaginatedHandler,
 } from "./notes.controller.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
 
@@ -39,6 +42,7 @@ const {
     getByIdSchema,
     orderSchema,
     notesPaginatedSchema,
+    searchNotesPaginatedSchema,
 } = schema;
 
 export const notesRoutes = async (app: FastifyInstance) => {
@@ -111,7 +115,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
         getAllNotesPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
-        "/search",
+        "/search/all",
         {
             preHandler: authHandler,
             schema: {
@@ -126,6 +130,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         searchNotesHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/search",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Search for notes by title, content or tags with pagination",
+                querystring: searchNotesPaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        searchNotesPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/:id",
@@ -235,7 +256,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
         getArchiveHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
-        "/archive/search",
+        "/archive/search/all",
         {
             preHandler: authHandler,
             schema: {
@@ -250,6 +271,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         searchArchiveHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/archive/search",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Search for notes in archive by title, content or tags with pagination",
+                querystring: searchNotesPaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        searchArchivePaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/bin/:id",
@@ -321,7 +359,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
         getBinPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
-        "/bin/search",
+        "/bin/search/all",
         {
             preHandler: authHandler,
             schema: {
@@ -336,6 +374,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         searchBinHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/bin/search",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Search for notes in bin by title, content or tags with pagination",
+                querystring: searchNotesPaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        searchBinPaginatedHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
         "/bin/all",

@@ -132,7 +132,32 @@ const NotesLayout = ({ notes, searchNotes, search }: Props) => {
                 searchNotes.isLoading ? (
                     <Loader className="col-span-full self-center justify-self-center" />
                 ) : searchNotes.data && searchNotes.data.length > 0 ? (
-                    searchNotes.data.map((note) => <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />)
+                    <>
+                        <div className="grid gap-4">
+                            {searchNotes.data.map(
+                                (note, i) =>
+                                    i % 4 === 0 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
+                            )}
+                        </div>
+                        <div className="grid gap-4">
+                            {searchNotes.data.map(
+                                (note, i) =>
+                                    i % 4 === 1 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
+                            )}
+                        </div>
+                        <div className="grid gap-4">
+                            {searchNotes.data.map(
+                                (note, i) =>
+                                    i % 4 === 2 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
+                            )}
+                        </div>
+                        <div className="grid gap-4">
+                            {searchNotes.data.map(
+                                (note, i) =>
+                                    i % 4 === 3 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
+                            )}
+                        </div>
+                    </>
                 ) : (
                     <p>No notes found</p>
                 )
