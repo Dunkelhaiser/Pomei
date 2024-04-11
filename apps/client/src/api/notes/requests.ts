@@ -48,8 +48,13 @@ export const deleteNote = async (params: GetByIdInput) => {
     await api.delete(`notes/${params.id}`, { credentials: "include" });
 };
 
-export const getBin = async () => {
-    const res = await api.get("notes/bin", { credentials: "include" }).json<Note[]>();
+export const getBin = async (input: GetNotePaginatedInput) => {
+    const res = await api.get("notes/bin", { searchParams: input, credentials: "include" }).json<NotesPaginated>();
+    return res;
+};
+
+export const searchBin = async (input: GetNotesInput) => {
+    const res = await api.get("notes/bin/search", { searchParams: input, credentials: "include" }).json<Note[]>();
     return res;
 };
 

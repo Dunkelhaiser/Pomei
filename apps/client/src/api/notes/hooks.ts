@@ -15,6 +15,7 @@ import {
     getNotes,
     moveToBin,
     searchArchive,
+    searchBin,
     searchNotes,
 } from "./requests";
 import { UserContext } from "@/context/User";
@@ -162,13 +163,29 @@ export const useDeleteNote = () => {
     });
 };
 
-export const useGetBin = () => {
+export const useGetBin = (input: GetNotePaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
 
-    return useQuery({
-        queryKey: ["notes", "bin"],
-        queryFn: getBin,
+    return useInfiniteQuery({
+        queryKey: ["notes", "bin", input],
+        queryFn: ({ pageParam }) => getBin({ ...input, page: pageParam }),
         enabled: isAuthorized,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
+    });
+};
+
+export const useSearchBin = (input: GetNotesInput) => {
+    const { isAuthorized } = useContext(UserContext);
+    return useQuery({
+        queryKey: ["notes", "search", "bin", input],
+        queryFn: () => searchBin(input),
+        enabled: isAuthorized && input.title.length > 0,
     });
 };
 
