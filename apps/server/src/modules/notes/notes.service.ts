@@ -40,6 +40,14 @@ export const getNotesCount = async (userId: string) => {
     return notesCount[0].count;
 };
 
+export const getArchiveSize = async (userId: string) => {
+    const archiveSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.isArchived, true)));
+    return archiveSize[0].count;
+};
+
 export const getAllNotesPaginated = async (
     userId: string,
     limit = 10,
@@ -172,6 +180,29 @@ export const getArchive = async (userId: string) => {
         .from(notes)
         .where(and(eq(notes.userId, userId), eq(notes.isArchived, true)));
     return archive;
+};
+
+export const getArchivePaginated = async (
+    userId: string,
+    limit = 10,
+    page = 1,
+    orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
+    order = "ascending"
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.isArchived, true)))
+        .orderBy(order === "ascending" ? notes[orderBy] : desc(notes[orderBy]))
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getArchiveSize(userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const moveToBin = async (id: string, move: boolean, userId: string) => {

@@ -12,6 +12,7 @@ import {
     getAllNotesHandler,
     getAllNotesPaginatedHandler,
     getArchiveHandler,
+    getArchivePaginatedHandler,
     getBinHandler,
     getNoteHandler,
     moveToBinHandler,
@@ -200,6 +201,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
     );
     app.withTypeProvider<ZodTypeProvider>().get(
         "/archive",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Get archive with pagination",
+                querystring: getNotePaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getArchivePaginatedHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/archive/all",
         {
             preHandler: authHandler,
             schema: {
