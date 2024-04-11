@@ -1,33 +1,20 @@
 /* eslint-disable no-nested-ternary */
 import { createFileRoute } from "@tanstack/react-router";
-import { Trash } from "lucide-react";
 import { Fragment, useEffect } from "react";
 import { z as zod } from "zod";
-import { useEmptyBin, useGetBin, useSearchBin } from "@/api/notes/hooks";
+import { useGetBin, useSearchBin } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import Note from "@/components/Note";
+import EmptyBin from "@/dialogs/EmptyBin";
 import { useIntersection } from "@/hooks/useIntersection";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Button from "@/ui/Button";
 import Loader from "@/ui/Loader";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/ui/Modal";
 import { Section, SectionContent, SectionHeader, SectionSubHeader } from "@/ui/Section";
 
 const Page = () => {
     const { sort, order, searchBy, search } = Route.useSearch();
     const bin = useGetBin({ page: 1, limit: 4, orderBy: sort, order });
     const searchBin = useSearchBin({ title: search ?? "", searchBy });
-    const emptyBinHandler = useEmptyBin();
 
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,
@@ -45,33 +32,7 @@ const Page = () => {
             <SectionHeader>Bin</SectionHeader>
             <NotesSearch from="/_protected/bin" />
             <SectionSubHeader>
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            disabled={!bin.data || bin.data.pages[0].notes.length < 1}
-                            loading={emptyBinHandler.isPending}
-                        >
-                            <Trash size={16} />
-                            Empty Bin
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Empty Bin?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                All notes in the bin will be permanently deleted.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction variant="destructive" onClick={() => emptyBinHandler.mutate()}>
-                                Empty
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <EmptyBin />
             </SectionSubHeader>
             <SectionContent
                 className={`
