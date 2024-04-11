@@ -8,7 +8,7 @@ import { Section, SectionHeader } from "@/ui/Section";
 const Page = () => {
     const { sort, order, searchBy, search } = Route.useSearch();
     const notes = useNotesInfinity({ page: 1, limit: 4, orderBy: sort, order });
-    const searchNotes = useSearchNotes({ title: search ?? "", searchBy });
+    const searchNotes = useSearchNotes({ page: 1, limit: 4, title: search ?? "", searchBy });
 
     return (
         <Section>

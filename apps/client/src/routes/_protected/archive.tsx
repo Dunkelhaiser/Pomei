@@ -8,7 +8,7 @@ import { Section, SectionHeader } from "@/ui/Section";
 const Page = () => {
     const { sort, order, searchBy, search } = Route.useSearch();
     const archive = useGetArchive({ page: 1, limit: 4, orderBy: sort, order });
-    const searchArchive = useSearchArchive({ title: search ?? "", searchBy });
+    const searchArchive = useSearchArchive({ page: 1, limit: 4, title: search ?? "", searchBy });
     return (
         <Section>
             <SectionHeader>Archive</SectionHeader>

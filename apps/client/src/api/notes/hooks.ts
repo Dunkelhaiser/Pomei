@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HTTPError } from "ky";
 import { useContext } from "react";
-import { ArchiveInput, GetNotePaginatedInput, GetNotesInput, MoveToBinInput } from "shared-types/notes";
+import { ArchiveInput, GetNotePaginatedInput, MoveToBinInput, SearchNotesPaginatedInput } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
@@ -47,12 +47,20 @@ export const useNotesInfinity = (input: GetNotePaginatedInput) => {
     });
 };
 
-export const useSearchNotes = (input: GetNotesInput) => {
+export const useSearchNotes = (input: SearchNotesPaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
-    return useQuery({
+
+    return useInfiniteQuery({
         queryKey: ["notes", "search", input],
-        queryFn: () => searchNotes(input),
+        queryFn: ({ pageParam }) => searchNotes({ ...input, page: pageParam }),
         enabled: isAuthorized && input.title.length > 0,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
     });
 };
 
@@ -94,12 +102,20 @@ export const useGetArchive = (input: GetNotePaginatedInput) => {
     });
 };
 
-export const useSearchArchive = (input: GetNotesInput) => {
+export const useSearchArchive = (input: SearchNotesPaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
-    return useQuery({
+
+    return useInfiniteQuery({
         queryKey: ["notes", "search", "archive", input],
-        queryFn: () => searchArchive(input),
+        queryFn: ({ pageParam }) => searchArchive({ ...input, page: pageParam }),
         enabled: isAuthorized && input.title.length > 0,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
     });
 };
 
@@ -180,12 +196,20 @@ export const useGetBin = (input: GetNotePaginatedInput) => {
     });
 };
 
-export const useSearchBin = (input: GetNotesInput) => {
+export const useSearchBin = (input: SearchNotesPaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
-    return useQuery({
+
+    return useInfiniteQuery({
         queryKey: ["notes", "search", "bin", input],
-        queryFn: () => searchBin(input),
+        queryFn: ({ pageParam }) => searchBin({ ...input, page: pageParam }),
         enabled: isAuthorized && input.title.length > 0,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
     });
 };
 

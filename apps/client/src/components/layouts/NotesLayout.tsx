@@ -1,19 +1,21 @@
 /* eslint-disable no-nested-ternary */
-import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/react-query";
+import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
 import { Fragment, forwardRef, useEffect } from "react";
-import { Note as NoteType, NotesPaginated } from "shared-types/notes";
+import { NotesPaginated } from "shared-types/notes";
 import Note from "@/components/Note";
 import { useIntersection } from "@/hooks/useIntersection";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import Loader from "@/ui/Loader";
 import { SectionContent } from "@/ui/Section";
 
+type InfiniteNote = UseInfiniteQueryResult<InfiniteData<NotesPaginated, unknown>, Error>;
+
 interface NotesQuery {
-    notes: UseInfiniteQueryResult<InfiniteData<NotesPaginated, unknown>, Error>;
+    notes: InfiniteNote;
 }
 
 interface Props extends NotesQuery {
-    searchNotes: UseQueryResult<NoteType[], Error>;
+    searchNotes: InfiniteNote;
     search?: string;
 }
 
@@ -120,6 +122,10 @@ const NotesLayout = ({ notes, searchNotes, search }: Props) => {
         if (isIntersecting && notes.hasNextPage) void notes.fetchNextPage();
     }, [isIntersecting, notes]);
 
+    useEffect(() => {
+        if (isIntersecting && searchNotes.hasNextPage) void searchNotes.fetchNextPage();
+    }, [isIntersecting, searchNotes]);
+
     return (
         <SectionContent
             className={`
@@ -131,32 +137,11 @@ const NotesLayout = ({ notes, searchNotes, search }: Props) => {
             {search ? (
                 searchNotes.isLoading ? (
                     <Loader className="col-span-full self-center justify-self-center" />
-                ) : searchNotes.data && searchNotes.data.length > 0 ? (
+                ) : searchNotes.data && searchNotes.data.pages[0].notes.length > 0 ? (
                     <>
-                        <div className="grid gap-4">
-                            {searchNotes.data.map(
-                                (note, i) =>
-                                    i % 4 === 0 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
-                            )}
-                        </div>
-                        <div className="grid gap-4">
-                            {searchNotes.data.map(
-                                (note, i) =>
-                                    i % 4 === 1 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
-                            )}
-                        </div>
-                        <div className="grid gap-4">
-                            {searchNotes.data.map(
-                                (note, i) =>
-                                    i % 4 === 2 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
-                            )}
-                        </div>
-                        <div className="grid gap-4">
-                            {searchNotes.data.map(
-                                (note, i) =>
-                                    i % 4 === 3 && <Note lineClamp="line-clamp-[18]" note={note} key={note.id} />
-                            )}
-                        </div>
+                        {desktop && <DesktopLayout notes={searchNotes} ref={ref} />}
+                        {tablet && <TabletLayout notes={searchNotes} ref={ref} />}
+                        {mobile && <MobileLayout notes={searchNotes} ref={ref} />}
                     </>
                 ) : (
                     <p>No notes found</p>

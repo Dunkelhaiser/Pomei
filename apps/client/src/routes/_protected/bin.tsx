@@ -1,4 +1,3 @@
- 
 import { createFileRoute } from "@tanstack/react-router";
 import { useGetBin, useSearchBin } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
@@ -10,7 +9,7 @@ import { Section, SectionHeader, SectionSubHeader } from "@/ui/Section";
 const Page = () => {
     const { sort, order, searchBy, search } = Route.useSearch();
     const bin = useGetBin({ page: 1, limit: 4, orderBy: sort, order });
-    const searchBin = useSearchBin({ title: search ?? "", searchBy });
+    const searchBin = useSearchBin({ page: 1, limit: 4, title: search ?? "", searchBy });
 
     return (
         <Section>

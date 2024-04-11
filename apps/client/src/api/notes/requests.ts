@@ -1,10 +1,10 @@
 import {
     ArchiveInput,
     GetNotePaginatedInput,
-    GetNotesInput,
     MoveToBinInput,
     Note,
     NotesPaginated,
+    SearchNotesPaginatedInput,
 } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { api } from "../api";
@@ -14,8 +14,8 @@ export const getNotes = async (input: GetNotePaginatedInput) => {
     return res;
 };
 
-export const searchNotes = async (input: GetNotesInput) => {
-    const res = await api.get("notes/search", { searchParams: input, credentials: "include" }).json<Note[]>();
+export const searchNotes = async (input: SearchNotesPaginatedInput) => {
+    const res = await api.get("notes/search", { searchParams: input, credentials: "include" }).json<NotesPaginated>();
     return res;
 };
 
@@ -29,8 +29,10 @@ export const getArchive = async (input: GetNotePaginatedInput) => {
     return res;
 };
 
-export const searchArchive = async (input: GetNotesInput) => {
-    const res = await api.get("notes/archive/search", { searchParams: input, credentials: "include" }).json<Note[]>();
+export const searchArchive = async (input: SearchNotesPaginatedInput) => {
+    const res = await api
+        .get("notes/archive/search", { searchParams: input, credentials: "include" })
+        .json<NotesPaginated>();
     return res;
 };
 
@@ -53,8 +55,10 @@ export const getBin = async (input: GetNotePaginatedInput) => {
     return res;
 };
 
-export const searchBin = async (input: GetNotesInput) => {
-    const res = await api.get("notes/bin/search", { searchParams: input, credentials: "include" }).json<Note[]>();
+export const searchBin = async (input: SearchNotesPaginatedInput) => {
+    const res = await api
+        .get("notes/bin/search", { searchParams: input, credentials: "include" })
+        .json<NotesPaginated>();
     return res;
 };
 
