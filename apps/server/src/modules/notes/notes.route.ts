@@ -14,6 +14,7 @@ import {
     getArchiveHandler,
     getArchivePaginatedHandler,
     getBinHandler,
+    getBinPaginatedHandler,
     getNoteHandler,
     moveToBinHandler,
     removeFromFolderHandler,
@@ -285,6 +286,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
     );
     app.withTypeProvider<ZodTypeProvider>().get(
         "/bin",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Get bin with pagination",
+                querystring: getNotePaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getBinPaginatedHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/bin/all",
         {
             preHandler: authHandler,
             schema: {

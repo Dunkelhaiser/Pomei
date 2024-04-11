@@ -22,6 +22,7 @@ import {
     getArchive,
     getArchivePaginated,
     getBin,
+    getBinPaginated,
     getNoteById,
     moveToBin,
     removeFromFolder,
@@ -229,6 +230,22 @@ export const emptyBinHandler = async (req: FastifyRequest, res: FastifyReply) =>
         return res.code(204).send();
     } catch (err) {
         return res.code(500).send("Failed to empty bin");
+    }
+};
+
+export const getBinPaginatedHandler = async (
+    req: FastifyRequest<{ Querystring: GetNotePaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, orderBy, order } = req.query;
+    try {
+        const data = await getBinPaginated(req.user.id, limit, page, orderBy, order);
+        return res.code(200).send(data);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to get bin");
     }
 };
 

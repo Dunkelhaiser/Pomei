@@ -48,6 +48,14 @@ export const getArchiveSize = async (userId: string) => {
     return archiveSize[0].count;
 };
 
+export const getBinSize = async (userId: string) => {
+    const archiveSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
+    return archiveSize[0].count;
+};
+
 export const getAllNotesPaginated = async (
     userId: string,
     limit = 10,
@@ -229,6 +237,29 @@ export const deleteNote = async (id: string, userId: string) => {
 
 export const emptyBin = async (userId: string) => {
     await db.delete(notes).where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)));
+};
+
+export const getBinPaginated = async (
+    userId: string,
+    limit = 10,
+    page = 1,
+    orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
+    order = "ascending"
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.isDeleted, true)))
+        .orderBy(order === "ascending" ? notes[orderBy] : desc(notes[orderBy]))
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getBinSize(userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const getBin = async (userId: string) => {
