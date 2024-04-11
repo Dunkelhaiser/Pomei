@@ -1,13 +1,12 @@
 import { useNavigate, useSearch, useRouterState } from "@tanstack/react-router";
 import OrderByMenu from "@/dropdowns/search/OrderByMenu";
-import SearchByMenu from "@/dropdowns/search/SearchByMenu";
 import SortByMenu from "@/dropdowns/search/SortByMenu";
 import Input from "@/ui/Input";
 import { SectionSubHeader } from "@/ui/Section";
 
-const NotesSearch = () => {
+const FoldersSearch = () => {
     const router = useRouterState();
-    const { search } = useSearch({ from: "/notes/" });
+    const { search } = useSearch({ from: "/_protected/folders/" });
     const navigate = useNavigate();
 
     const handlerSearch = (searchValue: string) => {
@@ -22,17 +21,10 @@ const NotesSearch = () => {
                 value={search}
                 onChange={(e) => handlerSearch(e.target.value)}
             />
-            <SearchByMenu
-                searchBy={[
-                    { name: "Title", value: "title" },
-                    { name: "Tags", value: "tags" },
-                    { name: "Content", value: "content" },
-                ]}
-            />
-            <SortByMenu from="/notes/" additionalSort={[{ name: "Title", value: "title" }]} />
-            <OrderByMenu from="/notes/" />
+            <SortByMenu from="/_protected/folders/" additionalSort={[{ name: "Name", value: "name" }]} />
+            <OrderByMenu from="/_protected/folders/" />
         </SectionSubHeader>
     );
 };
 
-export default NotesSearch;
+export default FoldersSearch;

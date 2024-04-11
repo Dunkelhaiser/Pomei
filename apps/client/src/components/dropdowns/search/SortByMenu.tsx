@@ -11,15 +11,16 @@ import {
 } from "@/ui/DropdownMenu";
 
 interface Props {
+    from: "/notes/" | "/_protected/folders/";
     additionalSort: {
         name: string;
         value: string;
     }[];
 }
 
-const SortByMenu = ({ additionalSort }: Props) => {
+const SortByMenu = ({ additionalSort, from }: Props) => {
     const router = useRouterState();
-    const { sort } = useSearch({ from: router.location.pathname as "/notes/" | "/_protected/folders/" });
+    const { sort } = useSearch({ from });
     const navigate = useNavigate();
 
     const handleSort = (sortValue: string) => {

@@ -10,9 +10,13 @@ import {
     DropdownMenuTrigger,
 } from "@/ui/DropdownMenu";
 
-const OrderByMenu = () => {
+interface Props {
+    from: "/notes/" | "/_protected/folders/";
+}
+
+const OrderByMenu = ({ from }: Props) => {
     const router = useRouterState();
-    const { order } = useSearch({ from: router.location.pathname as "/notes/" | "/_protected/folders/" });
+    const { order } = useSearch({ from });
     const navigate = useNavigate();
 
     const handleOrder = (orderValue: "ascending" | "descending") => {
