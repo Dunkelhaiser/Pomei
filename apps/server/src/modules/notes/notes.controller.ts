@@ -27,6 +27,7 @@ import {
     moveToBin,
     removeFromFolder,
     reorderNote,
+    searchArchive,
     searchNotes,
 } from "./notes.service.ts";
 
@@ -188,6 +189,18 @@ export const getArchiveHandler = async (req: FastifyRequest, res: FastifyReply) 
         return res.code(200).send(archive);
     } catch (err) {
         return res.code(500).send("Failed to get archive");
+    }
+};
+
+export const searchArchiveHandler = async (req: FastifyRequest<{ Querystring: GetNotesInput }>, res: FastifyReply) => {
+    try {
+        const notes = await searchArchive(req.user.id, req.query.title, req.query.searchBy);
+        return res.code(200).send(notes);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search archive");
     }
 };
 

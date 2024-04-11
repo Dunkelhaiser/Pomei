@@ -19,6 +19,7 @@ import {
     moveToBinHandler,
     removeFromFolderHandler,
     reorderNoteHandler,
+    searchArchiveHandler,
     searchNotesHandler,
 } from "./notes.controller.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
@@ -231,6 +232,23 @@ export const notesRoutes = async (app: FastifyInstance) => {
             },
         },
         getArchiveHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/archive/search",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["notes"],
+                description: "Search for notes in archive by title, content or tags",
+                querystring: getNotesSchema,
+                response: {
+                    200: notesSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        searchArchiveHandler
     );
     app.withTypeProvider<ZodTypeProvider>().put(
         "/bin/:id",

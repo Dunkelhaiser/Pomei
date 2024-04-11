@@ -86,6 +86,8 @@ export const searchNotes = async (userId: string, input: string, searchBy: "titl
         .where(
             and(
                 eq(notes.userId, userId),
+                eq(notes.isDeleted, false),
+                eq(notes.isArchived, false),
                 searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
             )
         );
@@ -211,6 +213,24 @@ export const getArchivePaginated = async (
         totalPages: pages,
         totalCount,
     };
+};
+
+export const searchArchive = async (
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title"
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.isArchived, true),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
+    return notesArr;
 };
 
 export const moveToBin = async (id: string, move: boolean, userId: string) => {
