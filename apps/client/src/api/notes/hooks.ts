@@ -75,13 +75,20 @@ export const useArchiveNote = () => {
     });
 };
 
-export const useGetArchive = () => {
+export const useGetArchive = (input: GetNotePaginatedInput) => {
     const { isAuthorized } = useContext(UserContext);
 
-    return useQuery({
-        queryKey: ["notes", "archive"],
-        queryFn: getArchive,
+    return useInfiniteQuery({
+        queryKey: ["notes", "archive", input],
+        queryFn: ({ pageParam }) => getArchive({ ...input, page: pageParam }),
         enabled: isAuthorized,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
     });
 };
 

@@ -1,5 +1,6 @@
 import { useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import { ArrowDownNarrowWide } from "lucide-react";
+import { FoldersRoutes, NotesRoutes } from "@/types/routes";
 import Button from "@/ui/Button";
 import {
     DropdownMenu,
@@ -11,7 +12,7 @@ import {
 } from "@/ui/DropdownMenu";
 
 interface Props {
-    from: "/notes/" | "/_protected/folders/";
+    from: NotesRoutes | FoldersRoutes;
 }
 
 const OrderByMenu = ({ from }: Props) => {

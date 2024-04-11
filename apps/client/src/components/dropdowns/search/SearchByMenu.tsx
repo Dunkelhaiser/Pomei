@@ -1,5 +1,6 @@
 import { useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import { Search } from "lucide-react";
+import { NotesRoutes } from "@/types/routes";
 import Button from "@/ui/Button";
 import {
     DropdownMenu,
@@ -11,15 +12,16 @@ import {
 } from "@/ui/DropdownMenu";
 
 interface Props {
+    from: NotesRoutes;
     searchBy: {
         name: string;
         value: string;
     }[];
 }
 
-const SearchByMenu = ({ searchBy }: Props) => {
+const SearchByMenu = ({ searchBy, from }: Props) => {
     const router = useRouterState();
-    const { searchBy: searchByQuery } = useSearch({ from: "/notes/" });
+    const { searchBy: searchByQuery } = useSearch({ from });
     const navigate = useNavigate();
 
     const handleSearchBy = (searchByValue: string) => {

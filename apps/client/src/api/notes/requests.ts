@@ -24,8 +24,8 @@ export const archiveNote = async (input: ArchiveInput, params: GetByIdInput) => 
     return res;
 };
 
-export const getArchive = async () => {
-    const res = await api.get("notes/archive", { credentials: "include" }).json<Note[]>();
+export const getArchive = async (input: GetNotePaginatedInput) => {
+    const res = await api.get("notes/archive", { searchParams: input, credentials: "include" }).json<NotesPaginated>();
     return res;
 };
 
