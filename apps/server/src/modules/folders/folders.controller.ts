@@ -1,5 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput, GetByIdInput, OrderInput } from "shared-types";
+import {
+    GetFolderInput,
+    GetFolderPaginatedInput,
+    NewFolderInput,
+    GetByIdInput,
+    OrderInput,
+    GetNotePaginatedInput,
+} from "shared-types";
 import {
     createFolder,
     deleteFolder,
@@ -8,6 +15,7 @@ import {
     getAllFolders,
     getAllFoldersPaginated,
     loadFolderContent,
+    loadFolderContentPaginated,
     reorderFolder,
     searchFolder,
 } from "./folders.service.ts";
@@ -64,6 +72,25 @@ export const searchFolderHandler = async (req: FastifyRequest<{ Querystring: Get
 export const loadFolderContentHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
     try {
         const folderContent = await loadFolderContent(req.params.id, req.user.id);
+        if (folderContent) {
+            return res.code(200).send(folderContent);
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to get folder content");
+    }
+};
+
+export const loadFolderContentPaginatedHandler = async (
+    req: FastifyRequest<{ Params: GetByIdInput; Querystring: GetNotePaginatedInput }>,
+    res: FastifyReply
+) => {
+    try {
+        const { page, limit, orderBy, order } = req.query;
+        const folderContent = await loadFolderContentPaginated(req.params.id, req.user.id, limit, page, orderBy, order);
         if (folderContent) {
             return res.code(200).send(folderContent);
         }

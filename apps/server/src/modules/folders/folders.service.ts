@@ -62,6 +62,14 @@ export const getLastFolderOrder = async (userId: string) => {
     return lastFolder.length ? lastFolder[0].order : null;
 };
 
+export const getFolderSize = async (folderId: string, userId: string) => {
+    const folderSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(and(eq(notes.userId, userId), eq(notes.folderId, folderId)));
+    return folderSize[0].count;
+};
+
 export const searchFolder = async (name: string, userId: string) => {
     const foldersArr = await db
         .select()
@@ -102,6 +110,43 @@ export const loadFolderContent = async (folderId: string, userId: string) => {
         );
 
     return folderNotes;
+};
+
+export const loadFolderContentPaginated = async (
+    folderId: string,
+    userId: string,
+    limit = 10,
+    page = 1,
+    orderBy: "order" | "title" | "createdAt" | "updatedAt" = "order",
+    order = "ascending"
+) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.folderId, folderId),
+                eq(notes.userId, userId),
+                eq(notes.isArchived, false),
+                eq(notes.isDeleted, false)
+            )
+        )
+        .orderBy(order === "ascending" ? notes[orderBy] : desc(notes[orderBy]))
+        .offset((page - 1) * limit)
+        .limit(limit);
+
+    const totalCount = await getFolderSize(folderId, userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
 };
 
 export const deleteFolder = async (folderId: string, userId: string) => {
