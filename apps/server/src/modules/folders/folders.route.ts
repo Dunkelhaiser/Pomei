@@ -29,6 +29,7 @@ const {
     foldersPaginatedSchema,
     notesPaginatedSchema,
     getNotePaginatedSchema,
+    searchNotesPaginatedSchema,
 } = schema;
 
 export const foldersRoutes = async (app: FastifyInstance) => {
@@ -125,6 +126,24 @@ export const foldersRoutes = async (app: FastifyInstance) => {
                 description: "Get folder content with pagination",
                 params: getByIdSchema,
                 querystring: getNotePaginatedSchema,
+                response: {
+                    200: notesPaginatedSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        loadFolderContentPaginatedHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/:id/search",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Search for notes in folder by title, content or tags with pagination",
+                params: getByIdSchema,
+                querystring: searchNotesPaginatedSchema,
                 response: {
                     200: notesPaginatedSchema,
                     400: messageSchema,

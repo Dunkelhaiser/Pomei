@@ -6,6 +6,7 @@ import {
     GetByIdInput,
     OrderInput,
     GetNotePaginatedInput,
+    SearchNotesPaginatedInput,
 } from "shared-types";
 import {
     createFolder,
@@ -18,6 +19,7 @@ import {
     loadFolderContentPaginated,
     reorderFolder,
     searchFolder,
+    searchFolderContent,
 } from "./folders.service.ts";
 
 export const createFolderHandler = async (req: FastifyRequest<{ Body: NewFolderInput }>, res: FastifyReply) => {
@@ -100,6 +102,22 @@ export const loadFolderContentPaginatedHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to get folder content");
+    }
+};
+
+export const searchFolderContentHandler = async (
+    req: FastifyRequest<{ Params: GetByIdInput; Querystring: SearchNotesPaginatedInput }>,
+    res: FastifyReply
+) => {
+    const { page, limit, title, searchBy } = req.query;
+    try {
+        const data = await searchFolderContent(req.params.id, req.user.id, title, searchBy, limit, page);
+        return res.code(200).send(data);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.code(400).send({ message: err.message });
+        }
+        return res.code(500).send("Failed to search folder");
     }
 };
 

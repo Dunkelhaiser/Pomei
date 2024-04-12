@@ -1,4 +1,4 @@
-import { and, count, desc, eq, ilike } from "drizzle-orm";
+import { and, arrayOverlaps, count, desc, eq, ilike } from "drizzle-orm";
 import { NewFolderInput } from "shared-types";
 import { db } from "@/db/client.ts";
 import { folders, notes } from "@/db/schema.ts";
@@ -70,6 +70,24 @@ export const getFolderSize = async (folderId: string, userId: string) => {
     return folderSize[0].count;
 };
 
+export const getFolderSizeSearch = async (
+    folderId: string,
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title"
+) => {
+    const folderSize = await db
+        .select({ count: count() })
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.folderId, folderId),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        );
+    return folderSize[0].count;
+};
 export const searchFolder = async (name: string, userId: string) => {
     const foldersArr = await db
         .select()
@@ -141,6 +159,36 @@ export const loadFolderContentPaginated = async (
         .limit(limit);
 
     const totalCount = await getFolderSize(folderId, userId);
+    const pages = Math.ceil(totalCount / limit);
+    return {
+        notes: notesArr,
+        totalPages: pages,
+        totalCount,
+    };
+};
+
+export const searchFolderContent = async (
+    folderId: string,
+    userId: string,
+    input: string,
+    searchBy: "title" | "content" | "tags" = "title",
+    limit = 10,
+    page = 1
+) => {
+    const notesArr = await db
+        .select()
+        .from(notes)
+        .where(
+            and(
+                eq(notes.userId, userId),
+                eq(notes.folderId, folderId),
+                searchBy === "tags" ? arrayOverlaps(notes.tags, [input]) : ilike(notes[searchBy], `%${input}%`)
+            )
+        )
+        .orderBy(notes.title)
+        .offset((page - 1) * limit)
+        .limit(limit);
+    const totalCount = await getFolderSizeSearch(folderId, userId, input, searchBy);
     const pages = Math.ceil(totalCount / limit);
     return {
         notes: notesArr,
