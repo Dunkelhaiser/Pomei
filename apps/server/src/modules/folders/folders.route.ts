@@ -11,6 +11,7 @@ import {
     loadFolderContentHandler,
     loadFolderContentPaginatedHandler,
     reorderFolderHandler,
+    searchFolderContentHandler,
     searchFolderHandler,
 } from "./folders.controller.ts";
 import { authHandler } from "@/auth/auth.handler.ts";
@@ -151,7 +152,7 @@ export const foldersRoutes = async (app: FastifyInstance) => {
                 },
             },
         },
-        loadFolderContentPaginatedHandler
+        searchFolderContentHandler
     );
     app.withTypeProvider<ZodTypeProvider>().delete(
         "/:id",
