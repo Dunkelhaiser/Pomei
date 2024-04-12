@@ -5,6 +5,7 @@ import {
     GetFolderPaginatedInput,
     NewFolderInput,
 } from "shared-types/folders";
+import { GetNotePaginatedInput, NotesPaginated, SearchNotesPaginatedInput } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { api } from "../api";
 
@@ -34,4 +35,18 @@ export const deleteFolder = async (params: GetByIdInput) => {
 
 export const deleteFolderWithNotes = async (params: GetByIdInput) => {
     await api.delete(`folders/${params.id}/notes`, { credentials: "include" });
+};
+
+export const loadFolder = async (params: GetByIdInput, input: GetNotePaginatedInput) => {
+    const res = await api
+        .get(`folders/${params.id}`, { searchParams: input, credentials: "include" })
+        .json<NotesPaginated>();
+    return res;
+};
+
+export const searchFolderContent = async (params: GetByIdInput, input: SearchNotesPaginatedInput) => {
+    const res = await api
+        .get(`folders/${params.id}/search`, { searchParams: input, credentials: "include" })
+        .json<NotesPaginated>();
+    return res;
 };

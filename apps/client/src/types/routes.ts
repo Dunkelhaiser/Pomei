@@ -16,5 +16,5 @@ export const foldersParamsSchema = zod.object({
     search,
 });
 
-export type NotesRoutes = "/notes/" | "/_protected/archive" | "/_protected/bin";
+export type NotesRoutes = "/notes/" | "/_protected/archive" | "/_protected/bin" | "/_protected/folders/$folderId";
 export type FoldersRoutes = "/_protected/folders/";

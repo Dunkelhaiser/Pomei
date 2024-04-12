@@ -2,10 +2,20 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { HTTPError } from "ky";
 import { useContext } from "react";
 import { GetFolderInput, GetFolderPaginatedInput, NewFolderInput } from "shared-types/folders";
+import { GetNotePaginatedInput, SearchNotesPaginatedInput } from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
-import { createFolder, deleteFolder, deleteFolderWithNotes, editFolder, getFolders, searchFolders } from "./requests";
+import {
+    createFolder,
+    deleteFolder,
+    deleteFolderWithNotes,
+    editFolder,
+    getFolders,
+    loadFolder,
+    searchFolderContent,
+    searchFolders,
+} from "./requests";
 import { UserContext } from "@/context/User";
 
 export const useFolders = (input: GetFolderPaginatedInput) => {
@@ -120,6 +130,40 @@ export const useDeleteFolderWithNotes = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["folders"] });
             toast.success("Folder deleted successfully");
+        },
+    });
+};
+
+export const useLoadFolderInfinity = (params: GetByIdInput, input: GetNotePaginatedInput) => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useInfiniteQuery({
+        queryKey: ["folder", params, input],
+        queryFn: ({ pageParam }) => loadFolder(params, { ...input, page: pageParam }),
+        enabled: isAuthorized,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
+        },
+    });
+};
+
+export const useSearchFolderContent = (params: GetByIdInput, input: SearchNotesPaginatedInput) => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useInfiniteQuery({
+        queryKey: ["folder", "search", params, input],
+        queryFn: ({ pageParam }) => searchFolderContent(params, { ...input, page: pageParam }),
+        enabled: isAuthorized && input.title.length > 0,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (allPages.length < lastPage.totalPages) {
+                return allPages.length + 1;
+            }
+            return null;
         },
     });
 };
