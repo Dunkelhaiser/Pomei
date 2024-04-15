@@ -65,3 +65,8 @@ export const searchBin = async (input: SearchNotesPaginatedInput) => {
 export const emptyBin = async () => {
     await api.delete("notes/bin", { credentials: "include" });
 };
+
+export const addToFolder = async (params: GetByIdInput, input: GetByIdInput) => {
+    const res = await api.put(`notes/folder/${params.id}`, { json: input, credentials: "include" }).json<Note>();
+    return res;
+};

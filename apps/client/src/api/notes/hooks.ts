@@ -6,6 +6,7 @@ import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import {
+    addToFolder,
     archiveNote,
     deleteNote,
     duplicateNote,
@@ -229,6 +230,27 @@ export const useEmptyBin = () => {
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: ["notes", "bin"] });
             toast.success("Bin emptied successfully");
+        },
+    });
+};
+
+export const useAddToFolder = (params: GetByIdInput) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (input: GetByIdInput) => addToFolder(params, input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to add note to folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Note added to folder successfully");
         },
     });
 };
