@@ -26,9 +26,9 @@ const DeleteNote = ({ id, open, setOpen }: Props) => {
 
     const onSubmit = async () => {
         if (permanently) {
-            deleteNoteHandler.mutate({ id });
+            await deleteNoteHandler.mutateAsync({ id });
         } else {
-            moveToBinHandler.mutate({
+            await moveToBinHandler.mutateAsync({
                 input: { moveToBin: true },
                 params: { id },
             });
@@ -56,7 +56,7 @@ const DeleteNote = ({ id, open, setOpen }: Props) => {
                     <Button
                         type="button"
                         variant="destructive"
-                        loading={deleteNoteHandler.isPending}
+                        loading={deleteNoteHandler.isPending || moveToBinHandler.isPending}
                         onClick={onSubmit}
                     >
                         Delete
