@@ -19,11 +19,12 @@ interface LinkProps {
     title: string;
     icon: React.ReactNode;
     to: string;
+    search?: Record<string, string>;
     close?: () => void;
     disabled?: boolean;
 }
 
-const Link = ({ title, icon, to, close, disabled }: LinkProps) => (
+const Link = ({ title, icon, to, search, close, disabled }: LinkProps) => (
     <RouterLink
         className={cn(
             "flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors",
@@ -32,6 +33,7 @@ const Link = ({ title, icon, to, close, disabled }: LinkProps) => (
             disabled && "cursor-not-allowed opacity-50"
         )}
         to={to}
+        search={search}
         onClick={close}
     >
         {icon}
@@ -84,7 +86,12 @@ const Sidebar = () => {
 
     const links = [
         { title: "Home", icon: <Home size={16} />, to: "/" },
-        { title: "Notes", icon: <StickyNote size={16} />, to: "/notes" },
+        {
+            title: "Notes",
+            icon: <StickyNote size={16} />,
+            to: "/notes",
+            search: { sort: "title", order: "ascending", searchBy: "title" },
+        },
         { title: "Folders", icon: <Folder size={16} />, to: "/folders", disabled: !user },
         { title: "Archive", icon: <Archive size={16} />, to: "/archive", disabled: !user },
         { title: "Bin", icon: <Trash size={16} />, to: "/bin", disabled: !user },

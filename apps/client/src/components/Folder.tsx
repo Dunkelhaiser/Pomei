@@ -17,6 +17,7 @@ const Folder = ({ folder }: FolderProps) => {
             <CardHeader className="grid grid-cols-[18px_1fr_18px] gap-2 pt-0">
                 <CardLinkAnchor
                     to="/folders/$folderId"
+                    search={{ sort: "title", order: "ascending", searchBy: "title" }}
                     params={{ folderId: folder.id }}
                     className="col-start-2 text-center text-lg font-medium"
                 >
