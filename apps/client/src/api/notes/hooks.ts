@@ -15,6 +15,7 @@ import {
     getBin,
     getNotes,
     moveToBin,
+    removeFromFolder,
     searchArchive,
     searchBin,
     searchNotes,
@@ -251,6 +252,27 @@ export const useAddToFolder = (params: GetByIdInput) => {
             void queryClient.invalidateQueries({ queryKey: ["notes"] });
             void queryClient.invalidateQueries({ queryKey: ["folders"] });
             toast.success("Note added to folder successfully");
+        },
+    });
+};
+
+export const useRemoveFromFolder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (params: GetByIdInput) => removeFromFolder(params),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to remove note to folder");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["folders"] });
+            toast.success("Note remove from folder successfully");
         },
     });
 };

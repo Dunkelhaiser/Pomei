@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Note as NoteType } from "shared-types/notes";
-import { useArchiveNote, useDeleteNote, useDuplicateNote, useMoveToBin } from "@/api/notes/hooks";
+import { useArchiveNote, useDeleteNote, useDuplicateNote, useMoveToBin, useRemoveFromFolder } from "@/api/notes/hooks";
 import AddToFolder from "@/dialogs/AddToFolder";
 import DeleteNote from "@/dialogs/DeleteNote";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, EllipsisBtn } from "@/ui/DropdownMenu";
@@ -17,6 +17,7 @@ const NoteMenu = ({ note }: NoteProps) => {
     const duplicateNoteHandler = useDuplicateNote();
     const moveToBinHandler = useMoveToBin();
     const deleteNoteHandler = useDeleteNote();
+    const removeFromFolderHandler = useRemoveFromFolder();
 
     return (
         <>
@@ -33,7 +34,7 @@ const NoteMenu = ({ note }: NoteProps) => {
                     {!note.isArchived &&
                         !note.isDeleted &&
                         (note.folderId ? (
-                            <DropdownMenuItem onClick={() => setOpenAddToFolder(true)}>
+                            <DropdownMenuItem onClick={() => removeFromFolderHandler.mutate({ id: note.id })}>
                                 Remove From Folder
                             </DropdownMenuItem>
                         ) : (

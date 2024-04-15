@@ -70,3 +70,8 @@ export const addToFolder = async (params: GetByIdInput, input: GetByIdInput) => 
     const res = await api.put(`notes/folder/${params.id}`, { json: input, credentials: "include" }).json<Note>();
     return res;
 };
+
+export const removeFromFolder = async (params: GetByIdInput) => {
+    const res = await api.delete(`notes/folder/${params.id}`, { credentials: "include" }).json<Note>();
+    return res;
+};
