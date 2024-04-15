@@ -3,7 +3,6 @@ import {
     GetByIdInput,
     OrderInput,
     ArchiveInput,
-    FolderIdInput,
     GetNotePaginatedInput,
     GetNotesInput,
     MoveToBinInput,
@@ -337,11 +336,11 @@ export const getBinHandler = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 export const addToFolderHandler = async (
-    req: FastifyRequest<{ Params: GetByIdInput; Body: FolderIdInput }>,
+    req: FastifyRequest<{ Params: GetByIdInput; Body: GetByIdInput }>,
     res: FastifyReply
 ) => {
     try {
-        const note = await addToFolder(req.params.id, req.body.folderId, req.user.id);
+        const note = await addToFolder(req.params.id, req.body.id, req.user.id);
         if (note) {
             return res.code(200).send(note);
         }

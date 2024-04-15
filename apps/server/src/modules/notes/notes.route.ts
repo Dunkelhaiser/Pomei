@@ -32,7 +32,6 @@ const {
     emptySchema,
     messageSchema,
     archiveSchema,
-    folderIdSchema,
     getNotePaginatedSchema,
     getNotesSchema,
     moveToBinSchema,
@@ -415,7 +414,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
                 tags: ["notes", "folders"],
                 description: "Add note to folder",
                 params: getByIdSchema,
-                body: folderIdSchema,
+                body: getByIdSchema,
                 response: {
                     200: noteSchema,
                     400: messageSchema,
