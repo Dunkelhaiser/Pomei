@@ -57,7 +57,7 @@ export const searchNotesPaginatedSchema = zod.object({
     limit: getPaginated.limit,
 });
 
-export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order: number };
+export type NewNoteInput = zod.infer<typeof newNoteSchema> & { order?: number };
 export type GetNotePaginatedInput = zod.infer<typeof getNotePaginatedSchema>;
 export type ArchiveInput = zod.infer<typeof archiveSchema>;
 export type MoveToBinInput = zod.infer<typeof moveToBinSchema>;
