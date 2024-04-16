@@ -1,6 +1,8 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Helmet } from "react-helmet-async";
 import { useNote } from "@/api/notes/hooks";
+import Editor from "@/components/Editor";
+import Input from "@/ui/Input";
 import Loader from "@/ui/Loader";
 
 const Page = () => {
@@ -24,7 +26,13 @@ const Page = () => {
             <Helmet>
                 <title>Pomei - {note.data?.title}</title>
             </Helmet>
-            Hello {JSON.stringify(note.data)}!
+            <Input
+                className="mb-4 bg-card px-4 py-5 text-2xl text-card-foreground"
+                placeholder="Title"
+                value={note.data?.title ?? ""}
+                readOnly={note.data?.isDeleted}
+            />
+            <Editor initialValue={note.data?.content ?? ""} readOnly={note.data?.isDeleted} />
         </div>
     );
 };
