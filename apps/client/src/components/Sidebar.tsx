@@ -19,7 +19,7 @@ interface LinkProps {
     title: string;
     icon: React.ReactNode;
     to: string;
-    search?: Record<string, string>;
+    search?: Record<string, string | undefined>;
     close?: () => void;
     disabled?: boolean;
 }
@@ -92,9 +92,27 @@ const Sidebar = () => {
             to: "/notes",
             search: { sort: "title", order: "ascending", searchBy: "title" },
         },
-        { title: "Folders", icon: <Folder size={16} />, to: "/folders", disabled: !user },
-        { title: "Archive", icon: <Archive size={16} />, to: "/archive", disabled: !user },
-        { title: "Bin", icon: <Trash size={16} />, to: "/bin", disabled: !user },
+        {
+            title: "Folders",
+            icon: <Folder size={16} />,
+            to: "/folders",
+            disabled: !user,
+            search: { sort: "name", order: "ascending" },
+        },
+        {
+            title: "Archive",
+            icon: <Archive size={16} />,
+            to: "/archive",
+            disabled: !user,
+            search: { sort: "title", order: "ascending", searchBy: "title" },
+        },
+        {
+            title: "Bin",
+            icon: <Trash size={16} />,
+            to: "/bin",
+            disabled: !user,
+            search: { sort: "title", order: "ascending", searchBy: "title" },
+        },
     ] satisfies LinkProps[];
 
     return (
