@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
 import { useNotesInfinity, useSearchNotes } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import NotesLayout from "@/components/layouts/NotesLayout";
 import { notesParamsSchema } from "@/types/routes";
+import Button from "@/ui/Button";
 import { Section, SectionHeader } from "@/ui/Section";
 
 const Page = () => {
@@ -14,6 +16,11 @@ const Page = () => {
         <Section>
             <SectionHeader>Notes</SectionHeader>
             <NotesSearch from="/notes/" />
+            <Button aria-label="Create Note" size="floating" asChild>
+                <Link to="/notes/create">
+                    <Plus />
+                </Link>
+            </Button>
             <NotesLayout notes={notes} searchNotes={searchNotes} search={search} />
         </Section>
     );

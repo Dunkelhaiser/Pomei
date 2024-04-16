@@ -15,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as NotesIndexImport } from "./routes/notes/index";
+import { Route as NotesCreateImport } from "./routes/notes/create";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 import { Route as ProtectedBinImport } from "./routes/_protected/bin";
 import { Route as ProtectedArchiveImport } from "./routes/_protected/archive";
@@ -72,6 +73,11 @@ const ProtectedSettingsLazyRoute = ProtectedSettingsLazyImport.update({
     path: "/settings",
     getParentRoute: () => ProtectedRoute,
 } as any).lazy(() => import("./routes/_protected/settings.lazy").then((d) => d.Route));
+
+const NotesCreateRoute = NotesCreateImport.update({
+    path: "/notes/create",
+    getParentRoute: () => rootRoute,
+} as any);
 
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
@@ -161,6 +167,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
+        "/notes/create": {
+            preLoaderRoute: typeof NotesCreateImport;
+            parentRoute: typeof rootRoute;
+        };
         "/_protected/settings": {
             preLoaderRoute: typeof ProtectedSettingsLazyImport;
             parentRoute: typeof ProtectedImport;
@@ -240,6 +250,7 @@ export const routeTree = rootRoute.addChildren([
             AuthAuthResetpasswordTokenLazyRoute,
         ]),
     ]),
+    NotesCreateRoute,
     NotesNoteIdLazyRoute,
     NotesIndexRoute,
 ]);
