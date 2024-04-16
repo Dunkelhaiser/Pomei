@@ -267,23 +267,15 @@ const plugins = createPlugins(
 );
 
 interface Props {
-    initialValue?: string;
+    initialValue?: { id: string; type: string; children: { text: string }[] }[];
     readOnly?: boolean;
+    onChange?: ((value: { id: string; type: string; children: { text: string }[] }[]) => void) | undefined;
 }
 
-const Editor = ({ initialValue = "", readOnly }: Props) => {
+const Editor = ({ initialValue = [{ id: "1", type: "p", children: [{ text: "" }] }], readOnly, onChange }: Props) => {
     return (
         <TooltipProvider>
-            <Plate
-                plugins={plugins}
-                initialValue={[
-                    {
-                        id: "1",
-                        type: "p",
-                        children: [{ text: initialValue }],
-                    },
-                ]}
-            >
+            <Plate onChange={onChange} plugins={plugins} initialValue={initialValue}>
                 <FixedToolbar>
                     <FixedToolbarButtons />
                 </FixedToolbar>

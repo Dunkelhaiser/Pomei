@@ -2,6 +2,7 @@ import {
     ArchiveInput,
     GetNotePaginatedInput,
     MoveToBinInput,
+    NewNoteInput,
     Note,
     NotesPaginated,
     SearchNotesPaginatedInput,
@@ -78,5 +79,10 @@ export const removeFromFolder = async (params: GetByIdInput) => {
 
 export const getNote = async (params: GetByIdInput) => {
     const res = await api.get(`notes/${params.id}`, { credentials: "include" }).json<Note>();
+    return res;
+};
+
+export const createNote = async (input: NewNoteInput) => {
+    const res = await api.post("notes", { json: input, credentials: "include" }).json<Note>();
     return res;
 };

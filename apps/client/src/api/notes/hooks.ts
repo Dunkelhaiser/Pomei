@@ -1,13 +1,21 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { HTTPError } from "ky";
 import { useContext } from "react";
-import { ArchiveInput, GetNotePaginatedInput, MoveToBinInput, SearchNotesPaginatedInput } from "shared-types/notes";
+import {
+    ArchiveInput,
+    GetNotePaginatedInput,
+    MoveToBinInput,
+    NewNoteInput,
+    SearchNotesPaginatedInput,
+} from "shared-types/notes";
 import { GetByIdInput } from "shared-types/shared";
 import { MessageResponse } from "shared-types/utilSchema";
 import { toast } from "sonner";
 import {
     addToFolder,
     archiveNote,
+    createNote,
     deleteNote,
     duplicateNote,
     emptyBin,
@@ -285,5 +293,27 @@ export const useNote = (params: GetByIdInput) => {
         queryKey: ["note", params],
         queryFn: () => getNote(params),
         enabled: isAuthorized,
+    });
+};
+
+export const useCreateNote = () => {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    return useMutation({
+        mutationFn: (input: NewNoteInput) => createNote(input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to create new note");
+        },
+        onSuccess: async (data) => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            toast.success("Note created successfully");
+            await navigate({ to: "/notes/$noteId", params: { noteId: data.id } });
+        },
     });
 };

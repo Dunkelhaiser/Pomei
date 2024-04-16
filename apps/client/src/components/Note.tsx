@@ -2,6 +2,7 @@ import { Note as NoteType } from "shared-types/notes";
 import NoteMenu from "@/dropdowns/NoteMenu";
 import { CardContent, CardHeader } from "@/ui/Card";
 import { CardLink, CardLinkAnchor } from "@/ui/CardLink";
+import { extractRichText } from "@/utils/extractRichText";
 import { cn } from "@/utils/utils";
 
 interface Props {
@@ -28,7 +29,7 @@ const Note = ({ note, lineClamp }: Props) => {
             </CardHeader>
             <CardContent className="space-y-3">
                 <p className={cn("text-sm text-muted-foreground dark:text-card-foreground/50", lineClamp)}>
-                    {note.content}
+                    {extractRichText(note.content)}
                 </p>
                 <p className="text-xs text-muted-foreground/95">{date}</p>
             </CardContent>

@@ -9,6 +9,12 @@ const Page = () => {
     const params = Route.useParams();
     const note = useNote({ id: params.noteId });
 
+    const content = JSON.parse(note.data?.content?.length ? note.data.content : "[]") as {
+        id: string;
+        type: string;
+        children: { text: string }[];
+    }[];
+
     if (note.isLoading) {
         return (
             <div className="absolute left-1/2 top-1/2 translate-x-1/2 translate-y-1/2">
@@ -32,7 +38,7 @@ const Page = () => {
                 value={note.data?.title ?? ""}
                 readOnly={note.data?.isDeleted}
             />
-            <Editor initialValue={note.data?.content ?? ""} readOnly={note.data?.isDeleted} />
+            <Editor initialValue={content} readOnly={note.data?.isDeleted} />
         </div>
     );
 };
