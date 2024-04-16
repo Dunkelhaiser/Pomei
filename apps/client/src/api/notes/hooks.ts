@@ -13,6 +13,7 @@ import {
     emptyBin,
     getArchive,
     getBin,
+    getNote,
     getNotes,
     moveToBin,
     removeFromFolder,
@@ -274,5 +275,15 @@ export const useRemoveFromFolder = () => {
             void queryClient.invalidateQueries({ queryKey: ["folders"] });
             toast.success("Note remove from folder successfully");
         },
+    });
+};
+
+export const useNote = (params: GetByIdInput) => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useQuery({
+        queryKey: ["note", params],
+        queryFn: () => getNote(params),
+        enabled: isAuthorized,
     });
 };

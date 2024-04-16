@@ -75,3 +75,8 @@ export const removeFromFolder = async (params: GetByIdInput) => {
     const res = await api.delete(`notes/folder/${params.id}`, { credentials: "include" }).json<Note>();
     return res;
 };
+
+export const getNote = async (params: GetByIdInput) => {
+    const res = await api.get(`notes/${params.id}`, { credentials: "include" }).json<Note>();
+    return res;
+};
