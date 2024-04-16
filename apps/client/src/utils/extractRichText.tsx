@@ -22,7 +22,7 @@ export const extractRichText = (json: string | null) => {
             if (node.children) {
                 node.children.forEach((child) => {
                     if (child.text) {
-                        textString += ` ${child.text}`;
+                        textString += child.text;
                     }
                     if (child.children) {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
