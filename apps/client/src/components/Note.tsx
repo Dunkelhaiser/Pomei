@@ -27,7 +27,7 @@ const Note = ({ note, lineClamp }: Props) => {
                 </CardLinkAnchor>
                 <NoteMenu note={note} />
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="flex grow flex-col justify-between gap-3">
                 <p className={cn("text-sm text-muted-foreground dark:text-card-foreground/50", lineClamp)}>
                     {extractRichText(note.content)}
                 </p>

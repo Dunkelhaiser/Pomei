@@ -9,7 +9,7 @@ const CardLink = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>
             ref={ref}
             className={cn(
                 `
-                    group relative max-w-full translate-y-0 scroll-p-6 ring-accent-foreground ring-offset-background transition duration-300
+                    group relative flex max-w-full translate-y-0 scroll-p-6 flex-col ring-accent-foreground ring-offset-background transition duration-300
                     hover:translate-y-[-1.5px]
                     focus-visible:translate-y-[-1.5px]
                     group-focus-visible:translate-y-[-1.5px]
