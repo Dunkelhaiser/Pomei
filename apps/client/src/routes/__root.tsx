@@ -1,6 +1,7 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { useContext } from "react";
+import { Helmet } from "react-helmet-async";
 import Sidebar from "@/components/Sidebar";
 import { ThemeContext } from "@/context/Theme";
 import Button from "@/ui/Button";
@@ -41,6 +42,9 @@ const NotFound = () => (
             lg:flex lg:h-full lg:flex-col lg:items-center lg:justify-center lg:px-8
         `}
     >
+        <Helmet>
+            <title>Pomei - Not Found</title>
+        </Helmet>
         <h1
             className={`
                 block text-7xl font-bold text-gray-800

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { SignUpInputWithPasswordConfirmation, signUpSchemaWithPasswordConfirmation } from "shared-types/auth";
 import { useSignUp } from "@/api/auth/hooks";
@@ -26,6 +27,9 @@ const Page = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Pomei - Sign Up</title>
+            </Helmet>
             <CardHeader>
                 <CardTitle className="text-2xl">Sign Up</CardTitle>
             </CardHeader>

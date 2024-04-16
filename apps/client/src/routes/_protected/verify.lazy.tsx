@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { VerificationCodeInput, verificationCodeSchema } from "shared-types/auth";
 import { useResendVerificationCode, useVerify } from "@/api/auth/hooks";
@@ -38,6 +39,9 @@ const Page = () => {
                 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2
             `}
         >
+            <Helmet>
+                <title>Pomei - Verify Account</title>
+            </Helmet>
             <CardHeader>
                 <CardTitle className="text-2xl">Verify Account</CardTitle>
             </CardHeader>

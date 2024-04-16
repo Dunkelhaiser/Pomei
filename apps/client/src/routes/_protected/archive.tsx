@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useGetArchive, useSearchArchive } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import NotesLayout from "@/components/layouts/NotesLayout";
@@ -11,6 +12,9 @@ const Page = () => {
     const searchArchive = useSearchArchive({ page: 1, limit: 4, title: search ?? "", searchBy });
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Archive</title>
+            </Helmet>
             <SectionHeader>Archive</SectionHeader>
             <NotesSearch from="/_protected/archive" />
             <NotesLayout notes={archive} searchNotes={searchArchive} search={search} />

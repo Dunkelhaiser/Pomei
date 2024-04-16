@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
+import { Helmet } from "react-helmet-async";
 import { useFolders } from "@/api/folders/hooks";
 import { useNotes } from "@/api/notes/hooks";
 import Folder from "@/components/Folder";
@@ -15,6 +16,9 @@ const Page = () => {
 
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Home</title>
+            </Helmet>
             <SectionHeader>Home</SectionHeader>
             <SectionContent className="space-y-8">
                 <section className="space-y-4">

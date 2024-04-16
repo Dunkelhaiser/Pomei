@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useNote } from "@/api/notes/hooks";
 import Loader from "@/ui/Loader";
 
@@ -18,7 +19,14 @@ const Page = () => {
         return <div>Note does not exist</div>;
     }
 
-    return <div>Hello {JSON.stringify(note.data)}!</div>;
+    return (
+        <div>
+            <Helmet>
+                <title>Pomei - {note.data?.title}</title>
+            </Helmet>
+            Hello {JSON.stringify(note.data)}!
+        </div>
+    );
 };
 
 export const Route = createLazyFileRoute("/notes/$noteId")({

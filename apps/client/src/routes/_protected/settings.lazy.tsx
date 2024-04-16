@@ -1,4 +1,5 @@
 import { Link, Outlet, createLazyFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useSignOut } from "@/api/auth/hooks";
 import Button from "@/ui/Button";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
@@ -22,6 +23,9 @@ const Page = () => {
 
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Settings</title>
+            </Helmet>
             <SectionHeader>Settings</SectionHeader>
             <SectionContent
                 className={`

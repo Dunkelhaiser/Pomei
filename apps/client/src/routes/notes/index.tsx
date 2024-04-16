@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { useNotesInfinity, useSearchNotes } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import NotesLayout from "@/components/layouts/NotesLayout";
@@ -14,6 +15,9 @@ const Page = () => {
 
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Notes</title>
+            </Helmet>
             <SectionHeader>Notes</SectionHeader>
             <NotesSearch from="/notes/" />
             <Button aria-label="Create Note" size="floating" asChild>

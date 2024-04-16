@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { useGetFoldersInfinity, useSearchFolders } from "@/api/folders/hooks";
 import NewFolder from "@/components/dialogs/NewFolder";
 import Folder from "@/components/Folder";
@@ -23,6 +24,9 @@ const Page = () => {
 
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Folders</title>
+            </Helmet>
             <SectionHeader>Folders</SectionHeader>
             <FoldersSearch />
             <SectionContent

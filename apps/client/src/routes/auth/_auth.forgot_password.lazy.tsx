@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { EmailInput, emailSchema } from "shared-types/auth";
 import { useResetPasswordRequest } from "@/api/auth/hooks";
@@ -24,6 +25,9 @@ const Page = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Pomei - Forgot Password</title>
+            </Helmet>
             <CardHeader>
                 <CardTitle className="text-2xl">Forgot Password</CardTitle>
             </CardHeader>

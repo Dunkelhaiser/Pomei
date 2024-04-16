@@ -35,6 +35,7 @@
         "next-themes": "^0.3.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-helmet-async": "^2.0.4",
         "react-hook-form": "^7.51.2",
         "shared-types": "workspace:*",
         "sonner": "^1.4.41",

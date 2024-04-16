@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Helmet } from "react-helmet-async";
 import { useGetBin, useSearchBin } from "@/api/notes/hooks";
 import NotesSearch from "@/components/headers/NotesSearch";
 import NotesLayout from "@/components/layouts/NotesLayout";
@@ -13,6 +14,9 @@ const Page = () => {
 
     return (
         <Section>
+            <Helmet>
+                <title>Pomei - Bin</title>
+            </Helmet>
             <SectionHeader>Bin</SectionHeader>
             <NotesSearch from="/_protected/bin" />
             <SectionSubHeader>
