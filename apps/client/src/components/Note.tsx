@@ -4,7 +4,7 @@ import NoteMenu from "@/dropdowns/NoteMenu";
 import { CardContent, CardHeader } from "@/ui/Card";
 import { CardLink, CardLinkAnchor } from "@/ui/CardLink";
 import { extractRichText } from "@/utils/extractRichText";
-import { cn } from "@/utils/utils";
+import { cn, formatDate } from "@/utils/utils";
 
 interface Props {
     note: NoteType;
@@ -13,13 +13,7 @@ interface Props {
 }
 
 const Note = ({ note, lineClamp, showTags = true }: Props) => {
-    const date = new Date(note.updatedAt).toLocaleDateString(undefined, {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    });
+    const date = formatDate(note.updatedAt);
 
     return (
         <CardLink>
