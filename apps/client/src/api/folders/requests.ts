@@ -50,3 +50,8 @@ export const searchFolderContent = async (params: GetByIdInput, input: SearchNot
         .json<NotesPaginated>();
     return res;
 };
+
+export const getFolderInfo = async (params: GetByIdInput) => {
+    const res = await api.get(`folders/${params.id}/info`, { credentials: "include" }).json<Folder>();
+    return res;
+};

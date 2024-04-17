@@ -11,6 +11,7 @@ import {
     deleteFolder,
     deleteFolderWithNotes,
     editFolder,
+    getFolderInfo,
     getFolders,
     loadFolder,
     searchFolderContent,
@@ -165,5 +166,15 @@ export const useSearchFolderContent = (params: GetByIdInput, input: SearchNotesP
             }
             return null;
         },
+    });
+};
+
+export const useFolderInfo = (params: GetByIdInput) => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return useQuery({
+        queryKey: ["folder", "info", params],
+        queryFn: () => getFolderInfo(params),
+        enabled: isAuthorized,
     });
 };
