@@ -139,33 +139,6 @@ const Sidebar = () => {
                     >
                         <Menu size={20} />
                     </button>
-
-                    <ol className="ms-3 flex items-center whitespace-nowrap" aria-label="Breadcrumb">
-                        <li
-                            className={`
-                                flex items-center text-sm text-gray-800
-                                dark:text-gray-400
-                            `}
-                        >
-                            Home
-                        </li>
-                        {/* <ChevronRight
-                            size={16}
-                            className={`
-                                    mx-3 shrink-0 overflow-visible text-gray-400
-                                    dark:text-gray-600
-                                `}
-                        />
-                        <li
-                            className={`
-                                truncate text-sm font-semibold text-gray-800
-                                dark:text-gray-400
-                            `}
-                            aria-current="page"
-                        >
-                            Folder Name
-                        </li> */}
-                    </ol>
                 </div>
             </div>
 
