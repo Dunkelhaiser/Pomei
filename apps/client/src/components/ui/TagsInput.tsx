@@ -31,7 +31,7 @@ const TagsInput = forwardRef<HTMLInputElement, Props>(({ className, tags, setTag
         <div
             className={cn(
                 `
-                    flex h-10 w-full gap-1
+                    flex min-h-10 w-full flex-wrap gap-1
                     rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background transition file:border-0 file:bg-transparent file:text-sm file:font-medium
                     placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 
                     has-[input:focus-visible]:outline-none has-[input:focus-visible]:ring-2
