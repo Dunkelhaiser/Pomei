@@ -197,6 +197,14 @@ export const searchFolderContent = async (
     };
 };
 
+export const getFolderInfo = async (folderId: string, userId: string) => {
+    const folder = await getFolderById(folderId, userId);
+    if (!folder) {
+        return null;
+    }
+    return folder;
+};
+
 export const deleteFolder = async (folderId: string, userId: string) => {
     const folder = await getFolderById(folderId, userId);
     if (!folder) {

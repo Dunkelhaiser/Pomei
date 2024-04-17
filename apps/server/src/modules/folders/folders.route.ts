@@ -8,6 +8,7 @@ import {
     editFolderHandler,
     getAllFoldersHandler,
     getAllFoldersPaginatedHandler,
+    getFolderInfoHandler,
     loadFolderContentHandler,
     loadFolderContentPaginatedHandler,
     reorderFolderHandler,
@@ -135,6 +136,23 @@ export const foldersRoutes = async (app: FastifyInstance) => {
             },
         },
         loadFolderContentPaginatedHandler
+    );
+    app.withTypeProvider<ZodTypeProvider>().get(
+        "/:id/info",
+        {
+            preHandler: authHandler,
+            schema: {
+                tags: ["folders"],
+                description: "Get folder info",
+                params: getByIdSchema,
+                response: {
+                    200: folderSchema,
+                    400: messageSchema,
+                    500: messageSchema,
+                },
+            },
+        },
+        getFolderInfoHandler
     );
     app.withTypeProvider<ZodTypeProvider>().get(
         "/:id/search",

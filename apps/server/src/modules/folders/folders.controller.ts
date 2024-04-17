@@ -15,6 +15,7 @@ import {
     editFolder,
     getAllFolders,
     getAllFoldersPaginated,
+    getFolderInfo,
     loadFolderContent,
     loadFolderContentPaginated,
     reorderFolder,
@@ -102,6 +103,18 @@ export const loadFolderContentPaginatedHandler = async (
             return res.code(400).send({ message: err.message });
         }
         return res.code(500).send("Failed to get folder content");
+    }
+};
+
+export const getFolderInfoHandler = async (req: FastifyRequest<{ Params: GetByIdInput }>, res: FastifyReply) => {
+    try {
+        const folder = await getFolderInfo(req.params.id, req.user.id);
+        if (folder) {
+            return res.code(200).send(folder);
+        }
+        return res.code(404).send({ message: "Folder not found" });
+    } catch (err) {
+        return res.code(500).send("Failed to get folder info");
     }
 };
 
