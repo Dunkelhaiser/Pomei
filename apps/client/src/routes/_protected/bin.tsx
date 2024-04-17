@@ -22,7 +22,7 @@ const Page = () => {
             <SectionSubHeader>
                 <EmptyBin />
             </SectionSubHeader>
-            <NotesLayout notes={bin} searchNotes={searchBin} search={search} />
+            <NotesLayout notes={bin} searchNotes={searchBin} search={search} emptyMessage="Bin is empty" />
         </Section>
     );
 };

@@ -17,6 +17,7 @@ interface NotesQuery {
 interface Props extends NotesQuery {
     searchNotes: InfiniteNote;
     search?: string;
+    emptyMessage?: string;
 }
 
 const DesktopLayout = forwardRef<HTMLDivElement, NotesQuery>(({ notes }, ref) => {
@@ -109,7 +110,7 @@ const MobileLayout = forwardRef<HTMLDivElement, NotesQuery>(({ notes }, ref) => 
 });
 MobileLayout.displayName = "MobileLayout";
 
-const NotesLayout = ({ notes, searchNotes, search }: Props) => {
+const NotesLayout = ({ notes, searchNotes, search, emptyMessage = "No notes found" }: Props) => {
     const { isIntersecting, ref } = useIntersection({
         threshold: 0,
     });
@@ -148,6 +149,8 @@ const NotesLayout = ({ notes, searchNotes, search }: Props) => {
                 )
             ) : notes.isLoading ? (
                 <Loader className="col-span-full self-center justify-self-center" />
+            ) : notes.data?.pages[0].totalCount === 0 ? (
+                <p>{emptyMessage}</p>
             ) : (
                 <>
                     {desktop && <DesktopLayout notes={notes} ref={ref} />}

@@ -14,7 +14,7 @@ const Page = () => {
         <Section>
             <SectionHeader>Specific Folder</SectionHeader>
             <NotesSearch from="/_protected/folders/$folderId" />
-            <NotesLayout notes={folder} searchNotes={searchFolder} search={search} />
+            <NotesLayout notes={folder} searchNotes={searchFolder} search={search} emptyMessage="Folder is empty" />
         </Section>
     );
 };

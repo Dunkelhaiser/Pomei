@@ -17,7 +17,7 @@ const Page = () => {
             </Helmet>
             <SectionHeader>Archive</SectionHeader>
             <NotesSearch from="/_protected/archive" />
-            <NotesLayout notes={archive} searchNotes={searchArchive} search={search} />
+            <NotesLayout notes={archive} searchNotes={searchArchive} search={search} emptyMessage="Archive is empty" />
         </Section>
     );
 };
