@@ -31,7 +31,7 @@ const Page = () => {
             />
             <TagsInput className="mb-2 bg-card text-card-foreground" tags={tags} setTags={setTags} />
             <Editor onChange={(val) => setContent(JSON.stringify(val))} />
-            <Button className="mt-4" type="button" onClick={createNote}>
+            <Button className="mt-4" type="button" onClick={createNote} loading={createNoteHandler.isPending}>
                 Create
             </Button>
         </div>

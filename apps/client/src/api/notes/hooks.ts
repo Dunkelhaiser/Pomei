@@ -18,6 +18,7 @@ import {
     createNote,
     deleteNote,
     duplicateNote,
+    editNote,
     emptyBin,
     getArchive,
     getBin,
@@ -314,6 +315,27 @@ export const useCreateNote = () => {
             void queryClient.invalidateQueries({ queryKey: ["notes"] });
             toast.success("Note created successfully");
             await navigate({ to: "/notes/$noteId", params: { noteId: data.id } });
+        },
+    });
+};
+
+export const useEditNote = (params: GetByIdInput) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (input: NewNoteInput) => editNote(params, input),
+        onError: async (err) => {
+            if (err instanceof HTTPError) {
+                const error = (await err.response.json()) as MessageResponse;
+                toast.error(error.message);
+                return;
+            }
+            toast.error("Failed to edit note");
+        },
+        onSuccess: () => {
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["note"] });
+            toast.success("Note edited successfully");
         },
     });
 };

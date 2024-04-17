@@ -86,3 +86,8 @@ export const createNote = async (input: NewNoteInput) => {
     const res = await api.post("notes", { json: input, credentials: "include" }).json<Note>();
     return res;
 };
+
+export const editNote = async (params: GetByIdInput, input: NewNoteInput) => {
+    const res = await api.put(`notes/${params.id}`, { json: input, credentials: "include" }).json<Note>();
+    return res;
+};

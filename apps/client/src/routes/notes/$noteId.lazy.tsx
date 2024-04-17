@@ -1,8 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNote } from "@/api/notes/hooks";
+import { useEditNote, useNote } from "@/api/notes/hooks";
 import Editor from "@/components/Editor";
+import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import Loader from "@/ui/Loader";
 import TagsInput from "@/ui/TagsInput";
@@ -13,6 +14,12 @@ const Page = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState([] as string[]);
+
+    const editNoteHandler = useEditNote({ id: params.noteId });
+
+    const editNote = async () => {
+        await editNoteHandler.mutateAsync({ title, content, tags });
+    };
 
     useEffect(() => {
         setTitle(note.data?.title ?? "");
@@ -47,6 +54,7 @@ const Page = () => {
                 className="mb-4 bg-card px-4 py-6 text-2xl font-medium text-card-foreground"
                 placeholder="Title"
                 value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 readOnly={note.data?.isDeleted}
             />
             <TagsInput className="mb-2 bg-card text-card-foreground" tags={tags} setTags={setTags} />
@@ -55,6 +63,9 @@ const Page = () => {
                 readOnly={note.data?.isDeleted}
                 onChange={(val) => setContent(JSON.stringify(val))}
             />
+            <Button className="mt-4" type="button" onClick={editNote} loading={editNoteHandler.isPending}>
+                Save
+            </Button>
         </div>
     );
 };
