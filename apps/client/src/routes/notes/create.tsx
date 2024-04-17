@@ -12,10 +12,10 @@ const Page = () => {
     const [content, setContent] = useState("");
     const [tags, setTags] = useState([] as string[]);
 
-    const createNoteHandler = useCreateNote();
+    const createNote = useCreateNote();
 
-    const createNote = async () => {
-        await createNoteHandler.mutateAsync({ title, content, tags });
+    const createNoteHandler = async () => {
+        await createNote.mutateAsync({ title, content, tags });
     };
 
     return (
@@ -31,7 +31,7 @@ const Page = () => {
             />
             <TagsInput className="mb-2 bg-card text-card-foreground" tags={tags} setTags={setTags} />
             <Editor onChange={(val) => setContent(JSON.stringify(val))} />
-            <Button className="mt-4" type="button" onClick={createNote} loading={createNoteHandler.isPending}>
+            <Button className="mt-4" type="button" onClick={createNoteHandler} loading={createNote.isPending}>
                 Create
             </Button>
         </div>

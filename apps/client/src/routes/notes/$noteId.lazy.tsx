@@ -15,10 +15,10 @@ const Page = () => {
     const [content, setContent] = useState("");
     const [tags, setTags] = useState([] as string[]);
 
-    const editNoteHandler = useEditNote({ id: params.noteId });
+    const editNote = useEditNote({ id: params.noteId });
 
-    const editNote = async () => {
-        await editNoteHandler.mutateAsync({ title, content, tags });
+    const editNoteHandler = async () => {
+        await editNote.mutateAsync({ title, content, tags });
     };
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const Page = () => {
                 readOnly={note.data?.isDeleted}
                 onChange={(val) => setContent(JSON.stringify(val))}
             />
-            <Button className="mt-4" type="button" onClick={editNote} loading={editNoteHandler.isPending}>
+            <Button className="mt-4" type="button" onClick={editNoteHandler} loading={editNote.isPending}>
                 Save
             </Button>
         </div>
