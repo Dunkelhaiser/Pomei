@@ -35,7 +35,7 @@ const Page = () => {
                         ) : (
                             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                             notes.data?.notes?.map((note) => (
-                                <Note lineClamp="line-clamp-[6]" note={note} key={note.id} />
+                                <Note lineClamp="line-clamp-[6]" note={note} key={note.id} showTags={false} />
                             ))
                         )}
                     </div>
