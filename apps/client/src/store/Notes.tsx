@@ -18,3 +18,18 @@ export const latestNotesAtom = atom((get) =>
 );
 
 export const noteByIdAtom = atom((get) => (id: string) => get(notesAtom).find((n) => n.id === id));
+
+export const notesSearchAtom = atom(
+    (get) => (search: string, searchBy: "title" | "content") =>
+        get(notesAtom).filter((n) => n[searchBy].toLowerCase().includes(search.toLowerCase()))
+);
+
+export const notesOrderAtom = atom(
+    (get) => (orderBy: "title" | "createdAt" | "updatedAt", order: "ascending" | "descending") =>
+        get(notesAtom).sort((a, b) => {
+            if (order === "ascending") {
+                return a[orderBy].localeCompare(b[orderBy]);
+            }
+            return b[orderBy].localeCompare(a[orderBy]);
+        })
+);

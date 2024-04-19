@@ -1,4 +1,6 @@
 import { useNavigate, useSearch, useRouterState } from "@tanstack/react-router";
+import { useContext } from "react";
+import { UserContext } from "@/context/User";
 import OrderByMenu from "@/dropdowns/search/OrderByMenu";
 import SearchByMenu from "@/dropdowns/search/SearchByMenu";
 import SortByMenu from "@/dropdowns/search/SortByMenu";
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const NotesSearch = ({ from }: Props) => {
+    const { isAuthorized } = useContext(UserContext);
     const router = useRouterState();
     const { search } = useSearch({ from });
     const navigate = useNavigate();
@@ -29,11 +32,18 @@ const NotesSearch = ({ from }: Props) => {
             />
             <SearchByMenu
                 from={from}
-                searchBy={[
-                    { name: "Title", value: "title" },
-                    { name: "Tags", value: "tags" },
-                    { name: "Content", value: "content" },
-                ]}
+                searchBy={
+                    isAuthorized
+                        ? [
+                              { name: "Title", value: "title" },
+                              { name: "Tags", value: "tags" },
+                              { name: "Content", value: "content" },
+                          ]
+                        : [
+                              { name: "Title", value: "title" },
+                              { name: "Content", value: "content" },
+                          ]
+                }
             />
             <SortByMenu from={from} additionalSort={[{ name: "Title", value: "title" }]} />
             <OrderByMenu from={from} />
