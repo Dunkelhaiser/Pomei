@@ -32,6 +32,7 @@
             "@/dropdowns/*": ["./src/components/dropdowns/*"],
             "@/dialogs/*": ["./src/components/dialogs/*"],
             "@/components/*": ["./src/components/*"],
+            "@/store/*": ["./src/store/*"],
             "@/utils/*": ["./src/utils/*"],
             "@/api/*": ["./src/api/*"],
             "@/*": ["./src/*"],

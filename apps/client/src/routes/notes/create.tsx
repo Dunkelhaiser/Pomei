@@ -1,13 +1,57 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useSetAtom } from "jotai";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useCreateNote } from "@/api/notes/hooks";
 import Editor from "@/components/Editor";
+import { UserContext } from "@/context/User";
+import { notesAtom } from "@/store/Notes";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import TagsInput from "@/ui/TagsInput";
+import { generateId } from "@/utils/utils";
 
-const Page = () => {
+const CreateLocal = () => {
+    const navigate = Route.useNavigate();
+    const setNote = useSetAtom(notesAtom);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+    const createNote = async () => {
+        const id = generateId();
+        setNote((prev) => [
+            ...prev,
+            {
+                id,
+                title,
+                content,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+        ]);
+        await navigate({ to: "/notes/$noteId", params: { noteId: id } });
+    };
+
+    return (
+        <div>
+            <Helmet>
+                <title>Pomei - New Note</title>
+            </Helmet>
+            <Input
+                className="mb-4 bg-card px-4 py-6 text-2xl font-medium text-card-foreground"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+            />
+            <Editor onChange={(val) => setContent(JSON.stringify(val))} />
+            <Button className="mt-4" type="button" onClick={createNote}>
+                Create
+            </Button>
+        </div>
+    );
+};
+
+const Create = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState([] as string[]);
@@ -36,6 +80,12 @@ const Page = () => {
             </Button>
         </div>
     );
+};
+
+const Page = () => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return isAuthorized ? <Create /> : <CreateLocal />;
 };
 
 export const Route = createFileRoute("/notes/create")({

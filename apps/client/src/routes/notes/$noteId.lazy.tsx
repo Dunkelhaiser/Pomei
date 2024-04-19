@@ -1,9 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useAtomValue, useSetAtom } from "jotai";
 import { BadgePlus, PencilLine } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { toast } from "sonner";
 import { useEditNote, useNote } from "@/api/notes/hooks";
 import Editor from "@/components/Editor";
+import { UserContext } from "@/context/User";
+import { noteByIdAtom, notesAtom } from "@/store/Notes";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import Loader from "@/ui/Loader";
@@ -11,7 +15,7 @@ import TagsInput from "@/ui/TagsInput";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/Tooltip";
 import { formatDate } from "@/utils/utils";
 
-const Page = () => {
+const Note = () => {
     const params = Route.useParams();
     const note = useNote({ id: params.noteId });
     const [title, setTitle] = useState("");
@@ -93,6 +97,71 @@ const Page = () => {
     }
 
     return <div>Note does not exist</div>;
+};
+
+const LocalNote = () => {
+    const params = Route.useParams();
+    const getNoteById = useAtomValue(noteByIdAtom);
+    const setNote = useSetAtom(notesAtom);
+    const note = getNoteById(params.noteId);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+    useEffect(() => {
+        setTitle(note?.title ?? "");
+        setContent(note?.content ?? "");
+    }, [note?.content, note?.title]);
+
+    if (!note) {
+        return <div>Note does not exist</div>;
+    }
+
+    const contentData = JSON.parse(note.content.length ? note.content : "[]") as {
+        id: string;
+        type: string;
+        children: { text: string }[];
+    }[];
+
+    const editNote = () => {
+        setNote((prev) =>
+            prev.map((n) => {
+                if (n.id === note.id) {
+                    return {
+                        ...n,
+                        title,
+                        content,
+                        updatedAt: new Date().toISOString(),
+                    };
+                }
+                return n;
+            })
+        );
+        toast.success("Note edited successfully");
+    };
+
+    return (
+        <div>
+            <Helmet>
+                <title>Pomei - {note.title}</title>
+            </Helmet>
+            <Input
+                className="mb-4 bg-card px-4 py-6 text-2xl font-medium text-card-foreground"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+            />
+            <Editor onChange={(val) => setContent(JSON.stringify(val))} initialValue={contentData} />
+            <Button className="mt-4" type="button" onClick={editNote}>
+                Save
+            </Button>
+        </div>
+    );
+};
+
+const Page = () => {
+    const { isAuthorized } = useContext(UserContext);
+
+    return isAuthorized ? <Note /> : <LocalNote />;
 };
 
 export const Route = createLazyFileRoute("/notes/$noteId")({
