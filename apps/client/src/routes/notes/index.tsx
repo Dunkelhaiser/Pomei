@@ -25,7 +25,12 @@ const Page = () => {
                     <Plus />
                 </Link>
             </Button>
-            <NotesLayout notes={notes} searchNotes={searchNotes} search={search} />
+            <NotesLayout
+                notes={notes}
+                searchNotes={searchNotes}
+                search={search}
+                emptyMessage="You don't have any notes"
+            />
         </Section>
     );
 };

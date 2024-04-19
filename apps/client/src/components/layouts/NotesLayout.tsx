@@ -145,12 +145,12 @@ const NotesLayout = ({ notes, searchNotes, search, emptyMessage = "No notes foun
                         {mobile && <MobileLayout notes={searchNotes} ref={ref} />}
                     </>
                 ) : (
-                    <p>No notes found</p>
+                    <p className="text-muted-foreground">No notes found</p>
                 )
             ) : notes.isLoading ? (
                 <Loader className="col-span-full self-center justify-self-center" />
             ) : notes.data?.pages[0].totalCount === 0 ? (
-                <p>{emptyMessage}</p>
+                <p className="text-muted-foreground">{emptyMessage}</p>
             ) : (
                 <>
                     {desktop && <DesktopLayout notes={notes} ref={ref} />}
