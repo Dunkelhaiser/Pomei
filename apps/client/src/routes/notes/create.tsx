@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSetAtom } from "jotai";
 import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { toast } from "sonner";
 import { useCreateNote } from "@/api/notes/hooks";
 import Editor from "@/components/Editor";
 import { UserContext } from "@/context/User";
@@ -29,6 +30,7 @@ const CreateLocal = () => {
                 updatedAt: new Date().toISOString(),
             },
         ]);
+        toast.success("Note created successfully");
         await navigate({ to: "/notes/$noteId", params: { noteId: id } });
     };
 

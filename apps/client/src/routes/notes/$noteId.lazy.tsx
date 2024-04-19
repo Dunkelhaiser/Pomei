@@ -116,6 +116,8 @@ const LocalNote = () => {
         return <div>Note does not exist</div>;
     }
 
+    const dateUpdated = formatDate(new Date(note.updatedAt));
+    const dateCreated = formatDate(new Date(note.createdAt));
     const contentData = JSON.parse(note.content.length ? note.content : "[]") as {
         id: string;
         type: string;
@@ -145,11 +147,25 @@ const LocalNote = () => {
                 <title>Pomei - {note.title}</title>
             </Helmet>
             <Input
-                className="mb-4 bg-card px-4 py-6 text-2xl font-medium text-card-foreground"
+                className="mb-1 bg-card px-4 py-6 text-2xl font-medium text-card-foreground"
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger className="mb-4 ml-4 cursor-default">
+                        <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <PencilLine size={14} /> {dateUpdated}
+                        </p>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <BadgePlus size={14} /> {dateCreated}
+                        </p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <Editor onChange={(val) => setContent(JSON.stringify(val))} initialValue={contentData} />
             <Button className="mt-4" type="button" onClick={editNote}>
                 Save
