@@ -1,4 +1,5 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { Link, createLazyFileRoute } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useFolders } from "@/api/folders/hooks";
@@ -6,6 +7,8 @@ import { useNotes } from "@/api/notes/hooks";
 import Folder from "@/components/Folder";
 import Note from "@/components/Note";
 import { UserContext } from "@/context/User";
+import NewFolder from "@/dialogs/NewFolder";
+import Button from "@/ui/Button";
 import Loader from "@/ui/Loader";
 import { Section, SectionContent, SectionHeader } from "@/ui/Section";
 
@@ -22,7 +25,14 @@ const Page = () => {
             <SectionHeader>Home</SectionHeader>
             <SectionContent className="space-y-8">
                 <section className="space-y-4">
-                    <h2 className="text-xl font-semibold">Latest Notes</h2>
+                    <div className="flex items-center justify-between gap-2">
+                        <h2 className="text-xl font-semibold">Latest Notes</h2>
+                        <Button size="icon" variant="ghost" className="size-7" asChild aria-label="Create Note">
+                            <Link to="/notes/create">
+                                <Plus size={22} />
+                            </Link>
+                        </Button>
+                    </div>
                     <div
                         className={`
                             grid min-h-24 grid-cols-1 gap-4
@@ -42,7 +52,14 @@ const Page = () => {
                 </section>
                 {user?.id && (
                     <section className="space-y-4">
-                        <h2 className="text-xl font-semibold">Latest Folders</h2>
+                        <div className="flex items-center justify-between gap-2">
+                            <h2 className="text-xl font-semibold">Latest Folders</h2>
+                            <NewFolder>
+                                <Button size="icon" variant="ghost" className="size-7" aria-label="Create Note">
+                                    <Plus size={22} />
+                                </Button>
+                            </NewFolder>
+                        </div>
                         <div
                             className={`
                                 grid min-h-24 grid-cols-1 gap-4

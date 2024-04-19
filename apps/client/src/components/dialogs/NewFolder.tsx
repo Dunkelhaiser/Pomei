@@ -17,7 +17,11 @@ import {
     AlertDialogTrigger,
 } from "@/ui/Modal";
 
-const NewFolder = () => {
+interface Props {
+    children?: React.ReactNode;
+}
+
+const NewFolder = ({ children }: Props) => {
     const [open, setOpen] = useState(false);
     const form = useForm<NewFolderInput>({
         resolver: zodResolver(newFolderSchema),
@@ -37,9 +41,11 @@ const NewFolder = () => {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
-                <Button aria-label="Create Folder" size="floating">
-                    <Plus />
-                </Button>
+                {children ?? (
+                    <Button aria-label="Create Folder" size="floating">
+                        <Plus />
+                    </Button>
+                )}
             </AlertDialogTrigger>
             <AlertDialogContent onCloseAutoFocus={() => form.reset()}>
                 <AlertDialogHeader>
