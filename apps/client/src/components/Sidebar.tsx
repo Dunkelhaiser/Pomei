@@ -26,6 +26,7 @@ interface LinkProps {
 
 const Link = ({ title, icon, to, search, close, disabled }: LinkProps) => (
     <RouterLink
+        activeOptions={{ includeSearch: false }}
         className={cn(
             "flex w-full items-center gap-x-3 rounded-lg px-3 py-2 text-sm text-primary-foreground transition-colors",
             !disabled &&
