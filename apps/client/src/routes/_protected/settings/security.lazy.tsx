@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { NewPasswordInputWithConfirmation, newPasswordSchemaWithConfirmation } from "shared-types/auth";
 import { useChangePassword } from "@/api/auth/hooks";
@@ -84,6 +84,6 @@ const Page = () => {
     );
 };
 
-export const Route = createFileRoute("/_protected/settings/security")({
+export const Route = createLazyFileRoute("/_protected/settings/security")({
     component: Page,
 });

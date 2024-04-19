@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useSetAtom } from "jotai";
 import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -90,6 +90,6 @@ const Page = () => {
     return isAuthorized ? <Create /> : <CreateLocal />;
 };
 
-export const Route = createFileRoute("/notes/create")({
+export const Route = createLazyFileRoute("/notes/create")({
     component: Page,
 });

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { PasswordInput, passwordSchema } from "shared-types/auth";
 import { useDeleteAccount, useTerminateAllSessions } from "@/api/auth/hooks";
@@ -71,6 +71,6 @@ const Page = () => {
     );
 };
 
-export const Route = createFileRoute("/_protected/settings/danger_zone")({
+export const Route = createLazyFileRoute("/_protected/settings/danger_zone")({
     component: Page,
 });

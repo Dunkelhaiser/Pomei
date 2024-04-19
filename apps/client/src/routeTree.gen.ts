@@ -15,26 +15,26 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./routes/__root";
 import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as NotesIndexImport } from "./routes/notes/index";
-import { Route as NotesCreateImport } from "./routes/notes/create";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
 import { Route as ProtectedBinImport } from "./routes/_protected/bin";
 import { Route as ProtectedArchiveImport } from "./routes/_protected/archive";
 import { Route as ProtectedFoldersIndexImport } from "./routes/_protected/folders/index";
-import { Route as ProtectedSettingsSecurityImport } from "./routes/_protected/settings/security";
-import { Route as ProtectedSettingsGeneralImport } from "./routes/_protected/settings/general";
-import { Route as ProtectedSettingsDangerzoneImport } from "./routes/_protected/settings/danger_zone";
 import { Route as ProtectedFoldersFolderIdImport } from "./routes/_protected/folders/$folderId";
 
 // Create Virtual Routes
 
 const AuthImport = createFileRoute("/auth")();
 const IndexLazyImport = createFileRoute("/")();
+const NotesCreateLazyImport = createFileRoute("/notes/create")();
 const NotesNoteIdLazyImport = createFileRoute("/notes/$noteId")();
 const ProtectedVerifyLazyImport = createFileRoute("/_protected/verify")();
 const ProtectedSettingsLazyImport = createFileRoute("/_protected/settings")();
 const AuthAuthSignupLazyImport = createFileRoute("/auth/_auth/sign_up")();
 const AuthAuthSigninLazyImport = createFileRoute("/auth/_auth/sign_in")();
 const AuthAuthForgotpasswordLazyImport = createFileRoute("/auth/_auth/forgot_password")();
+const ProtectedSettingsSecurityLazyImport = createFileRoute("/_protected/settings/security")();
+const ProtectedSettingsGeneralLazyImport = createFileRoute("/_protected/settings/general")();
+const ProtectedSettingsDangerzoneLazyImport = createFileRoute("/_protected/settings/danger_zone")();
 const AuthAuthResetpasswordTokenLazyImport = createFileRoute("/auth/_auth/reset_password/$token")();
 
 // Create/Update Routes
@@ -59,6 +59,11 @@ const NotesIndexRoute = NotesIndexImport.update({
     getParentRoute: () => rootRoute,
 } as any);
 
+const NotesCreateLazyRoute = NotesCreateLazyImport.update({
+    path: "/notes/create",
+    getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/notes/create.lazy").then((d) => d.Route));
+
 const NotesNoteIdLazyRoute = NotesNoteIdLazyImport.update({
     path: "/notes/$noteId",
     getParentRoute: () => rootRoute,
@@ -73,11 +78,6 @@ const ProtectedSettingsLazyRoute = ProtectedSettingsLazyImport.update({
     path: "/settings",
     getParentRoute: () => ProtectedRoute,
 } as any).lazy(() => import("./routes/_protected/settings.lazy").then((d) => d.Route));
-
-const NotesCreateRoute = NotesCreateImport.update({
-    path: "/notes/create",
-    getParentRoute: () => rootRoute,
-} as any);
 
 const AuthAuthRoute = AuthAuthImport.update({
     id: "/_auth",
@@ -114,20 +114,20 @@ const AuthAuthForgotpasswordLazyRoute = AuthAuthForgotpasswordLazyImport.update(
     getParentRoute: () => AuthAuthRoute,
 } as any).lazy(() => import("./routes/auth/_auth.forgot_password.lazy").then((d) => d.Route));
 
-const ProtectedSettingsSecurityRoute = ProtectedSettingsSecurityImport.update({
+const ProtectedSettingsSecurityLazyRoute = ProtectedSettingsSecurityLazyImport.update({
     path: "/security",
     getParentRoute: () => ProtectedSettingsLazyRoute,
-} as any);
+} as any).lazy(() => import("./routes/_protected/settings/security.lazy").then((d) => d.Route));
 
-const ProtectedSettingsGeneralRoute = ProtectedSettingsGeneralImport.update({
+const ProtectedSettingsGeneralLazyRoute = ProtectedSettingsGeneralLazyImport.update({
     path: "/general",
     getParentRoute: () => ProtectedSettingsLazyRoute,
-} as any);
+} as any).lazy(() => import("./routes/_protected/settings/general.lazy").then((d) => d.Route));
 
-const ProtectedSettingsDangerzoneRoute = ProtectedSettingsDangerzoneImport.update({
+const ProtectedSettingsDangerzoneLazyRoute = ProtectedSettingsDangerzoneLazyImport.update({
     path: "/danger_zone",
     getParentRoute: () => ProtectedSettingsLazyRoute,
-} as any);
+} as any).lazy(() => import("./routes/_protected/settings/danger_zone.lazy").then((d) => d.Route));
 
 const ProtectedFoldersFolderIdRoute = ProtectedFoldersFolderIdImport.update({
     path: "/folders/$folderId",
@@ -167,10 +167,6 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof AuthAuthImport;
             parentRoute: typeof AuthRoute;
         };
-        "/notes/create": {
-            preLoaderRoute: typeof NotesCreateImport;
-            parentRoute: typeof rootRoute;
-        };
         "/_protected/settings": {
             preLoaderRoute: typeof ProtectedSettingsLazyImport;
             parentRoute: typeof ProtectedImport;
@@ -183,6 +179,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof NotesNoteIdLazyImport;
             parentRoute: typeof rootRoute;
         };
+        "/notes/create": {
+            preLoaderRoute: typeof NotesCreateLazyImport;
+            parentRoute: typeof rootRoute;
+        };
         "/notes/": {
             preLoaderRoute: typeof NotesIndexImport;
             parentRoute: typeof rootRoute;
@@ -192,15 +192,15 @@ declare module "@tanstack/react-router" {
             parentRoute: typeof ProtectedImport;
         };
         "/_protected/settings/danger_zone": {
-            preLoaderRoute: typeof ProtectedSettingsDangerzoneImport;
+            preLoaderRoute: typeof ProtectedSettingsDangerzoneLazyImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
         };
         "/_protected/settings/general": {
-            preLoaderRoute: typeof ProtectedSettingsGeneralImport;
+            preLoaderRoute: typeof ProtectedSettingsGeneralLazyImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
         };
         "/_protected/settings/security": {
-            preLoaderRoute: typeof ProtectedSettingsSecurityImport;
+            preLoaderRoute: typeof ProtectedSettingsSecurityLazyImport;
             parentRoute: typeof ProtectedSettingsLazyImport;
         };
         "/auth/_auth/forgot_password": {
@@ -234,9 +234,9 @@ export const routeTree = rootRoute.addChildren([
         ProtectedArchiveRoute,
         ProtectedBinRoute,
         ProtectedSettingsLazyRoute.addChildren([
-            ProtectedSettingsDangerzoneRoute,
-            ProtectedSettingsGeneralRoute,
-            ProtectedSettingsSecurityRoute,
+            ProtectedSettingsDangerzoneLazyRoute,
+            ProtectedSettingsGeneralLazyRoute,
+            ProtectedSettingsSecurityLazyRoute,
         ]),
         ProtectedVerifyLazyRoute,
         ProtectedFoldersFolderIdRoute,
@@ -250,8 +250,8 @@ export const routeTree = rootRoute.addChildren([
             AuthAuthResetpasswordTokenLazyRoute,
         ]),
     ]),
-    NotesCreateRoute,
     NotesNoteIdLazyRoute,
+    NotesCreateLazyRoute,
     NotesIndexRoute,
 ]);
 

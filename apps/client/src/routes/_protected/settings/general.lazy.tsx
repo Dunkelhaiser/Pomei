@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { EmailInput, emailSchema } from "shared-types/auth";
@@ -62,6 +62,6 @@ const Page = () => {
     );
 };
 
-export const Route = createFileRoute("/_protected/settings/general")({
+export const Route = createLazyFileRoute("/_protected/settings/general")({
     component: Page,
 });
