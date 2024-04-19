@@ -22,7 +22,7 @@ const Page = () => {
             <Helmet>
                 <title>Pomei - {folderInfo.data?.name ?? "Not Found"}</title>
             </Helmet>
-            <SectionHeader>{folderInfo.data?.name}</SectionHeader>
+            <SectionHeader className="min-h-9">{folderInfo.data?.name}</SectionHeader>
             <NotesSearch from="/_protected/folders/$folderId" />
             <NotesLayout notes={folder} searchNotes={searchFolder} search={search} emptyMessage="Folder is empty" />
         </Section>
