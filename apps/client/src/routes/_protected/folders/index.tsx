@@ -44,10 +44,12 @@ const Page = () => {
                     ) : searchFolders.data && searchFolders.data.length > 0 ? (
                         searchFolders.data.map((folder) => <Folder folder={folder} key={folder.id} />)
                     ) : (
-                        <p>No folders found.</p>
+                        <p className="text-muted-foreground">No folders found.</p>
                     )
                 ) : folders.isLoading ? (
                     <Loader className="col-span-full self-center justify-self-center" />
+                ) : folders.data?.pages[0].totalCount === 0 ? (
+                    <p className="text-muted-foreground">You don&apos;t have any folders.</p>
                 ) : (
                     folders.data?.pages.map((page) =>
                         page.folders.map((folder, i) =>
