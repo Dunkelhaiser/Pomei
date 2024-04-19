@@ -35,13 +35,16 @@ const Page = () => {
                     </div>
                     <div
                         className={`
-                            grid min-h-24 grid-cols-1 gap-4
+                            grid min-h-12 grid-cols-1 gap-4
                             md:grid-cols-2
                             xl:grid-cols-4
                         `}
                     >
+                        {/* eslint-disable-next-line no-nested-ternary */}
                         {notes.isLoading ? (
                             <Loader className="col-span-full self-center justify-self-center" />
+                        ) : notes.data?.notes.length === 0 ? (
+                            <p className="text-muted-foreground">You don&apos;t have any notes.</p>
                         ) : (
                             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                             notes.data?.notes?.map((note) => (
@@ -62,13 +65,16 @@ const Page = () => {
                         </div>
                         <div
                             className={`
-                                grid min-h-24 grid-cols-1 gap-4
+                                grid min-h-12 grid-cols-1 gap-4
                                 md:grid-cols-2
                                 xl:grid-cols-4
                             `}
                         >
+                            {/* eslint-disable-next-line no-nested-ternary */}
                             {folders.isLoading ? (
                                 <Loader className="col-span-full self-center justify-self-center" />
+                            ) : folders.data?.folders.length === 0 ? (
+                                <p className="text-muted-foreground">You don&apos;t have any folders.</p>
                             ) : (
                                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                                 folders.data?.folders?.map((folder) => <Folder folder={folder} key={folder.id} />)
