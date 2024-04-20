@@ -1,4 +1,6 @@
 import { useSetAtom } from "jotai";
+import { useState } from "react";
+import DeleteLocalNote from "@/dialogs/DeleteLocalNote";
 import { LocalNote as LocalNoteType, notesAtom } from "@/store/Notes";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, EllipsisBtn } from "@/ui/DropdownMenu";
 import { generateId } from "@/utils/utils";
@@ -8,6 +10,7 @@ interface NoteProps {
 }
 
 const LocalNoteMenu = ({ note }: NoteProps) => {
+    const [openDelete, setOpenDelete] = useState(false);
     const setNotes = useSetAtom(notesAtom);
 
     const duplicateNote = () => {
@@ -22,26 +25,25 @@ const LocalNoteMenu = ({ note }: NoteProps) => {
         ]);
     };
 
-    const deleteNote = () => {
-        setNotes((prev) => prev.filter((n) => n.id !== note.id));
-    };
-
     return (
-        <DropdownMenu>
-            <EllipsisBtn />
-            <DropdownMenuContent>
-                <DropdownMenuItem onClick={duplicateNote}>Duplicate</DropdownMenuItem>
-                <DropdownMenuItem
-                    className={`
-                        text-destructive
-                        focus:text-destructive
-                    `}
-                    onClick={deleteNote}
-                >
-                    Delete
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+            <DeleteLocalNote id={note.id} open={openDelete} setOpen={setOpenDelete} />
+            <DropdownMenu>
+                <EllipsisBtn />
+                <DropdownMenuContent>
+                    <DropdownMenuItem onClick={duplicateNote}>Duplicate</DropdownMenuItem>
+                    <DropdownMenuItem
+                        className={`
+                            text-destructive
+                            focus:text-destructive
+                        `}
+                        onClick={() => setOpenDelete(true)}
+                    >
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </>
     );
 };
 
