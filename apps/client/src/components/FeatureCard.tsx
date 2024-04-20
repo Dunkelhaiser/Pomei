@@ -12,38 +12,38 @@ interface Props {
 const FeatureCard = ({ mode, link, features, price }: Props) => {
     return (
         <div className="flex flex-col gap-5 rounded-xl border border-border bg-card p-8 text-center text-card-foreground">
-            <h4 className="text-lg font-medium">{mode}</h4>
+            <h2 className="text-lg font-medium">{mode}</h2>
             <span className="text-5xl font-bold">{price}</span>
 
-            <ul
+            <div
                 className={`
                     mt-2 grid w-full justify-between gap-2.5 text-sm
                     sm:grid-cols-2 sm:gap-2
                 `}
             >
-                <div className="space-y-2.5">
+                <ul className="space-y-2.5">
                     {features.map(
                         (feature, i) =>
                             i % 2 === 0 && (
                                 <li key={feature} className="flex gap-2">
-                                    <Check size={16} className="mt-0.5 text-primary" />
+                                    <Check size={16} className="mt-0.5 min-w-4 text-primary" />
                                     <span className="text-left">{feature}</span>
                                 </li>
                             )
                     )}
-                </div>
-                <div className="space-y-2.5">
+                </ul>
+                <ul className="space-y-2.5">
                     {features.map(
                         (feature, i) =>
                             i % 2 !== 0 && (
                                 <li key={feature} className="flex gap-2">
-                                    <Check size={16} className="mt-0.5 text-primary" />
+                                    <Check size={16} className="mt-0.5 min-w-4 text-primary" />
                                     <span className="text-left">{feature}</span>
                                 </li>
                             )
                     )}
-                </div>
-            </ul>
+                </ul>
+            </div>
 
             <Button asChild className="mt-auto">
                 <Link to={link.to}>{link.title}</Link>

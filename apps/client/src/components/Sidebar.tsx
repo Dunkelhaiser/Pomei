@@ -48,6 +48,7 @@ const ThemeSwitcher = () => {
     return (
         <Select onValueChange={changeTheme} defaultValue={isSystem ? "system" : theme ?? "system"}>
             <SelectTrigger
+                aria-label="Theme"
                 className={`
                     border-none bg-transparent text-primary-foreground
                     hover:bg-foreground/10
@@ -59,17 +60,17 @@ const ThemeSwitcher = () => {
                 <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="light">
+                <SelectItem value="light" aria-label="Light">
                     <div className="flex items-center gap-x-3">
                         <Sun size={16} /> Light
                     </div>
                 </SelectItem>
-                <SelectItem value="dark">
+                <SelectItem value="dark" aria-label="Dark">
                     <div className="flex items-center gap-x-3">
                         <Moon size={16} /> Dark
                     </div>
                 </SelectItem>
-                <SelectItem value="system">
+                <SelectItem value="system" aria-label="System">
                     <div className="flex items-center gap-x-3">
                         <Monitor size={16} /> System
                     </div>
