@@ -47,7 +47,7 @@ void (async () => {
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
             secure: env.PRODUCTION === true,
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "none",
         },
     } as FastifyCookieOptions);
 
