@@ -6,7 +6,6 @@ import Fastify from "fastify";
 import { serializerCompiler, validatorCompiler, jsonSchemaTransform } from "fastify-type-provider-zod";
 import { env } from "./env.ts";
 import { authRoutes } from "./modules/auth/auth.route.ts";
-import { csrfPlugin } from "./modules/auth/csrf.ts";
 import { foldersRoutes } from "./modules/folders/folders.route.ts";
 import { notesRoutes } from "./modules/notes/notes.route.ts";
 import { version } from "../package.json";
@@ -51,10 +50,6 @@ void (async () => {
             sameSite: "None",
         },
     } as FastifyCookieOptions);
-
-    void app.register(csrfPlugin, {
-        enabled: env.PRODUCTION === true,
-    });
 
     void app.register(authRoutes, { prefix: "/auth" });
     void app.register(notesRoutes, { prefix: "/notes" });
