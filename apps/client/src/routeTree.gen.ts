@@ -13,6 +13,7 @@ import { createFileRoute } from "@tanstack/react-router";
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
+import { Route as FeaturesImport } from "./routes/features";
 import { Route as ProtectedImport } from "./routes/_protected";
 import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as AuthAuthImport } from "./routes/auth/_auth";
@@ -41,6 +42,11 @@ const AuthAuthResetpasswordTokenLazyImport = createFileRoute("/auth/_auth/reset_
 
 const AuthRoute = AuthImport.update({
     path: "/auth",
+    getParentRoute: () => rootRoute,
+} as any);
+
+const FeaturesRoute = FeaturesImport.update({
+    path: "/features",
     getParentRoute: () => rootRoute,
 } as any);
 
@@ -151,6 +157,10 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof ProtectedImport;
             parentRoute: typeof rootRoute;
         };
+        "/features": {
+            preLoaderRoute: typeof FeaturesImport;
+            parentRoute: typeof rootRoute;
+        };
         "/_protected/archive": {
             preLoaderRoute: typeof ProtectedArchiveImport;
             parentRoute: typeof ProtectedImport;
@@ -242,6 +252,7 @@ export const routeTree = rootRoute.addChildren([
         ProtectedFoldersFolderIdRoute,
         ProtectedFoldersIndexRoute,
     ]),
+    FeaturesRoute,
     AuthRoute.addChildren([
         AuthAuthRoute.addChildren([
             AuthAuthForgotpasswordLazyRoute,

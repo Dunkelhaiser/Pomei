@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_protected")({
         const authenticated = await isAuthenticated();
         if (!authenticated) {
             throw redirect({
-                to: "/auth/sign_in",
+                to: "/features",
             });
         }
     },
