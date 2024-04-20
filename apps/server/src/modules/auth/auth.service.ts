@@ -66,7 +66,7 @@ export const verifyVerificationCode = async (user: User, code: string) => {
 
 export const sendVerificationCode = async (code: string, email: string) => {
     const { error } = await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "pomei@kyrylotymchyshyn.com",
         to: email,
         subject: "Pomei - Verification",
         html: `<h1>Your verification code: ${code}</h1>`,
@@ -91,7 +91,7 @@ export const generatePasswordResetToken = async (userId: string) => {
 
 export const sendPasswordResetLink = async (link: string, email: string) => {
     const { error } = await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "pomei@kyrylotymchyshyn.com",
         to: email,
         subject: "Pomei - Password Reset",
         html: `<h1>Your password reset link: ${link}</h1>`,
