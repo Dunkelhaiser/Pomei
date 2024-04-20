@@ -45,9 +45,9 @@ void (async () => {
         secret: "EGt+lNs9nf6rT8WGSQuGMYK4KCs=",
         setOptions: {
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            secure: env.PRODUCTION === true,
+            secure: true,
             httpOnly: true,
-            sameSite: "None",
+            sameSite: "none",
         },
     } as FastifyCookieOptions);
 
