@@ -10,6 +10,7 @@ export const env = createEnv({
             .transform((s) => s === "true"),
         RESEND_KEY: z.string(),
         FRONTEND_URL: z.string().url(),
+        PORT: z.number(),
     },
     runtimeEnv: process.env,
     emptyStringAsUndefined: true,

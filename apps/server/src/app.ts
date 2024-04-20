@@ -56,7 +56,7 @@ void (async () => {
     void app.register(foldersRoutes, { prefix: "/folders" });
 
     try {
-        await app.listen({ port: 10000, host: "0.0.0.0" });
+        await app.listen({ port: env.PORT || 10000, host: "0.0.0.0" });
     } catch (err) {
         app.log.error(err);
         process.exit(1);
