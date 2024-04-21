@@ -20,7 +20,7 @@
     "devDependencies": {
         "@types/node": "^20.11.25",
         "dotenv": "^16.4.5",
-        "drizzle-kit": "^0.20.16",
+        "drizzle-kit": "^0.20.17",
         "eslint": "^8.56.0",
         "eslint-config-shared": "workspace:*",
         "pg": "^8.11.3",

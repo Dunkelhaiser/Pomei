@@ -12,7 +12,7 @@ export const lucia = new Lucia(adapter, {
         attributes: {
             secure: env.PRODUCTION === true,
             // @ts-expect-error only "none" works but is not included in interface
-            sameSite: "none",
+            sameSite: env.PRODUCTION === true ? "none" : undefined,
         },
     },
     getUserAttributes: (attributes) => ({
