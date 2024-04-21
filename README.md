@@ -56,6 +56,8 @@
 
 To run the project, clone repo run "pnpm i" and "pnpm run dev", or access it at <https://pomei.pages.dev>.
 
+**Due to the project being hosted on Render free tier, there may be 50 seconds of server inactivity on the first visit. If any server error occures on first visit, please try again after 50 seconds**
+
 ### About
 
 Pomei is a note-taking app, that can be used locally or with a personal account.
