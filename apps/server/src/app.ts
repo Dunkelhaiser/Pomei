@@ -26,20 +26,23 @@ void (async () => {
         origin: env.FRONTEND_URL,
         credentials: true,
     });
-    void app.register(swagger, {
-        swagger: {
-            info: {
-                title: "Pomei",
-                description: "Pomei API Documentation",
-                version,
+
+    if (env.PRODUCTION === false) {
+        void app.register(swagger, {
+            swagger: {
+                info: {
+                    title: "Pomei",
+                    description: "Pomei API Documentation",
+                    version,
+                },
             },
-        },
-        transform: jsonSchemaTransform,
-    });
-    void app.register(swaggerUi, {
-        routePrefix: "/docs",
-        staticCSP: true,
-    });
+            transform: jsonSchemaTransform,
+        });
+        void app.register(swaggerUi, {
+            routePrefix: "/docs",
+            staticCSP: true,
+        });
+    }
 
     void app.register(fastifyCookie, {
         secret: "EGt+lNs9nf6rT8WGSQuGMYK4KCs=",
