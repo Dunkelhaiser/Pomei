@@ -11,7 +11,6 @@ export const lucia = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
             secure: env.PRODUCTION === true,
-            // @ts-expect-error only "none" works but is not included in interface
             sameSite: env.PRODUCTION === true ? "none" : undefined,
         },
     },

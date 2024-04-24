@@ -100,13 +100,10 @@ export const verificationCodeHandler = async (
 
 export const resendVerificationCodeHandler = async (req: FastifyRequest, res: FastifyReply) => {
     try {
-        // @ts-expect-error due to sameSite: "none" error
         if (req.user.verifiedAt !== null) {
             return res.code(400).send({ message: "User already verified" });
         }
         const verificationCode = await genereateVerificationCode(req.user.id);
-        // @ts-expect-error due to sameSite: "none" error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         await sendVerificationCode(verificationCode, req.user.email);
         return res.code(200).send({ message: "Verification code sent" });
     } catch (err) {
@@ -153,8 +150,6 @@ export const changePasswordHandler = async (req: FastifyRequest<{ Body: NewPassw
     try {
         const { oldPassword, password } = req.body;
 
-        // @ts-expect-error due to sameSite: "none" error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const user = await getUserByEmail(req.user.email);
         if (!user) {
             return res.code(400).send({ message: "Invalid credentials" });
